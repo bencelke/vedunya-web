@@ -1,0 +1,433 @@
+{
+  "discoveredInFlutterAssets": 186,
+  "copied": 15,
+  "skipped": 0,
+  "alreadyExisted": 31,
+  "conflicts": 0,
+  "records": [
+    {
+      "category": "brand",
+      "source": "assets/logo/mystic_logo.svg",
+      "destination": "public/assets/brand/mystic-logo.svg",
+      "fileType": "svg",
+      "action": "copied",
+      "reason": "copied from Flutter (source unchanged)",
+      "productionUsage": "mystic_logo.dart"
+    },
+    {
+      "category": "brand",
+      "source": "assets/logo/logo-white-svg.svg",
+      "destination": "public/assets/brand/mystic-logo-white.svg",
+      "fileType": "svg",
+      "action": "copied",
+      "reason": "copied from Flutter (source unchanged)",
+      "productionUsage": "brand dark backgrounds"
+    },
+    {
+      "category": "brand",
+      "source": "assets/logo/google_g.svg",
+      "destination": "public/assets/brand/google-g.svg",
+      "fileType": "svg",
+      "action": "copied",
+      "reason": "copied from Flutter (source unchanged)",
+      "productionUsage": "mystic_social_sign_in_block.dart"
+    },
+    {
+      "category": "brand",
+      "source": "assets/logo/icon-makosh-padded.png",
+      "destination": "public/assets/brand/icon-makosh-padded.png",
+      "fileType": "png",
+      "action": "copied",
+      "reason": "copied from Flutter (source unchanged)",
+      "productionUsage": "launch_splash_screen.dart, mobile_app_root.dart"
+    },
+    {
+      "category": "brand",
+      "source": "assets/logo/icon-foreground-rgba-1024.png",
+      "destination": "public/assets/brand/icon-foreground-rgba-1024.png",
+      "fileType": "png",
+      "action": "copied",
+      "reason": "copied from Flutter (source unchanged)",
+      "productionUsage": "mystic_logo.dart fallback"
+    },
+    {
+      "category": "brand",
+      "source": "assets/logo/loading_makosh.png",
+      "destination": "public/assets/brand/loading-makosh.png",
+      "fileType": "png",
+      "action": "copied",
+      "reason": "copied from Flutter (source unchanged)",
+      "productionUsage": "pubspec splash reference"
+    },
+    {
+      "category": "brand",
+      "source": "assets/logo/splash-screen.png",
+      "destination": "public/assets/brand/splash-screen.png",
+      "fileType": "png",
+      "action": "copied",
+      "reason": "copied from Flutter (source unchanged)",
+      "productionUsage": "native splash reference"
+    },
+    {
+      "category": "brand",
+      "source": "assets/app_icon/mystic_icon.svg",
+      "destination": "public/assets/brand/mystic-icon.svg",
+      "fileType": "svg",
+      "action": "copied",
+      "reason": "copied from Flutter (source unchanged)",
+      "productionUsage": "app icon source"
+    },
+    {
+      "category": "icons",
+      "source": "assets/logo/icon-app-launcher-1024.png",
+      "destination": "public/icons/icon-app-launcher-1024.png",
+      "fileType": "png",
+      "action": "copied",
+      "reason": "copied from Flutter (source unchanged)",
+      "productionUsage": "flutter_launcher_icons"
+    },
+    {
+      "category": "icons",
+      "source": "assets/logo/icon-launcher-ios-1024.png",
+      "destination": "public/icons/icon-launcher-ios-1024.png",
+      "fileType": "png",
+      "action": "copied",
+      "reason": "copied from Flutter (source unchanged)",
+      "productionUsage": "flutter_launcher_icons iOS"
+    },
+    {
+      "category": "icons",
+      "source": "assets/logo/icon-foreground-rgba-1024.png",
+      "destination": "public/icons/icon-foreground-rgba-1024.png",
+      "fileType": "png",
+      "action": "copied",
+      "reason": "copied from Flutter (source unchanged)",
+      "productionUsage": "adaptive icon foreground"
+    },
+    {
+      "category": "backgrounds",
+      "source": "assets/background/background-jpg.jpg",
+      "destination": "public/assets/backgrounds/app-background.jpg",
+      "fileType": "jpg",
+      "action": "copied",
+      "reason": "copied from Flutter (source unchanged)",
+      "productionUsage": "cosmic_tokens.dart, mystic_background.dart"
+    },
+    {
+      "category": "courses",
+      "source": "assets/Course Visuals/Rune 2 course/prozhivanie.png",
+      "destination": "public/assets/courses/living-the-runes/prozhivanie.png",
+      "fileType": "png",
+      "action": "copied",
+      "reason": "copied from Flutter (source unchanged)",
+      "productionUsage": "library_item.dart living-the-runes cover"
+    },
+    {
+      "category": "courses",
+      "source": "assets/Course Visuals/Basic Runes/Pervie Shagi Runi-100kb.jpg",
+      "destination": "public/assets/courses/runes-first-steps/cover.jpg",
+      "fileType": "jpg",
+      "action": "copied",
+      "reason": "copied from Flutter (source unchanged)",
+      "productionUsage": "library_item.dart runes-first-steps cover"
+    },
+    {
+      "category": "courses",
+      "source": "assets/moon/svg_moon/moon_full.png",
+      "destination": "public/assets/courses/lunar-path-30-days/cover.png",
+      "fileType": "png",
+      "action": "copied",
+      "reason": "copied from Flutter (source unchanged)",
+      "productionUsage": "library_item.dart lunar-path cover fallback"
+    },
+    {
+      "category": "moon",
+      "source": "assets/moon/svg_moon/moon_new.png",
+      "destination": "public/assets/moon/phases/moon_new.png",
+      "fileType": "png",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "moon_asset_map.dart"
+    },
+    {
+      "category": "moon",
+      "source": "assets/moon/svg_moon/moon_waxing_crescent.png",
+      "destination": "public/assets/moon/phases/moon_waxing_crescent.png",
+      "fileType": "png",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "moon_asset_map.dart"
+    },
+    {
+      "category": "moon",
+      "source": "assets/moon/svg_moon/moon_first_quarter.png",
+      "destination": "public/assets/moon/phases/moon_first_quarter.png",
+      "fileType": "png",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "moon_asset_map.dart"
+    },
+    {
+      "category": "moon",
+      "source": "assets/moon/svg_moon/moon_waxing_gibbous.png",
+      "destination": "public/assets/moon/phases/moon_waxing_gibbous.png",
+      "fileType": "png",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "moon_asset_map.dart"
+    },
+    {
+      "category": "moon",
+      "source": "assets/moon/svg_moon/moon_full.png",
+      "destination": "public/assets/moon/phases/moon_full.png",
+      "fileType": "png",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "moon_asset_map.dart"
+    },
+    {
+      "category": "moon",
+      "source": "assets/moon/svg_moon/moon_waning_gibbous.png",
+      "destination": "public/assets/moon/phases/moon_waning_gibbous.png",
+      "fileType": "png",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "moon_asset_map.dart"
+    },
+    {
+      "category": "moon",
+      "source": "assets/moon/svg_moon/moon_waning_crescent.png",
+      "destination": "public/assets/moon/phases/moon_waning_crescent.png",
+      "fileType": "png",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "moon_asset_map.dart"
+    },
+    {
+      "category": "runes",
+      "source": "assets/runes/svg/fehu.svg",
+      "destination": "public/assets/runes/symbols/fehu.svg",
+      "fileType": "svg",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "rune_asset_map.dart"
+    },
+    {
+      "category": "runes",
+      "source": "assets/runes/svg/uruz.svg",
+      "destination": "public/assets/runes/symbols/uruz.svg",
+      "fileType": "svg",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "rune_asset_map.dart"
+    },
+    {
+      "category": "runes",
+      "source": "assets/runes/svg/thurisaz.svg",
+      "destination": "public/assets/runes/symbols/thurisaz.svg",
+      "fileType": "svg",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "rune_asset_map.dart"
+    },
+    {
+      "category": "runes",
+      "source": "assets/runes/svg/ansuz.svg",
+      "destination": "public/assets/runes/symbols/ansuz.svg",
+      "fileType": "svg",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "rune_asset_map.dart"
+    },
+    {
+      "category": "runes",
+      "source": "assets/runes/svg/raido.svg",
+      "destination": "public/assets/runes/symbols/raido.svg",
+      "fileType": "svg",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "rune_asset_map.dart"
+    },
+    {
+      "category": "runes",
+      "source": "assets/runes/svg/kenaz.svg",
+      "destination": "public/assets/runes/symbols/kenaz.svg",
+      "fileType": "svg",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "rune_asset_map.dart"
+    },
+    {
+      "category": "runes",
+      "source": "assets/runes/svg/gebo.svg",
+      "destination": "public/assets/runes/symbols/gebo.svg",
+      "fileType": "svg",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "rune_asset_map.dart"
+    },
+    {
+      "category": "runes",
+      "source": "assets/runes/svg/wunjo.svg",
+      "destination": "public/assets/runes/symbols/wunjo.svg",
+      "fileType": "svg",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "rune_asset_map.dart"
+    },
+    {
+      "category": "runes",
+      "source": "assets/runes/svg/hagalaz.svg",
+      "destination": "public/assets/runes/symbols/hagalaz.svg",
+      "fileType": "svg",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "rune_asset_map.dart"
+    },
+    {
+      "category": "runes",
+      "source": "assets/runes/svg/nauthiz.svg",
+      "destination": "public/assets/runes/symbols/nauthiz.svg",
+      "fileType": "svg",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "rune_asset_map.dart"
+    },
+    {
+      "category": "runes",
+      "source": "assets/runes/svg/isa.svg",
+      "destination": "public/assets/runes/symbols/isa.svg",
+      "fileType": "svg",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "rune_asset_map.dart"
+    },
+    {
+      "category": "runes",
+      "source": "assets/runes/svg/jera.svg",
+      "destination": "public/assets/runes/symbols/jera.svg",
+      "fileType": "svg",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "rune_asset_map.dart"
+    },
+    {
+      "category": "runes",
+      "source": "assets/runes/svg/eihwaz.svg",
+      "destination": "public/assets/runes/symbols/eihwaz.svg",
+      "fileType": "svg",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "rune_asset_map.dart"
+    },
+    {
+      "category": "runes",
+      "source": "assets/runes/svg/perthro.svg",
+      "destination": "public/assets/runes/symbols/perthro.svg",
+      "fileType": "svg",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "rune_asset_map.dart"
+    },
+    {
+      "category": "runes",
+      "source": "assets/runes/svg/algiz.svg",
+      "destination": "public/assets/runes/symbols/algiz.svg",
+      "fileType": "svg",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "rune_asset_map.dart"
+    },
+    {
+      "category": "runes",
+      "source": "assets/runes/svg/sowilo.svg",
+      "destination": "public/assets/runes/symbols/sowilo.svg",
+      "fileType": "svg",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "rune_asset_map.dart"
+    },
+    {
+      "category": "runes",
+      "source": "assets/runes/svg/tiwaz.svg",
+      "destination": "public/assets/runes/symbols/tiwaz.svg",
+      "fileType": "svg",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "rune_asset_map.dart"
+    },
+    {
+      "category": "runes",
+      "source": "assets/runes/svg/berkano.svg",
+      "destination": "public/assets/runes/symbols/berkano.svg",
+      "fileType": "svg",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "rune_asset_map.dart"
+    },
+    {
+      "category": "runes",
+      "source": "assets/runes/svg/ehwaz.svg",
+      "destination": "public/assets/runes/symbols/ehwaz.svg",
+      "fileType": "svg",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "rune_asset_map.dart"
+    },
+    {
+      "category": "runes",
+      "source": "assets/runes/svg/mannaz.svg",
+      "destination": "public/assets/runes/symbols/mannaz.svg",
+      "fileType": "svg",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "rune_asset_map.dart"
+    },
+    {
+      "category": "runes",
+      "source": "assets/runes/svg/laguz.svg",
+      "destination": "public/assets/runes/symbols/laguz.svg",
+      "fileType": "svg",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "rune_asset_map.dart"
+    },
+    {
+      "category": "runes",
+      "source": "assets/runes/svg/ingwaz.svg",
+      "destination": "public/assets/runes/symbols/ingwaz.svg",
+      "fileType": "svg",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "rune_asset_map.dart"
+    },
+    {
+      "category": "runes",
+      "source": "assets/runes/svg/dagaz.svg",
+      "destination": "public/assets/runes/symbols/dagaz.svg",
+      "fileType": "svg",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "rune_asset_map.dart"
+    },
+    {
+      "category": "runes",
+      "source": "assets/runes/svg/othala.svg",
+      "destination": "public/assets/runes/symbols/othala.svg",
+      "fileType": "svg",
+      "action": "already_existed",
+      "reason": "identical file already present",
+      "productionUsage": "rune_asset_map.dart"
+    }
+  ],
+  "excludedFolders": [
+    "assets/fonts/",
+    "assets/cards/",
+    "assets/design_reference/",
+    "assets/Screnshots/",
+    "assets/orb/",
+    "assets/runes/*.svg (legacy root spellings)",
+    "assets/moon/*.png (non-canonical experimental)",
+    "build/, .dart_tool/, ios/Pods/, android/.gradle/"
+  ]
+}

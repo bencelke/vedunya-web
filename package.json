@@ -14,7 +14,8 @@
     "rune:check": "tsx scripts/rune-check.ts --",
     "content:check": "tsx scripts/live-content-check.ts",
     "sanity:check": "tsx scripts/sanity-check.ts",
-    "courses:check": "tsx scripts/courses-check.ts"
+    "courses:check": "tsx scripts/courses-check.ts",
+    "assets:check": "tsx scripts/validate-assets.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",

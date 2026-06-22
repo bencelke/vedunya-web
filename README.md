@@ -128,6 +128,19 @@ npm run courses:check
 
 See `docs/migration/course-port-report.md`.
 
+## Asset migration status
+
+Production image assets are copied from the read-only Mystic Flutter project into `public/assets/` (copy-only — Flutter source files are never moved or modified).
+
+```powershell
+npm run assets:check
+npx tsx scripts/migrate-flutter-assets.ts
+```
+
+See `docs/migration/full-asset-migration-report.md`.
+
+**Never copy** font files, `.env` files, Firebase plist/json configs, or service account keys into `public/`.
+
 ## Moon feature status
 
 - Synodic engine ported from `moon_engine_service.dart` (UTC-normalized Julian date)
