@@ -6,21 +6,43 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "vitest run",
+    "verify:firebase": "tsx scripts/verify-firebase-connection.ts",
+    "numerology:check": "tsx scripts/numerology-check.ts",
+    "moon:check": "tsx scripts/moon-check.ts",
+    "rune:check": "tsx scripts/rune-check.ts --",
+    "content:check": "tsx scripts/live-content-check.ts",
+    "sanity:check": "tsx scripts/sanity-check.ts",
+    "courses:check": "tsx scripts/courses-check.ts"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.4.0",
+    "@sanity/client": "^7.22.1",
+    "clsx": "^2.1.1",
+    "firebase": "^12.14.0",
+    "firebase-admin": "^14.0.0",
+    "lucide-react": "^1.18.0",
     "next": "16.2.9",
+    "next-intl": "^4.13.0",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "react-hook-form": "^7.79.0",
+    "server-only": "^0.0.1",
+    "tailwind-merge": "^3.6.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^6.0.2",
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "tsx": "^4.20.3",
+    "typescript": "^5",
+    "vitest": "^4.1.8"
   }
 }

@@ -1,0 +1,106 @@
+import "server-only";
+
+import { cache } from "react";
+import { cookies } from "next/headers";
+
+import { calculateMoonContext } from "@/features/moon/engine/calculate-moon-context";
+import {
+  buildMoonCalculationInput,
+  parseCalculationInstant,
+  resolveMoonDateKey,
+  resolveMoonTimezone,
+} from "@/features/moon/engine/date-time";
+import {
+  getCachedLunarDayContent,
+  getCachedMoonPhaseContent,
+} from "@/features/moon/repositories/moon-content-repository";
+import {
+  localizeLunarDayContent,
+  localizeMoonPhaseContent,
+  resolveLocaleWithFallback,
+} from "@/features/moon/services/moon-content-service";
+import { TIMEZONE_COOKIE } from "@/features/numerology/constants";
+import type {
+  MoonGuidanceLoadResult,
+  MoonGuidanceResult,
+  SupportedMoonLocale,
+} from "@/features/moon/types/moon";
+
+async function loadMoonGuidanceInternal(input: {
+  locale: SupportedMoonLocale;
+  instant?: Date;
+  timezone?: string;
+}): Promise<MoonGuidanceLoadResult> {
+  const locale = resolveLocaleWithFallback(input.locale);
+  const cookieStore = await cookies();
+  const timezone = input.timezone
+    ?? resolveMoonTimezone(cookieStore.get(TIMEZONE_COOKIE)?.value);
+
+  let calculationInstant = input.instant ?? new Date();
+  if (input.instant) {
+    try {
+      calculationInstant = input.instant;
+    } catch {
+      return { status: "error", reason: "invalid-instant" };
+    }
+  }
+
+  try {
+    const calculationInput = buildMoonCalculationInput({
+      instant: calculationInstant,
+      timezone,
+    });
+    const calculation = calculateMoonContext(calculationInput);
+    const phaseLoad = await getCachedMoonPhaseContent(calculation.phaseId);
+    const lunarLoad = await getCachedLunarDayContent(calculation.lunarDay);
+
+    const phase = localizeMoonPhaseContent(phaseLoad.record, locale, true);
+    const lunarDayContent = lunarLoad.record
+      ? localizeLunarDayContent(lunarLoad.record, locale, false)
+      : null;
+
+    const guidance: MoonGuidanceResult = {
+      dateKey: resolveMoonDateKey(timezone, calculationInstant),
+      timezone,
+      calculation,
+      phase,
+      lunarDayContent,
+      source: {
+        phase: phaseLoad.source,
+        lunarDay: lunarLoad.source,
+      },
+    };
+
+    return { status: "ready", guidance };
+  } catch {
+    return { status: "error", reason: "calculation-failed" };
+  }
+}
+
+export const loadCurrentMoonGuidance = cache(
+  async (locale: SupportedMoonLocale): Promise<MoonGuidanceLoadResult> =>
+    loadMoonGuidanceInternal({ locale }),
+);
+
+export async function loadMoonGuidanceForInstant(input: {
+  locale: SupportedMoonLocale;
+  calculationDateTime: string;
+  timezone: string;
+}): Promise<MoonGuidanceLoadResult> {
+  try {
+    const instant = parseCalculationInstant(input.calculationDateTime);
+    return loadMoonGuidanceInternal({
+      locale: input.locale,
+      instant,
+      timezone: resolveMoonTimezone(input.timezone),
+    });
+  } catch {
+    return { status: "error", reason: "invalid-datetime" };
+  }
+}
+
+export async function loadMoonSummary(
+  locale: SupportedMoonLocale,
+): Promise<MoonGuidanceLoadResult> {
+  return loadCurrentMoonGuidance(locale);
+}

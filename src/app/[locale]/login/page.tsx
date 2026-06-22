@@ -1,0 +1,35 @@
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import type { Metadata } from "next";
+
+import { AuthScreen } from "@/features/auth/components/auth-screen";
+import { redirectAuthenticatedFromLogin } from "@/lib/auth/require-user";
+import type { SupportedLocale } from "@/config/app-config";
+import { hasLocale } from "next-intl";
+import { routing } from "@/i18n/routing";
+import { notFound } from "next/navigation";
+
+type LoginPageProps = {
+  params: Promise<{ locale: string }>;
+};
+
+export async function generateMetadata({
+  params,
+}: LoginPageProps): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "auth" });
+  return { title: t("loginMetaTitle") };
+}
+
+export default async function LoginPage({ params }: LoginPageProps) {
+  const { locale: localeParam } = await params;
+
+  if (!hasLocale(routing.locales, localeParam)) {
+    notFound();
+  }
+
+  const locale = localeParam as SupportedLocale;
+  setRequestLocale(locale);
+  await redirectAuthenticatedFromLogin(locale);
+
+  return <AuthScreen locale={locale} initialMode="login" />;
+}

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Placeholder app icon">
+  <rect width="512" height="512" rx="108" fill="#12101a"/>
+  <rect x="48" y="48" width="416" height="416" rx="88" fill="#1a1624" stroke="#c9a962" stroke-width="4"/>
+  <text x="256" y="276" text-anchor="middle" fill="#7a7284" font-family="system-ui, sans-serif" font-size="48">512</text>
+</svg>

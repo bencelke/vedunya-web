@@ -1,0 +1,327 @@
+{
+  "common": {
+    "login": "Log in",
+    "save": "Save",
+    "continue": "Continue",
+    "back": "Back",
+    "mockNotice": "Preview content — not connected to a live backend yet."
+  },
+  "navigation": {
+    "today": "Today",
+    "moon": "Moon",
+    "courses": "Courses",
+    "profile": "Profile"
+  },
+  "a11y": {
+    "languageSwitcher": "Language",
+    "bottomNavigation": "Main navigation",
+    "openMenu": "Open menu"
+  },
+  "landing": {
+    "hero": {
+      "eyebrow": "Daily guidance by Vedunya Maria",
+      "headline": "Daily guidance for a calmer, clearer day.",
+      "supporting": "Thoughtful support for your rhythm — a short reading, lunar context, and one practical step you can take today.",
+      "primaryCta": "View today’s guidance",
+      "secondaryCta": "How it works"
+    },
+    "preview": {
+      "heading": "A glimpse of today",
+      "description": "Explore a sample day before creating an account.",
+      "guidanceLabel": "Daily guidance",
+      "guidanceTitle": "Pause before you respond",
+      "guidanceBody": "Give yourself a quiet moment before answering messages or making decisions. Clarity often arrives when the pace slows.",
+      "moonLabel": "Moon rhythm",
+      "moonTitle": "Waning gibbous",
+      "moonBody": "A good day to refine plans, release what feels heavy, and keep only what still matters.",
+      "actionLabel": "Practical action",
+      "actionTitle": "One small step",
+      "actionBody": "Choose one conversation or task to handle with extra care instead of rushing through everything at once."
+    },
+    "howItWorks": {
+      "heading": "How it works",
+      "description": "Simple daily support, designed for real life.",
+      "step1Title": "Receive daily guidance",
+      "step1Body": "Each day brings a concise reading with lunar context and one grounded action.",
+      "step2Title": "Personalize with your details",
+      "step2Body": "Add your name and birth date so future guidance can feel more personal and relevant.",
+      "step3Title": "Save and return later",
+      "step3Body": "Keep meaningful days and enable reminders once your account is ready."
+    },
+    "finalCta": {
+      "heading": "Begin with today",
+      "description": "Start with the current guidance preview, or prepare your profile for a more personal experience.",
+      "primaryCta": "Open Today",
+      "secondaryCta": "Start onboarding"
+    }
+  },
+  "today": {
+    "metaTitle": "Today",
+    "heading": "Today",
+    "greeting": "Good morning",
+    "dateLabel": "Friday, June 13",
+    "guidanceLabel": "Daily guidance",
+    "actionLabel": "Practical action",
+    "actionTitle": "One step for today",
+    "moonLabel": "Moon rhythm",
+    "saveCta": "Save this guidance",
+    "saveHint": "Sign in will be required in a later release."
+  },
+  "dailyGuidance": {
+    "greeting": "Good morning",
+    "pageSubtitle": "What to understand and do today",
+    "focusLabel": "Your focus for today",
+    "actionLabel": "One useful step",
+    "personalDayLabel": "Personal day",
+    "personalDayHint": "Your personal-day number shapes today’s rhythm.",
+    "personalDayExplanation": "Personal day {number} — {title} sets the tone behind today’s focus.",
+    "moonRhythmLabel": "Your personal rhythm",
+    "runeFocusLabel": "A symbolic perspective",
+    "viewMoonDetails": "View moon details",
+    "viewRuneDetails": "View rune meaning",
+    "previewLabel": "Preview — guidance below is an example, not calculated for you.",
+    "personalizeMessage": "Sign in and add your name and birth date to receive guidance shaped for your day.",
+    "completeProfile": "Complete your profile to unlock personal daily guidance.",
+    "numerologyUnavailable": "Personal-day guidance is unavailable right now.",
+    "moonUnavailable": "Moon rhythm is unavailable right now.",
+    "runeUnavailable": "Today’s rune is unavailable right now.",
+    "loadError": "Unable to load today’s guidance. Please try again later.",
+    "profileLink": "Profile",
+    "loadingA11y": "Loading today’s guidance"
+  },
+  "moon": {
+    "metaTitle": "Moon",
+    "heading": "Moon rhythm",
+    "description": "Current phase and lunar-day pacing for your day.",
+    "rhythmLabel": "Your rhythm for today",
+    "currentPhaseLabel": "Current phase",
+    "lunarDayLabel": "Lunar day {day}",
+    "actionLabel": "Practical guidance",
+    "reflectionLabel": "Reflection",
+    "viewDetails": "View moon details",
+    "loadError": "Unable to load moon information right now.",
+    "lunarDayMissing": "Lunar-day guidance is not available for this day yet.",
+    "infoNote": "Phase and lunar-day estimates use a synodic model. Timezone refines your calendar day label; core math follows the same UTC instant as Mystic mobile.",
+    "timezoneFallbackNote": "Using UTC until your device timezone is synchronized.",
+    "phaseVisualA11y": "Moon phase illustration: {phase}",
+    "currentPhase": "Waning gibbous",
+    "currentGuidance": "A supportive phase for simplifying commitments, finishing what is nearly done, and making room for rest.",
+    "upcomingLabel": "Coming next",
+    "upcomingPhase": "Last quarter",
+    "upcomingGuidance": "Use the next phase to review priorities and adjust what no longer fits your week."
+  },
+  "runes": {
+    "dailyLabel": "Rune of the day",
+    "focusLabel": "A symbolic focus for today",
+    "shortMeaningLabel": "Short meaning",
+    "deepMeaningLabel": "Deep meaning",
+    "actionLabel": "Practical action",
+    "warningLabel": "Boundary",
+    "affirmationLabel": "Affirmation",
+    "reflectionLabel": "Reflection",
+    "viewMeaning": "View rune meaning",
+    "loadError": "Unable to load the rune right now.",
+    "premiumSoon": "Premium access will be available soon.",
+    "backToToday": "Back to Today",
+    "invalidRune": "Rune not found",
+    "symbolA11y": "Rune symbol: {rune}"
+  },
+  "courses": {
+    "metaTitle": "Courses",
+    "heading": "Courses",
+    "description": "Structured programs for deeper rune work and inner rhythm.",
+    "loadError": "Unable to load courses. Please try again later.",
+    "courseProgress": "Course progress",
+    "lessonsHeading": "Lessons",
+    "continueLearning": "Continue learning",
+    "resumeCourse": "Resume course",
+    "courseCompleted": "Course completed",
+    "purchaseUnavailableTitle": "Purchase unavailable",
+    "purchaseUnavailable": "Course purchase is not available on the web yet. You can review the course overview here.",
+    "comingSoonMessage": "This course is not available yet.",
+    "signInToSaveProgress": "Sign in to save your progress.",
+    "lessonNumber": "Lesson {number}",
+    "progressPercent": "{percent}% complete",
+    "lessonCount": "{count, plural, one {# lesson} other {# lessons}}",
+    "estimatedDuration": "{duration}",
+    "comingSoon": "Coming soon",
+    "completed": "Completed",
+    "resume": "Resume",
+    "startCourse": "Start course",
+    "viewCourse": "View course",
+    "coverA11y": "Course cover: {title}",
+    "lessonIconA11y": "Lesson icon: {title}",
+    "lessonCompleted": "Completed",
+    "lessonCurrent": "In progress",
+    "lessonLocked": "Locked",
+    "markComplete": "Mark complete",
+    "markCompleteSubmitting": "Saving…",
+    "markCompleteDone": "Completed lesson",
+    "backToCourse": "Back to course",
+    "previousLesson": "Previous lesson",
+    "nextLesson": "Next lesson",
+    "contentPractice": "Practice",
+    "contentReflection": "Reflection"
+  },
+  "profile": {
+    "metaTitle": "Profile",
+    "heading": "Profile",
+    "description": "Your account details and preferences."
+  },
+  "auth": {
+    "loginMetaTitle": "Log in",
+    "loginTitle": "Welcome back",
+    "registerTitle": "Create your account",
+    "loginDescription": "Sign in to continue your daily guidance.",
+    "registerDescription": "Create an account to save your profile and return each day.",
+    "divider": "or",
+    "switchToRegister": "Create an account",
+    "switchToLogin": "Already have an account? Log in",
+    "forgotPasswordLink": "Forgot password?",
+    "backToLanding": "Back to home",
+    "legalNotice": "Terms and privacy links will be added before public launch.",
+    "applePlaceholder": "Apple sign-in on the web is planned for a later release.",
+    "loading": "Checking your session…",
+    "configuration": {
+      "title": "Firebase is not configured yet",
+      "body": "Add the Firebase Web and Admin environment variables to `.env.local`, then restart the development server."
+    },
+    "loginForm": {
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "submit": "Log in",
+      "submitting": "Signing in…"
+    },
+    "registerForm": {
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "confirmPasswordLabel": "Confirm password",
+      "termsLabel": "I agree to the terms that will be published before launch.",
+      "submit": "Create account",
+      "submitting": "Creating account…"
+    },
+    "google": {
+      "continue": "Continue with Google",
+      "submitting": "Opening Google…"
+    },
+    "forgotPassword": {
+      "metaTitle": "Reset password",
+      "heading": "Reset your password",
+      "description": "Enter your email and we will send reset instructions if an account exists.",
+      "configurationRequired": "Password reset requires Firebase configuration in `.env.local`.",
+      "backToLogin": "Back to log in"
+    },
+    "forgotPasswordForm": {
+      "emailLabel": "Email",
+      "submit": "Send reset link",
+      "submitting": "Sending…",
+      "success": "If an account exists for this email, reset instructions have been sent."
+    },
+    "errors": {
+      "generic": "We couldn’t complete that action. Please try again.",
+      "invalidEmail": "Enter a valid email address.",
+      "invalidCredential": "We couldn’t sign you in. Check your details and try again.",
+      "userDisabled": "This account is disabled. Contact support if you need help.",
+      "emailAlreadyInUse": "An account with this email already exists.",
+      "weakPassword": "Choose a stronger password with at least 8 characters.",
+      "tooManyRequests": "Too many attempts. Wait a moment and try again.",
+      "popupBlocked": "The sign-in window was blocked. Allow pop-ups and try again.",
+      "popupClosed": "Sign-in was cancelled before it finished.",
+      "network": "Network error. Check your connection and try again.",
+      "unauthorizedDomain": "This domain is not authorized for sign-in yet.",
+      "operationNotAllowed": "This sign-in method is not enabled yet.",
+      "configuration": "Authentication is not configured on this environment.",
+      "passwordMismatch": "Passwords do not match.",
+      "termsRequired": "Please accept the terms before creating an account."
+    },
+    "onboarding": {
+      "metaTitle": "Profile setup",
+      "eyebrow": "Profile setup",
+      "continue": "Continue",
+      "back": "Back",
+      "finish": "Go to Today",
+      "saving": "Saving…",
+      "steps": {
+        "welcome": {
+          "title": "Make your guidance personal",
+          "body": "A short setup helps Mystic address you by name and prepare daily rhythm calculations."
+        },
+        "name": {
+          "title": "What should we call you?",
+          "body": "Use the name you would like to see in the app.",
+          "fieldLabel": "Display name"
+        },
+        "dob": {
+          "title": "Your birth date",
+          "body": "Your birth date helps calculate your personal daily rhythm.",
+          "fieldLabel": "Date of birth",
+          "helper": "You can update this later in Profile."
+        },
+        "language": {
+          "title": "Choose your language",
+          "body": "This sets your default app language and profile preference.",
+          "english": "English",
+          "russian": "Russian"
+        },
+        "ready": {
+          "title": "You are ready",
+          "body": "Your profile is saved. Daily calculations will be connected in the next release."
+        }
+      }
+    },
+    "profile": {
+      "metaTitle": "Profile",
+      "heading": "Profile",
+      "description": "Your account details and preferences.",
+      "name": "Name",
+      "email": "Email",
+      "birthDate": "Birth date",
+      "language": "Language",
+      "providers": "Sign-in method",
+      "english": "English",
+      "russian": "Russian",
+      "notSet": "Not set",
+      "edit": "Edit profile",
+      "save": "Save changes",
+      "saving": "Saving…",
+      "cancel": "Cancel",
+      "saved": "Profile updated.",
+      "saveError": "We couldn’t save your profile. Try again.",
+      "validationError": "Check the entered details and try again.",
+      "resetPassword": "Send password reset email",
+      "resetSent": "If this account uses email sign-in, reset instructions have been sent.",
+      "logout": "Log out",
+      "backToToday": "Back to Today"
+    },
+    "today": {
+      "greetingNamed": "Good morning, {name}",
+      "setupRequired": "Finish profile setup to unlock personal guidance and saving.",
+      "setupCta": "Complete profile setup",
+      "guestPreview": "Sign in to see guidance based on your birth date and today’s calendar day.",
+      "signedInPreview": "You are signed in. Personal calculations will connect in the next release.",
+      "saveRequiresSetup": "Complete profile setup before saving guidance."
+    }
+  },
+  "numerology": {
+    "pageHeading": "Your personal rhythm for today",
+    "personalDayLabel": "Personal day",
+    "todayNumberLabel": "Today’s number",
+    "basedOnBirthDate": "Based on your birth date and today’s date",
+    "actionLabel": "Practical action",
+    "reflectionLabel": "Reflection",
+    "completeProfile": "Complete your profile to unlock personal daily guidance.",
+    "loadError": "Unable to load guidance right now. Please try again later.",
+    "retry": "Retry",
+    "numberA11y": "Personal day number {number}"
+  },
+  "login": {
+    "metaTitle": "Log in",
+    "heading": "Log in",
+    "description": "Access your guidance, saved days, and personal settings."
+  },
+  "onboarding": {
+    "metaTitle": "Onboarding",
+    "heading": "Personalize your guidance",
+    "description": "Share a few details so future readings can feel more personal."
+  }
+}
