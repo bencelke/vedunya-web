@@ -1,11 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 
-import { AppHeader } from "@/components/layout/app-header";
-import { AppShell } from "@/components/layout/app-shell";
-import { MobilePage } from "@/components/layout/mobile-page";
-import { CourseCatalog } from "@/features/courses/components/course-catalog";
-import { CourseErrorState } from "@/features/courses/components/course-error-state";
+import { CoursesScreen } from "@/features/courses/components/courses-screen";
 import { loadCourseCatalog } from "@/features/courses/services/load-course-catalog";
 import type { SupportedLocale } from "@/config/app-config";
 
@@ -26,30 +22,22 @@ export default async function CoursesPage({ params }: CoursesPageProps) {
   setRequestLocale(locale);
   const t = await getTranslations("courses");
 
-  let items = [];
+  let items = null;
+  let loadFailed = false;
+
   try {
     items = await loadCourseCatalog(locale as SupportedLocale);
   } catch {
-    return (
-      <>
-        <AppHeader showLogin={false} />
-        <AppShell>
-          <MobilePage title={t("heading")} description={t("description")}>
-            <CourseErrorState message={t("loadError")} />
-          </MobilePage>
-        </AppShell>
-      </>
-    );
+    loadFailed = true;
   }
 
   return (
-    <>
-      <AppHeader showLogin={false} />
-      <AppShell>
-        <MobilePage title={t("heading")} description={t("description")}>
-          <CourseCatalog courses={items} />
-        </MobilePage>
-      </AppShell>
-    </>
+    <CoursesScreen
+      courses={loadFailed ? null : items}
+      eyebrow={t("catalogEyebrow")}
+      title={t("heading")}
+      description={t("description")}
+      errorMessage={loadFailed ? t("loadError") : undefined}
+    />
   );
 }

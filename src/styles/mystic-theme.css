@@ -1,0 +1,330 @@
+/* Mystic design system — Flutter AppColors + CosmicTokens + MysticChromeTokens */
+
+:root {
+  /* Brand */
+  --mystic-gold: #c4a86a;
+  --mystic-gold-soft: rgba(196, 168, 106, 0.16);
+  --mystic-gold-deep: #9a8558;
+  --mystic-void: #0b0d14;
+  --mystic-parchment: #f3ede3;
+  --mystic-ivory: #f8f6f0;
+  --mystic-ink: #000000;
+
+  /* Light auth / onboarding (AppColors) */
+  --auth-bg: #ffffff;
+  --auth-card: #ffffff;
+  --auth-text: #000000;
+  --auth-muted: #444444;
+  --auth-border: #e5e5e5;
+  --auth-gold: #b89b5e;
+  --auth-surface-muted: #f8f6f0;
+  --auth-surface-cream: #f5f1e8;
+  --auth-gold-soft: rgba(184, 155, 94, 0.12);
+  --auth-glow: radial-gradient(
+    ellipse 90% 60% at 50% -10%,
+    rgba(184, 155, 94, 0.12),
+    transparent 72%
+  );
+  --auth-shadow: 0 24px 48px -28px rgba(0, 0, 0, 0.08);
+
+  /* Dark app shell (CosmicTokens) */
+  --app-bg: #0b0d14;
+  --app-surface: #12182a;
+  --app-surface-elevated: #1a2238;
+  --app-text: #faf6ec;
+  --app-muted: #e8dcc8;
+  --app-subtle: #a89878;
+  --app-label: #c4b090;
+  --app-border: rgba(196, 168, 106, 0.2);
+  --app-glass: rgba(18, 24, 34, 0.88);
+  --app-violet-soft: rgba(74, 45, 92, 0.35);
+  --app-glow-radial: radial-gradient(
+    ellipse 80% 50% at 50% -20%,
+    rgba(74, 45, 92, 0.28),
+    transparent 70%
+  );
+
+  /* Chrome / nav (MysticChromeTokens) */
+  --chrome-glass: rgba(12, 16, 24, 0.784);
+  --chrome-border: rgba(196, 168, 106, 0.2);
+  --chrome-blur: 20px;
+  --nav-active: #c4a86a;
+  --nav-inactive: #6b6458;
+  --nav-active-glow: 0 0 8px rgba(196, 168, 106, 0.35);
+  --nav-icon-glow: drop-shadow(0 0 8px rgba(196, 168, 106, 0.35));
+
+  /* Shape / space (MysticRadii + MysticSpacing + Today) */
+  --radius-sm: 0.75rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.5rem;
+  --radius-pill: 9999px;
+  --radius-card: var(--radius-md);
+  --content-mobile-padding: 1.25rem;
+  --content-max-width: 32rem;
+  --today-max-width: 26.25rem;
+  --reading-max-width: 36rem;
+  --header-height: 3.5rem;
+  --bottom-nav-height: 4.5rem;
+  --spacing-page: var(--content-mobile-padding);
+  --spacing-section: 1.25rem;
+
+  /* Effects */
+  --shadow-soft: 0 8px 24px -12px rgba(0, 0, 0, 0.45);
+  --shadow-card: 0 28px 56px -36px rgba(0, 0, 0, 0.9);
+  --shadow-gold: 0 0 18px rgba(196, 168, 106, 0.12);
+  --glow-gold: radial-gradient(
+    ellipse 80% 70% at 50% -20%,
+    rgba(196, 168, 106, 0.18),
+    transparent 70%
+  );
+
+  /* Legacy aliases (globals.css consumers) */
+  --page-bg: var(--app-bg);
+  --surface-primary: var(--app-surface);
+  --surface-elevated: var(--app-surface-elevated);
+  --text-primary: var(--app-text);
+  --text-muted: var(--app-muted);
+  --text-subtle: var(--app-subtle);
+  --border-subtle: var(--app-border);
+  --accent-gold: var(--mystic-gold);
+  --accent-gold-muted: var(--mystic-gold-soft);
+  --accent-violet: #2d1f3d;
+  --accent-violet-soft: var(--app-violet-soft);
+  --focus-ring: var(--mystic-gold);
+  --destructive: #c62828;
+  --glow-radial: var(--app-glow-radial);
+
+  /* Legacy auth aliases */
+  --auth-page-bg: var(--auth-bg);
+  --auth-surface: var(--auth-card);
+  --auth-text-primary: var(--auth-text);
+  --auth-text-muted: var(--auth-muted);
+  --auth-text-subtle: #8a7f72;
+  --auth-accent-gold: var(--auth-gold);
+  --auth-accent-gold-soft: var(--auth-gold-soft);
+  --auth-radius-card: var(--radius-lg);
+  --shell-max-width: var(--content-max-width);
+  --nav-active-indicator: var(--nav-active);
+}
+
+@theme inline {
+  --color-page-bg: var(--page-bg);
+  --color-surface-primary: var(--surface-primary);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-text-primary: var(--text-primary);
+  --color-text-muted: var(--text-muted);
+  --color-text-subtle: var(--text-subtle);
+  --color-border-subtle: var(--border-subtle);
+  --color-accent-gold: var(--accent-gold);
+  --color-accent-gold-muted: var(--accent-gold-muted);
+  --color-accent-violet: var(--accent-violet);
+  --color-accent-violet-soft: var(--accent-violet-soft);
+  --color-focus-ring: var(--focus-ring);
+  --color-destructive: var(--destructive);
+  --color-auth-page-bg: var(--auth-page-bg);
+  --color-auth-surface: var(--auth-surface);
+  --color-auth-surface-muted: var(--auth-surface-muted);
+  --color-auth-text-primary: var(--auth-text-primary);
+  --color-auth-text-muted: var(--auth-text-muted);
+  --color-auth-text-subtle: var(--auth-text-subtle);
+  --color-auth-border: var(--auth-border);
+  --color-auth-accent-gold: var(--auth-accent-gold);
+  --color-auth-accent-gold-soft: var(--auth-accent-gold-soft);
+  --radius-card: var(--radius-card);
+  --font-sans: var(--font-geist-sans);
+}
+
+@layer utilities {
+  .mystic-auth-page {
+    min-height: 100dvh;
+    background-color: var(--auth-bg);
+    background-image: var(--auth-glow);
+    color: var(--auth-text);
+  }
+
+  .mystic-auth-card {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--auth-border);
+    background-color: var(--auth-card);
+    box-shadow: var(--auth-shadow);
+  }
+
+  .mystic-auth-content {
+    width: 100%;
+  }
+
+  .mystic-auth-wordmark {
+    font-size: 1.5rem;
+    font-weight: 400;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--auth-gold);
+  }
+
+  .mystic-auth-divider {
+    width: 2.25rem;
+    height: 1px;
+    margin-inline: auto;
+    background-color: color-mix(in srgb, var(--auth-gold) 32%, transparent);
+  }
+
+  .mystic-auth-input-underline {
+    min-height: 2.75rem;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid var(--auth-border);
+    border-radius: 0;
+    background-color: transparent;
+    padding: 0.5rem 0 0.625rem;
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--auth-text);
+    outline: none;
+  }
+
+  .mystic-auth-input-underline::placeholder {
+    color: color-mix(in srgb, var(--auth-muted) 72%, transparent);
+  }
+
+  .mystic-auth-input-underline:focus-visible {
+    border-bottom-color: color-mix(in srgb, var(--auth-gold) 55%, transparent);
+    box-shadow: none;
+  }
+
+  .mystic-auth-lang-toggle {
+    border: 1px solid color-mix(in srgb, var(--auth-gold) 65%, transparent);
+    border-radius: var(--radius-pill);
+  }
+
+  .mystic-auth-lang-chip-active {
+    background-color: var(--auth-gold);
+    color: var(--auth-bg);
+  }
+
+  .mystic-app-page {
+    position: relative;
+    isolation: isolate;
+    background-color: var(--app-bg);
+    color: var(--app-text);
+  }
+
+  .mystic-app-page::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.34;
+    background:
+      linear-gradient(180deg, rgba(11, 13, 20, 0.55) 0%, rgba(11, 13, 20, 0.92) 55%),
+      url("/assets/backgrounds/app-background.jpg") center / cover no-repeat;
+  }
+
+  .mystic-app-canvas {
+    width: 100%;
+    max-width: var(--content-max-width);
+    margin-inline: auto;
+    min-height: 100dvh;
+  }
+
+  .mystic-shell {
+    width: 100%;
+    max-width: var(--content-max-width);
+    margin-inline: auto;
+  }
+
+  .mystic-reading-column {
+    width: 100%;
+    max-width: var(--reading-max-width);
+    margin-inline: auto;
+  }
+
+  .mystic-today-column {
+    width: 100%;
+    max-width: var(--today-max-width);
+    margin-inline: auto;
+  }
+
+  .mystic-chrome-nav {
+    border-top: 1px solid var(--chrome-border);
+    background-color: var(--chrome-glass);
+    backdrop-filter: blur(var(--chrome-blur));
+    -webkit-backdrop-filter: blur(var(--chrome-blur));
+  }
+
+  .mystic-chrome-header {
+    border-bottom: 1px solid var(--chrome-border);
+    background-color: color-mix(in srgb, var(--app-bg) 88%, transparent);
+    backdrop-filter: blur(var(--chrome-blur));
+    -webkit-backdrop-filter: blur(var(--chrome-blur));
+  }
+
+  .mystic-cosmic-card {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--chrome-border);
+    background-color: var(--app-glass);
+    box-shadow: var(--shadow-card);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .mystic-cosmic-card-elevated {
+    border-radius: var(--radius-xl);
+    border: 1px solid color-mix(in srgb, var(--mystic-gold) 30%, transparent);
+    background-color: color-mix(in srgb, var(--app-surface-elevated) 95%, transparent);
+    box-shadow: var(--shadow-card);
+  }
+
+  .mystic-eyebrow {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--mystic-gold);
+  }
+
+  .mystic-nav-active-pill {
+    position: relative;
+    color: var(--nav-active);
+  }
+
+  .mystic-nav-active-pill::after {
+    content: "";
+    position: absolute;
+    bottom: 0.35rem;
+    left: 50%;
+    width: 1.25rem;
+    height: 0.125rem;
+    transform: translateX(-50%);
+    border-radius: var(--radius-pill);
+    background-color: var(--nav-active);
+  }
+
+  .mystic-gold-glow-surface {
+    isolation: isolate;
+    position: relative;
+  }
+
+  .mystic-gold-glow-surface::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 7rem;
+    pointer-events: none;
+    background: var(--glow-gold);
+  }
+
+  .mystic-rune-sigil {
+    border: 2px solid rgba(214, 180, 106, 0.42);
+    background: rgba(242, 230, 201, 0.08);
+    box-shadow: var(--shadow-gold), inset 0 0 24px rgba(242, 230, 201, 0.04);
+  }
+
+  .mystic-rune-sigil-glyph {
+    filter: brightness(0) saturate(100%) invert(91%) sepia(12%) saturate(420%)
+      hue-rotate(358deg) brightness(104%) contrast(92%);
+  }
+}

@@ -1,18 +1,13 @@
 import { getTranslations } from "next-intl/server";
 
-import { BrandMark } from "@/components/brand/brand-mark";
-import { Link } from "@/i18n/navigation";
-
 type DailyGuidanceHeaderProps = {
   formattedDate: string;
   greetingName: string | null;
-  showProfile?: boolean;
 };
 
 export async function DailyGuidanceHeader({
   formattedDate,
   greetingName,
-  showProfile = false,
 }: DailyGuidanceHeaderProps) {
   const t = await getTranslations("dailyGuidance");
   const tAuth = await getTranslations("auth.today");
@@ -22,24 +17,20 @@ export async function DailyGuidanceHeader({
     : t("greeting");
 
   return (
-    <header className="mb-8 space-y-3">
-      <div className="flex items-start justify-between gap-4">
-        <BrandMark compact showLogo />
-        {showProfile ? (
-          <Link
-            href="/profile"
-            className="inline-flex min-h-11 items-center rounded-full border border-border-subtle px-4 text-sm text-text-muted transition-colors hover:border-accent-gold/40 hover:text-text-primary"
-          >
-            {t("profileLink")}
-          </Link>
-        ) : null}
-      </div>
-      <div className="space-y-1">
-        <p className="text-sm text-text-subtle">{formattedDate}</p>
-        <h1 className="text-[1.625rem] font-medium leading-tight tracking-tight text-text-primary">
+    <header className="mb-10 space-y-4 text-center sm:text-left">
+      <p className="mystic-auth-wordmark text-[1.125rem] tracking-[0.12em] text-accent-gold sm:text-left">
+        {t("brandWordmark")}
+      </p>
+      <div className="space-y-2">
+        <p className="text-xs font-medium uppercase tracking-[0.16em] text-accent-gold">
+          {formattedDate}
+        </p>
+        <h1 className="text-[clamp(1.75rem,5vw,2rem)] font-normal leading-[1.1] tracking-[-0.02em] text-text-primary">
           {greeting}
         </h1>
-        <p className="text-sm text-text-muted">{t("pageSubtitle")}</p>
+        <p className="mx-auto max-w-[22rem] text-sm leading-relaxed text-text-muted sm:mx-0">
+          {t("pageSubtitle")}
+        </p>
       </div>
     </header>
   );

@@ -17,6 +17,8 @@ import type {
 type ComposeAuthenticatedInput = {
   formattedDate: string;
   greetingName: string | null;
+  premiumActive: boolean;
+  runeDeep?: string | null;
   labels: {
     primaryLabel: string;
     numerologyUnavailable: string;
@@ -61,8 +63,9 @@ export function composeReflectionNote(
   numerology: PersonalDayResult | null,
   primaryMessage: string,
   primaryAction: string,
+  premiumActive: boolean,
 ): string | null {
-  if (!numerology) {
+  if (!premiumActive || !numerology) {
     return null;
   }
 
@@ -87,10 +90,14 @@ export function composeReflectionNote(
 export function composeMoonSection(
   moon: MoonGuidanceResult | null,
   unavailableMessage: string,
+  premiumActive: boolean,
 ): DailyGuidanceMoonSection {
   if (!moon) {
     return { status: "unavailable", message: unavailableMessage };
   }
+
+  const deepSource = moon.phase.guidance?.trim() || "";
+  const actionSource = moon.phase.action?.trim() || "";
 
   return {
     status: "ready",
@@ -99,6 +106,9 @@ export function composeMoonSection(
       phaseTitle: moon.phase.title,
       lunarDay: moon.calculation.lunarDay,
       summary: moon.phase.short,
+      deep: premiumActive ? deepSource || null : null,
+      action: premiumActive ? actionSource || null : null,
+      showPremiumDeepLock: !premiumActive && Boolean(deepSource || actionSource),
       assetPath: moonPhaseArtDescriptor({
         phase4Id: moon.calculation.phaseId,
         phase8Id: moon.calculation.phase8Id,
@@ -112,12 +122,18 @@ export function composeRuneSection(
   rune: DailyRuneResult | null,
   unavailableMessage: string,
   primaryAction: string,
+  options: {
+    premiumActive: boolean;
+    runeDeep?: string | null;
+  },
 ): DailyGuidanceRuneSection {
   if (!rune) {
     return { status: "unavailable", message: unavailableMessage };
   }
 
   const runeAction = rune.content.action.trim();
+  const runeDeep = options.runeDeep?.trim() || "";
+  const hasPremiumDepth = Boolean(runeDeep || runeAction);
 
   return {
     status: "ready",
@@ -125,7 +141,12 @@ export function composeRuneSection(
       runeId: rune.selection.runeId,
       title: rune.content.title,
       summary: rune.content.short,
-      action: shouldShowRuneAction(primaryAction, runeAction) ? runeAction : null,
+      deep: options.premiumActive ? runeDeep || null : null,
+      action:
+        options.premiumActive && shouldShowRuneAction(primaryAction, runeAction)
+          ? runeAction
+          : null,
+      showPremiumDeepLock: !options.premiumActive && hasPremiumDepth,
       assetPath: getRuneAssetPath(rune.selection.runeId),
       href: `/runes/${rune.selection.runeId}`,
     },
@@ -153,16 +174,25 @@ export function composeAuthenticatedGuidance(
     input.labels.formatPersonalDayExplanation,
   );
 
-  const moon = composeMoonSection(input.moon, input.labels.moonUnavailable);
+  const moon = composeMoonSection(
+    input.moon,
+    input.labels.moonUnavailable,
+    input.premiumActive,
+  );
   const rune = composeRuneSection(
     input.rune,
     input.labels.runeUnavailable,
     primary.action,
+    {
+      premiumActive: input.premiumActive,
+      runeDeep: input.runeDeep,
+    },
   );
 
   return {
     formattedDate: input.formattedDate,
     greetingName: input.greetingName,
+    premiumActive: input.premiumActive,
     primary,
     numerology,
     moon,
@@ -171,6 +201,7 @@ export function composeAuthenticatedGuidance(
       input.numerology,
       primary.message,
       primary.action,
+      input.premiumActive,
     ),
   };
 }
@@ -187,5 +218,6 @@ export function serializeGuidanceForTests(
     moonStatus: guidance.moon.status,
     runeStatus: guidance.rune.status,
     hasReflection: Boolean(guidance.reflection),
+    premiumActive: guidance.premiumActive,
   };
 }

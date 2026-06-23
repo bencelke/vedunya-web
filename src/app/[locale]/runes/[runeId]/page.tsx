@@ -7,13 +7,10 @@ import { hasLocale } from "next-intl";
 import { AppHeader } from "@/components/layout/app-header";
 import { AppShell } from "@/components/layout/app-shell";
 import { MobilePage } from "@/components/layout/mobile-page";
-import { Link } from "@/i18n/navigation";
-import { routing } from "@/i18n/routing";
 import { normalizeRuneKey, resolveRuneId } from "@/features/runes/constants/rune-aliases";
-import { RuneDetailContent } from "@/features/runes/components/rune-detail-content";
-import { RuneErrorState } from "@/features/runes/components/rune-error-state";
-import { RuneSymbol } from "@/features/runes/components/rune-symbol";
+import { RuneDetailScreen } from "@/features/runes/components/rune-detail-screen";
 import { loadRuneDetail } from "@/features/runes/services/load-rune-detail";
+import { routing } from "@/i18n/routing";
 import type { SupportedLocale } from "@/config/app-config";
 
 export const dynamic = "force-dynamic";
@@ -29,9 +26,16 @@ export async function generateMetadata({
   const canonical = resolveRuneId(runeId);
   const t = await getTranslations({ locale, namespace: "runes" });
 
-  return {
-    title: canonical ? runeId : t("invalidRune"),
-  };
+  if (!canonical) {
+    return { title: t("invalidRune") };
+  }
+
+  const loaded = await loadRuneDetail(canonical, locale as SupportedLocale);
+  if (loaded.status === "ready") {
+    return { title: loaded.detail.content.title };
+  }
+
+  return { title: t("invalidRune") };
 }
 
 export default async function RuneDetailPage({ params }: RuneDetailPageProps) {
@@ -66,38 +70,18 @@ export default async function RuneDetailPage({ params }: RuneDetailPageProps) {
     <>
       <AppHeader showLogin={false} />
       <AppShell>
-        <MobilePage>
-          <Link
-            href="/today"
-            className="mb-6 inline-flex text-sm text-accent-gold underline-offset-4 hover:underline"
-          >
-            {t("backToToday")}
-          </Link>
-
-          {loaded.status === "ready" ? (
-            <div className="mx-auto max-w-xl space-y-6">
-              <div className="flex flex-col items-center gap-4 text-center">
-                <RuneSymbol
-                  runeId={loaded.detail.runeId}
-                  alt={t("symbolA11y", {
-                    rune: loaded.detail.content.title,
-                  })}
-                  size={120}
-                />
-                <div>
-                  <p className="text-xs font-medium uppercase tracking-[0.14em] text-accent-gold">
-                    {t("focusLabel")}
-                  </p>
-                  <h1 className="mt-2 text-2xl font-medium text-text-primary">
-                    {loaded.detail.content.title}
-                  </h1>
-                </div>
-              </div>
-              <RuneDetailContent detail={loaded.detail} />
-            </div>
-          ) : (
-            <RuneErrorState />
-          )}
+        <MobilePage className="mystic-today-column py-6 pt-safe-top">
+          <RuneDetailScreen
+            loaded={loaded}
+            backLabel={t("backToToday")}
+            focusLabel={t("focusLabel")}
+            symbolAlt={t("symbolA11y", {
+              rune:
+                loaded.status === "ready"
+                  ? loaded.detail.content.title
+                  : canonical,
+            })}
+          />
         </MobilePage>
       </AppShell>
     </>

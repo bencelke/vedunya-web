@@ -12,8 +12,11 @@ import {
   mapZodIssueToAuthError,
   type AuthErrorKey,
 } from "@/features/auth/utils/auth-error-map";
+import { AuthFormCard } from "@/features/auth/components/auth-form-card";
 import { bootstrapUserProfile } from "@/features/profile/services/profile-bootstrap-service";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import type { SupportedLocale } from "@/config/app-config";
 
 type LoginFormProps = {
@@ -62,37 +65,46 @@ export function LoginForm({ locale, onSuccess }: LoginFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <AuthErrorMessage errorKey={errorKey} />
-      <div className="space-y-2">
-        <label htmlFor="login-email" className="text-sm text-text-muted">
-          {t("emailLabel")}
-        </label>
-        <input
-          id="login-email"
-          type="email"
-          autoComplete="email"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-          className="min-h-12 w-full rounded-[var(--radius-card)] border border-border-subtle bg-surface-primary px-4 text-sm text-text-primary outline-none focus-visible:ring-2 focus-visible:ring-focus-ring"
-        />
-      </div>
-      <div className="space-y-2">
-        <label htmlFor="login-password" className="text-sm text-text-muted">
-          {t("passwordLabel")}
-        </label>
-        <input
-          id="login-password"
-          type="password"
-          autoComplete="current-password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          className="min-h-12 w-full rounded-[var(--radius-card)] border border-border-subtle bg-surface-primary px-4 text-sm text-text-primary outline-none focus-visible:ring-2 focus-visible:ring-focus-ring"
-        />
-      </div>
-      <Button type="submit" className="w-full" disabled={submitting}>
-        {submitting ? t("submitting") : t("submit")}
-      </Button>
-    </form>
+    <AuthFormCard>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <AuthErrorMessage errorKey={errorKey} tone="auth" />
+        <div className="space-y-2">
+          <Label htmlFor="login-email" tone="auth">
+            {t("emailLabel")}
+          </Label>
+          <Input
+            id="login-email"
+            type="email"
+            autoComplete="email"
+            tone="auth"
+            variant="underline"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="login-password" tone="auth">
+            {t("passwordLabel")}
+          </Label>
+          <Input
+            id="login-password"
+            type="password"
+            autoComplete="current-password"
+            tone="auth"
+            variant="underline"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
+        </div>
+        <Button
+          type="submit"
+          variant="authPrimary"
+          className="w-full"
+          disabled={submitting}
+        >
+          {submitting ? t("submitting") : t("submit")}
+        </Button>
+      </form>
+    </AuthFormCard>
   );
 }

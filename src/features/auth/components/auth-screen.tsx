@@ -3,10 +3,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 
-import { BrandMark } from "@/components/brand/brand-mark";
-import { Container } from "@/components/ui/container";
-import { AppHeader } from "@/components/layout/app-header";
-import { GoogleSignInButton } from "@/features/auth/components/google-sign-in-button";
+import { AuthBrandHeader } from "@/features/auth/components/auth-brand-header";
+import { AuthLanguageBar } from "@/features/auth/components/auth-language-bar";
+import { AuthProviderButtons } from "@/features/auth/components/auth-provider-buttons";
+import { AuthShell } from "@/features/auth/components/auth-shell";
 import { LoginForm } from "@/features/auth/components/login-form";
 import { RegisterForm } from "@/features/auth/components/register-form";
 import { useAuth } from "@/features/auth/hooks/use-auth";
@@ -52,89 +52,91 @@ export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
     void redirectAfterAuth();
   }
 
+  const topBar = (
+    <AuthLanguageBar
+      backHref="/"
+      backLabel={t("backToLanding")}
+      tone="auth"
+    />
+  );
+
   if (loading) {
     return (
-      <>
-        <AppHeader showLogin={false} />
-        <Container narrow className="py-16">
-          <p className="text-sm text-text-muted">{t("loading")}</p>
-        </Container>
-      </>
+      <AuthShell topBar={topBar}>
+        <div className="space-y-6 py-10 text-center">
+          <AuthBrandHeader
+            headline={t("welcomeHeadline")}
+            subtitle={t("loading")}
+            showWordmark={false}
+          />
+        </div>
+      </AuthShell>
     );
   }
 
   if (!configured || !adminConfigured) {
     return (
-      <>
-        <AppHeader showLogin={false} />
-        <Container narrow className="space-y-4 py-16">
-          <h1 className="text-2xl font-medium text-text-primary">
-            {t("configuration.title")}
-          </h1>
-          <p className="text-sm leading-relaxed text-text-muted">
-            {t("configuration.body")}
-          </p>
-        </Container>
-      </>
+      <AuthShell topBar={topBar}>
+        <div className="space-y-6 py-4">
+          <AuthBrandHeader
+            headline={t("configuration.title")}
+            subtitle={t("configuration.body")}
+            showWordmark={false}
+          />
+        </div>
+      </AuthShell>
     );
   }
 
-  return (
-    <>
-      <AppHeader showLogin={false} />
-      <Container narrow className="space-y-8 py-8">
-        <header className="space-y-3">
-          <BrandMark />
-          <div className="space-y-2">
-            <h1 className="text-2xl font-medium text-text-primary">
-              {mode === "login" ? t("loginTitle") : t("registerTitle")}
-            </h1>
-            <p className="text-sm leading-relaxed text-text-muted">
-              {mode === "login" ? t("loginDescription") : t("registerDescription")}
-            </p>
-          </div>
-        </header>
+  const isLogin = mode === "login";
 
-        <GoogleSignInButton locale={locale} onSuccess={handleAuthSuccess} />
+  return (
+    <AuthShell topBar={topBar}>
+      <div className="space-y-8">
+        <AuthBrandHeader
+          headline={isLogin ? t("loginTitle") : t("registerTitle")}
+          subtitle={isLogin ? t("loginDescription") : t("registerDescription")}
+        />
+
+        <AuthProviderButtons locale={locale} onSuccess={handleAuthSuccess} />
 
         <div className="flex items-center gap-3">
-          <div className="h-px flex-1 bg-border-subtle" />
-          <span className="text-xs uppercase tracking-[0.12em] text-text-subtle">
+          <div className="h-px flex-1 bg-auth-border" />
+          <span className="text-xs font-medium uppercase tracking-[0.14em] text-auth-text-subtle">
             {t("divider")}
           </span>
-          <div className="h-px flex-1 bg-border-subtle" />
+          <div className="h-px flex-1 bg-auth-border" />
         </div>
 
-        {mode === "login" ? (
+        {isLogin ? (
           <LoginForm locale={locale} onSuccess={handleAuthSuccess} />
         ) : (
           <RegisterForm locale={locale} onSuccess={handleAuthSuccess} />
         )}
 
-        <div className="space-y-3 text-sm text-text-muted">
+        <div className="space-y-4 border-t border-auth-border/80 pt-6 text-center text-sm">
           <button
             type="button"
-            onClick={() => setMode(mode === "login" ? "register" : "login")}
-            className="text-accent-gold underline-offset-4 hover:underline"
+            onClick={() => setMode(isLogin ? "register" : "login")}
+            className="font-medium tracking-[0.01em] text-auth-text-muted transition-colors hover:text-auth-text-primary"
           >
-            {mode === "login" ? t("switchToRegister") : t("switchToLogin")}
+            {isLogin ? t("switchToRegister") : t("switchToLogin")}
           </button>
-          {mode === "login" ? (
+          {isLogin ? (
             <p>
-              <Link href="/forgot-password" className="text-text-muted underline-offset-4 hover:underline">
+              <Link
+                href="/forgot-password"
+                className="text-auth-text-muted underline-offset-4 hover:text-auth-text-primary hover:underline"
+              >
                 {t("forgotPasswordLink")}
               </Link>
             </p>
           ) : null}
-          <p>
-            <Link href="/" className="text-text-muted underline-offset-4 hover:underline">
-              {t("backToLanding")}
-            </Link>
+          <p className="text-xs leading-relaxed text-auth-text-subtle">
+            {t("legalNotice")}
           </p>
-          <p className="text-xs leading-relaxed text-text-subtle">{t("legalNotice")}</p>
-          <p className="text-xs leading-relaxed text-text-subtle">{t("applePlaceholder")}</p>
         </div>
-      </Container>
-    </>
+      </div>
+    </AuthShell>
   );
 }

@@ -2,20 +2,31 @@ import { type HTMLAttributes } from "react";
 
 import { cn } from "@/lib/utils";
 
+type CardTone = "app" | "cosmic" | "elevated";
+
 type CardProps = HTMLAttributes<HTMLDivElement> & {
+  /** @deprecated Use tone="elevated" */
   elevated?: boolean;
+  tone?: CardTone;
 };
 
 export function Card({
   className,
   elevated = false,
+  tone,
   ...props
 }: CardProps) {
+  const resolvedTone: CardTone =
+    tone ?? (elevated ? "elevated" : "app");
+
   return (
     <div
       className={cn(
-        "rounded-[var(--radius-card)] border border-border-subtle p-5",
-        elevated ? "bg-surface-elevated" : "bg-surface-primary",
+        "p-5",
+        resolvedTone === "cosmic" && "mystic-cosmic-card",
+        resolvedTone === "elevated" && "mystic-cosmic-card-elevated",
+        resolvedTone === "app" &&
+          "rounded-[var(--radius-md)] border border-border-subtle bg-surface-primary",
         className,
       )}
       {...props}

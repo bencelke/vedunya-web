@@ -94,6 +94,8 @@ export type MoonGuidanceResult = {
   calculation: MoonCalculation;
   phase: MoonLocalizedContent;
   lunarDayContent: MoonLocalizedContent | null;
+  premiumActive: boolean;
+  showPremiumLock: boolean;
   source: {
     phase: "firestore" | "fallback";
     lunarDay: MoonContentSource;

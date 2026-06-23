@@ -99,6 +99,7 @@ export type RuneDetailResult = {
   runeId: CanonicalRuneId;
   content: RuneDeepContent;
   access: RuneContentAccess;
+  showPremiumLock: boolean;
   source: "firestore" | "fallback" | "minimal";
 };
 

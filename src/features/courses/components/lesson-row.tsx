@@ -1,7 +1,7 @@
 import Image from "next/image";
 
-import { getLessonIconPath } from "@/features/courses/constants/course-assets";
 import type { CourseLessonSummary } from "@/features/courses/types/course";
+import { getLessonIconPath } from "@/features/courses/constants/course-assets";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
@@ -33,9 +33,9 @@ export function LessonRow({
     <>
       <div
         className={cn(
-          "relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-[calc(var(--radius-card)-0.35rem)] border bg-surface-primary",
+          "relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full border bg-surface-primary",
           state === "current"
-            ? "border-accent-gold/40 bg-accent-gold-muted"
+            ? "border-accent-gold/40 bg-accent-gold-muted/50"
             : "border-border-subtle",
           isLocked && "opacity-60",
         )}
@@ -60,18 +60,18 @@ export function LessonRow({
           >
             {lesson.title}
           </p>
-          <span
-            className={cn(
-              "shrink-0 text-[0.6875rem] font-medium uppercase tracking-[0.12em]",
-              state === "completed"
-                ? "text-accent-gold"
-                : state === "current"
+          {statusLabel ? (
+            <span
+              className={cn(
+                "shrink-0 text-[0.6875rem] font-medium uppercase tracking-[0.12em]",
+                state === "completed" || state === "current"
                   ? "text-accent-gold"
                   : "text-text-subtle",
-            )}
-          >
-            {statusLabel}
-          </span>
+              )}
+            >
+              {statusLabel}
+            </span>
+          ) : null}
         </div>
         {lesson.subtitle ? (
           <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-text-muted">
@@ -86,7 +86,7 @@ export function LessonRow({
     return (
       <div
         aria-disabled
-        className="flex min-w-0 items-start gap-4 overflow-hidden rounded-[var(--radius-card)] border border-border-subtle bg-surface-primary/70 p-4"
+        className="mystic-cosmic-card flex min-w-0 items-start gap-4 overflow-hidden p-4 opacity-80"
       >
         {content}
       </div>
@@ -97,10 +97,8 @@ export function LessonRow({
     <Link
       href={href}
       className={cn(
-        "flex min-w-0 items-start gap-4 overflow-hidden rounded-[var(--radius-card)] border p-4 transition-colors focus-visible:outline-none",
-        state === "current"
-          ? "border-accent-gold/30 bg-surface-elevated hover:bg-accent-gold-muted/40"
-          : "border-border-subtle bg-surface-primary hover:bg-surface-elevated",
+        "mystic-cosmic-card flex min-w-0 items-start gap-4 overflow-hidden p-4 transition-colors focus-visible:outline-none",
+        state === "current" && "border-accent-gold/25 bg-accent-gold-muted/20",
       )}
     >
       {content}

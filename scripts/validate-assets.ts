@@ -118,6 +118,23 @@ function validateAssets(): CheckResult {
     }
   }
 
+  const pwaIcons = [
+    "public/icons/icon-192x192.png",
+    "public/icons/icon-512x512.png",
+    "public/icons/icon-512x512-maskable.png",
+    "public/icons/apple-touch-icon.png",
+  ];
+  for (const iconRel of pwaIcons) {
+    const iconPath = path.join(WEB_ROOT, iconRel);
+    if (!fs.existsSync(iconPath)) {
+      errors.push(`Missing PWA icon: ${iconRel}`);
+    }
+  }
+
+  if (!fs.existsSync(path.join(WEB_ROOT, "public/sw.js"))) {
+    errors.push("Missing service worker: public/sw.js");
+  }
+
   const assetFiles = walkFiles(PUBLIC_ASSETS);
   for (const file of assetFiles) {
     const rel = relativeFromPublic(file);

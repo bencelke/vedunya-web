@@ -4,9 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { hasLocale } from "next-intl";
 
-import { OnboardingFlow } from "@/features/auth/components/onboarding-flow";
-import { AppHeader } from "@/components/layout/app-header";
-import { AppShell } from "@/components/layout/app-shell";
+import { OnboardingFlow } from "@/features/onboarding/components/onboarding-flow";
 import { getProfileSnapshot } from "@/features/profile/services/profile-repository";
 import { requireIncompleteProfile } from "@/lib/auth/require-user";
 import { routing } from "@/i18n/routing";
@@ -36,12 +34,5 @@ export default async function OnboardingPage({ params }: OnboardingPageProps) {
   const { user } = await requireIncompleteProfile(locale);
   const profile = await getProfileSnapshot(user.uid);
 
-  return (
-    <>
-      <AppHeader showLogin={false} />
-      <AppShell>
-        <OnboardingFlow locale={locale} initialProfile={profile} />
-      </AppShell>
-    </>
-  );
+  return <OnboardingFlow locale={locale} initialProfile={profile} />;
 }

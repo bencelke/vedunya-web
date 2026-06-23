@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 
+import { mysticAssets } from "@/config/mysticAssets";
 import { AuthErrorMessage } from "@/features/auth/components/auth-error-message";
 import { loginWithGoogle } from "@/features/auth/services/auth-service";
 import { createServerSession } from "@/features/auth/services/session-service";
@@ -51,14 +53,21 @@ export function GoogleSignInButton({ locale, onSuccess }: GoogleSignInButtonProp
 
   return (
     <div className="space-y-3">
-      <AuthErrorMessage errorKey={errorKey} />
+      <AuthErrorMessage errorKey={errorKey} tone="auth" />
       <Button
         type="button"
-        variant="secondary"
+        variant="authOutline"
         className="w-full"
         disabled={submitting}
         onClick={handleClick}
       >
+        <Image
+          src={mysticAssets.brand.googleIcon}
+          alt=""
+          aria-hidden="true"
+          width={18}
+          height={18}
+        />
         {submitting ? t("submitting") : t("continue")}
       </Button>
     </div>

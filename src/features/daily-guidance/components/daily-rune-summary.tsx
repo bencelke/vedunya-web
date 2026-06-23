@@ -1,5 +1,5 @@
 import { Link } from "@/i18n/navigation";
-import { RuneSymbol } from "@/features/runes/components/rune-symbol";
+import { MysticRuneSigil } from "@/features/runes/components/mystic-rune-sigil";
 import { SectionUnavailable } from "@/features/daily-guidance/components/section-unavailable";
 import type { DailyGuidanceRuneSection } from "@/features/daily-guidance/types/daily-guidance-view-model";
 import { isGuidanceReady } from "@/features/daily-guidance/types/daily-guidance-view-model";
@@ -27,26 +27,26 @@ export function DailyRuneSummary({
   const data = rune.data;
 
   return (
-    <section className="rounded-[var(--radius-card)] border border-border-subtle bg-surface-primary/70 p-5">
-      <p className="text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-text-subtle">
+    <section className="overflow-hidden rounded-[var(--radius-card)] border border-border-subtle/80 bg-surface-primary/75 p-5 backdrop-blur-sm">
+      <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.16em] text-text-subtle">
         {label}
       </p>
-      <h3 className="mt-2 text-base font-medium leading-snug text-text-primary">
+      <h3 className="mt-2 text-lg font-medium leading-snug text-text-primary">
         {data.title}
       </h3>
-      <div className="mt-3 flex items-start gap-4">
-        <RuneSymbol
+      <div className="mt-4 flex items-start gap-4">
+        <MysticRuneSigil
           runeId={data.runeId as CanonicalRuneId}
           alt={symbolAlt}
-          size={64}
+          size={72}
         />
         <p className="min-w-0 flex-1 text-sm leading-relaxed text-text-muted">
           {data.summary}
         </p>
       </div>
       {data.action ? (
-        <div className="mt-4 border-t border-border-subtle pt-4">
-          <p className="text-xs font-medium tracking-[0.12em] text-accent-gold">
+        <div className="mt-4 border-t border-border-subtle/80 pt-4">
+          <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-accent-gold">
             {actionLabel}
           </p>
           <p className="mt-2 text-sm leading-relaxed text-text-primary">

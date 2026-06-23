@@ -3,12 +3,6 @@
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 
-import {
-  Card,
-  CardBody,
-  CardLabel,
-  CardTitle,
-} from "@/components/ui/card";
 import { getCourseCoverPath } from "@/features/courses/constants/course-assets";
 import type { CourseCatalogItem } from "@/features/courses/types/course";
 import { Link } from "@/i18n/navigation";
@@ -29,17 +23,20 @@ export function CourseCard({ course }: CourseCardProps) {
   const showCompleted = course.isCompleted === true;
   const isLocked = !course.access.canOpenLessons;
 
-  const ctaLabel = hasProgress ? t("resume") : t("viewCourse");
+  const ctaLabel = hasProgress
+    ? t("resumePath")
+    : isLocked
+      ? t("viewCourse")
+      : t("viewCourse");
   const progressLabel =
     course.progressPercent !== null
       ? t("progressPercent", { percent: course.progressPercent })
       : null;
 
   return (
-    <Card
-      elevated
+    <article
       className={cn(
-        "min-w-0 overflow-hidden border-accent-gold/15 p-0",
+        "mystic-cosmic-card-elevated min-w-0 overflow-hidden p-0",
         isLocked && "opacity-95",
       )}
     >
@@ -56,7 +53,7 @@ export function CourseCard({ course }: CourseCardProps) {
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 420px"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-page-bg/80 via-page-bg/10 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-page-bg/85 via-page-bg/15 to-transparent" />
             {course.access.showComingSoon ? (
               <span className="absolute left-4 top-4 rounded-full border border-border-subtle bg-surface-elevated/90 px-3 py-1 text-[0.6875rem] font-medium uppercase tracking-[0.12em] text-text-muted">
                 {t("comingSoon")}
@@ -70,31 +67,35 @@ export function CourseCard({ course }: CourseCardProps) {
           </div>
         ) : null}
 
-        <div className="min-w-0 p-5">
-          <CardLabel>{t("lessonCount", { count: course.lessonCount })}</CardLabel>
-          <CardTitle className="mt-2 line-clamp-2">{course.title}</CardTitle>
-          <CardBody className="line-clamp-3">{course.description}</CardBody>
+        <div className="min-w-0 space-y-3 p-5">
+          <p className="mystic-eyebrow">
+            {t("lessonCount", { count: course.lessonCount })}
+          </p>
+          <h2 className="line-clamp-2 text-xl font-medium tracking-tight text-text-primary">
+            {course.title}
+          </h2>
+          <p className="line-clamp-3 text-sm leading-[1.72] text-text-muted">
+            {course.description}
+          </p>
 
           {course.estimatedDuration ? (
-            <p className="mt-3 text-xs text-text-subtle">
+            <p className="text-xs text-text-subtle">
               {t("estimatedDuration", { duration: course.estimatedDuration })}
             </p>
           ) : null}
 
           {hasProgress && progressLabel ? (
-            <div className="mt-4">
-              <CourseProgressBar
-                percent={course.progressPercent ?? 0}
-                label={progressLabel}
-              />
-            </div>
+            <CourseProgressBar
+              percent={course.progressPercent ?? 0}
+              label={progressLabel}
+            />
           ) : null}
 
-          <span className="mt-5 inline-flex text-sm font-medium text-accent-gold underline-offset-4 hover:underline">
+          <span className="inline-flex min-h-11 items-center text-sm font-medium text-accent-gold underline-offset-4 hover:underline">
             {ctaLabel}
           </span>
         </div>
       </Link>
-    </Card>
+    </article>
   );
 }

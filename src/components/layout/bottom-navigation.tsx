@@ -28,10 +28,10 @@ export function BottomNavigation() {
   return (
     <nav
       aria-label={tA11y("bottomNavigation")}
-      className="fixed inset-x-0 bottom-nav-offset z-50 border-t border-border-subtle bg-surface-primary/95 backdrop-blur-md"
+      className="mystic-chrome-nav fixed inset-x-0 bottom-nav-offset z-50"
       style={{ height: "var(--bottom-nav-height)" }}
     >
-      <ul className="mx-auto flex h-full max-w-lg items-stretch px-2">
+      <ul className="mystic-shell flex h-full items-stretch px-1">
         {bottomNavItems.map((item) => {
           const Icon = iconMap[item.icon];
           const isActive =
@@ -43,15 +43,18 @@ export function BottomNavigation() {
               <Link
                 href={item.href}
                 className={cn(
-                  "flex h-full flex-col items-center justify-center gap-1 px-2 text-xs transition-colors",
+                  "relative flex h-full flex-col items-center justify-center gap-1 px-2 text-[0.6875rem] font-medium tracking-[0.02em] transition-colors",
                   isActive
-                    ? "text-accent-gold"
-                    : "text-text-subtle hover:text-text-muted",
+                    ? "mystic-nav-active-pill text-[var(--nav-active)]"
+                    : "text-[var(--nav-inactive)] hover:text-text-muted",
                 )}
                 aria-current={isActive ? "page" : undefined}
               >
                 <Icon
-                  className="h-5 w-5"
+                  className={cn(
+                    "h-5 w-5",
+                    isActive ? "[filter:var(--nav-icon-glow)]" : "",
+                  )}
                   strokeWidth={isActive ? 2.25 : 1.75}
                   aria-hidden="true"
                 />

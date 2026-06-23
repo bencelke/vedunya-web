@@ -6,6 +6,7 @@ import { hasLocale } from "next-intl";
 import { AppHeader } from "@/components/layout/app-header";
 import { AppShell } from "@/components/layout/app-shell";
 import { ProfileContent } from "@/features/profile/components/profile-content";
+import { getPushStatusSummary } from "@/features/notifications/server/push-status";
 import { getProfileSnapshot } from "@/features/profile/services/profile-repository";
 import { requireUser } from "@/lib/auth/current-user";
 import { routing } from "@/i18n/routing";
@@ -39,11 +40,13 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     notFound();
   }
 
+  const pushStatus = await getPushStatusSummary(user.uid, locale);
+
   return (
     <>
-      <AppHeader showLogin={false} />
+      <AppHeader showLogin={false} showProfile />
       <AppShell>
-        <ProfileContent locale={locale} profile={profile} />
+        <ProfileContent locale={locale} profile={profile} pushStatus={pushStatus} />
       </AppShell>
     </>
   );

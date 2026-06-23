@@ -11,6 +11,10 @@ import { parseDateKey } from "@/features/runes/engine/date-key";
 import { resolveMoonDateKey } from "@/features/moon/engine/date-time";
 import { buildDailyRuneResult } from "@/features/runes/services/daily-rune-service";
 import { getCachedRuneDeepContent } from "@/features/runes/repositories/rune-content-repository";
+import {
+  applyRuneContentAccess,
+  hasRunePremiumContent,
+} from "@/features/runes/services/apply-rune-content-access";
 import { resolveRuneContentAccess } from "@/features/runes/services/rune-entitlement";
 import { resolveRuneId } from "@/features/runes/constants/rune-aliases";
 import { getCurrentUser } from "@/lib/auth/current-user";
@@ -82,12 +86,17 @@ export async function loadRuneDetail(
     return { status: "not-found" };
   }
 
+  const rawContent = loaded.content;
+  const showPremiumLock =
+    !access.premiumActive && hasRunePremiumContent(rawContent);
+
   return {
     status: "ready",
     detail: {
       runeId,
-      content: loaded.content,
+      content: applyRuneContentAccess(rawContent, access),
       access,
+      showPremiumLock,
       source: loaded.source,
     },
   };

@@ -12,33 +12,31 @@ export function PrimaryGuidanceCard({
   return (
     <section
       aria-labelledby="daily-guidance-primary-title"
-      className="guidance-primary-surface relative overflow-hidden rounded-[calc(var(--radius-card)+0.25rem)] border border-accent-gold/25 bg-surface-elevated p-6 shadow-[0_24px_48px_-32px_rgba(0,0,0,0.85)]"
+      className="guidance-primary-surface mystic-cosmic-card-elevated relative overflow-hidden p-6 sm:p-7"
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-[radial-gradient(ellipse_80%_70%_at_50%_-20%,rgba(201,169,98,0.14),transparent_70%)]"
+        className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-[var(--glow-gold)]"
       />
-      <div className="relative space-y-4">
-        <p className="text-xs font-medium tracking-[0.12em] text-accent-gold">
-          {primary.label}
-        </p>
+      <div className="relative space-y-4 text-center sm:text-left">
+        <p className="mystic-eyebrow">{primary.label}</p>
         <h2
           id="daily-guidance-primary-title"
-          className="max-w-[28ch] text-xl font-medium leading-snug text-text-primary sm:text-2xl"
+          className="mx-auto max-w-[22rem] text-[clamp(1.375rem,4.5vw,1.75rem)] font-normal leading-[1.2] tracking-[-0.02em] text-text-primary sm:mx-0"
         >
           {primary.title}
         </h2>
         {primary.message ? (
-          <p className="max-w-prose text-[0.9375rem] leading-7 text-text-muted">
+          <p className="mx-auto max-w-[24rem] text-[0.9375rem] leading-[1.72] text-text-muted sm:mx-0">
             {primary.message}
           </p>
         ) : null}
         {primary.action ? (
-          <div className="rounded-[calc(var(--radius-card)-0.15rem)] border border-accent-gold/15 bg-page-bg/40 p-4">
-            <p className="text-xs font-medium tracking-[0.12em] text-accent-gold">
+          <div className="mx-auto max-w-[24rem] rounded-[var(--radius-md)] border border-accent-gold/20 bg-page-bg/40 p-4 text-left sm:mx-0">
+            <p className="text-xs font-medium uppercase tracking-[0.14em] text-accent-gold">
               {actionLabel}
             </p>
-            <p className="mt-2 max-w-prose text-[0.9375rem] leading-7 text-text-primary">
+            <p className="mt-2 text-[0.9375rem] leading-[1.72] text-text-primary">
               {primary.action}
             </p>
           </div>

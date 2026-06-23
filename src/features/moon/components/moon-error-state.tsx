@@ -7,17 +7,11 @@ type MoonErrorStateProps = {
 export function MoonErrorState({ compact = false }: MoonErrorStateProps) {
   const t = useTranslations("moon");
 
-  if (compact) {
-    return (
-      <div className="rounded-[var(--radius-card)] border border-border-subtle bg-surface-elevated p-4">
-        <p className="text-sm text-text-muted">{t("loadError")}</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="rounded-[var(--radius-card)] border border-border-subtle bg-surface-elevated p-6 text-center">
-      <p className="text-sm text-text-muted">{t("loadError")}</p>
+    <div
+      className={`mystic-cosmic-card text-center ${compact ? "p-4" : "p-6"}`}
+    >
+      <p className="text-sm leading-relaxed text-text-muted">{t("loadError")}</p>
     </div>
   );
 }

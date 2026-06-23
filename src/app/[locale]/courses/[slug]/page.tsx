@@ -2,11 +2,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { AppHeader } from "@/components/layout/app-header";
-import { AppShell } from "@/components/layout/app-shell";
-import { MobilePage } from "@/components/layout/mobile-page";
-import { CourseDetailHero } from "@/features/courses/components/course-detail-hero";
-import { LessonList } from "@/features/courses/components/lesson-list";
+import { CourseDetailScreen } from "@/features/courses/components/course-detail-screen";
 import { isKnownCourseSlug } from "@/features/courses/constants/course-ids";
 import { loadCourseDetail } from "@/features/courses/services/load-course-detail";
 import type { SupportedLocale } from "@/config/app-config";
@@ -54,54 +50,43 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
       : null;
 
   const ctaLabel = detail.progress?.isCompleted
-    ? t("continueLearning")
+    ? t("continueLesson")
     : completedIds.length > 0
-      ? t("resumeCourse")
+      ? t("resumePath")
       : t("startCourse");
 
-  return (
-    <>
-      <AppHeader showLogin={false} />
-      <AppShell>
-        <MobilePage>
-          <CourseDetailHero
-            coverPath={detail.summary.coverAssetPath}
-            title={detail.summary.title}
-            description={detail.summary.description}
-            progressPercent={progressPercent}
-            progressLabel={
-              progressPercent !== null
-                ? t("progressPercent", { percent: progressPercent })
-                : null
-            }
-            ctaHref={ctaHref}
-            ctaLabel={ctaLabel}
-            access={detail.access}
-            lockedTitle={t("purchaseUnavailableTitle")}
-            lockedMessage={t("purchaseUnavailable")}
-            coverAlt={t("coverA11y", { title: detail.summary.title })}
-          />
+  const lockedTitle = detail.access.showComingSoon
+    ? t("comingSoon")
+    : t("purchaseUnavailableTitle");
+  const lockedMessage = detail.access.showComingSoon
+    ? t("comingSoonCourseMessage")
+    : t("purchaseUnavailable");
 
-          <div className="mt-8">
-            <h2 className="mb-4 text-sm font-medium tracking-[0.12em] text-accent-gold">
-              {t("lessonsHeading")}
-            </h2>
-            <LessonList
-              courseSlug={slug}
-              lessons={detail.lessons}
-              completedLessonIds={completedIds}
-              currentLessonId={detail.progress?.lastOpenedLessonId ?? null}
-              canOpenLessons={detail.access.canOpenLessons}
-              completedLabel={t("lessonCompleted")}
-              currentLabel={t("lessonCurrent")}
-              lockedLabel={t("lessonLocked")}
-              getLessonIconAlt={(lesson) =>
-                t("lessonIconA11y", { title: lesson.title })
-              }
-            />
-          </div>
-        </MobilePage>
-      </AppShell>
-    </>
+  return (
+    <CourseDetailScreen
+      slug={slug}
+      coverPath={detail.summary.coverAssetPath}
+      title={detail.summary.title}
+      description={detail.summary.description}
+      lessons={detail.lessons}
+      progress={detail.progress}
+      access={detail.access}
+      progressPercent={progressPercent}
+      ctaHref={ctaHref}
+      ctaLabel={ctaLabel}
+      lessonsHeading={t("lessonsHeading")}
+      progressLabel={
+        progressPercent !== null
+          ? t("progressPercent", { percent: progressPercent })
+          : null
+      }
+      lockedTitle={lockedTitle}
+      lockedMessage={lockedMessage}
+      coverAlt={t("coverA11y", { title: detail.summary.title })}
+      completedLabel={t("lessonCompleted")}
+      currentLabel={t("lessonCurrent")}
+      lockedLabel={t("lessonLocked")}
+      getLessonIconAlt={(lesson) => t("lessonIconA11y", { title: lesson.title })}
+    />
   );
 }

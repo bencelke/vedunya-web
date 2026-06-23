@@ -1,7 +1,9 @@
 import { useTranslations } from "next-intl";
 
+import { RuneFieldCard } from "@/features/runes/components/rune-field-card";
+import { RuneMeaningCard } from "@/features/runes/components/rune-meaning-card";
+import { RunePremiumLockCard } from "@/features/runes/components/rune-premium-lock-card";
 import type { RuneDetailResult } from "@/features/runes/types/rune";
-import { RunePremiumSection } from "@/features/runes/components/rune-premium-section";
 
 type RuneDetailContentProps = {
   detail: RuneDetailResult;
@@ -9,53 +11,47 @@ type RuneDetailContentProps = {
 
 export function RuneDetailContent({ detail }: RuneDetailContentProps) {
   const t = useTranslations("runes");
-  const { content, access } = detail;
+  const { content, access, showPremiumLock } = detail;
 
   return (
-    <div className="space-y-6">
-      <section className="rounded-[var(--radius-card)] border border-border-subtle bg-surface-elevated p-5">
-        <h2 className="text-xs font-medium uppercase tracking-[0.14em] text-accent-gold">
-          {t("shortMeaningLabel")}
-        </h2>
-        <p className="mt-3 text-sm leading-relaxed text-text-muted">
-          {content.short}
-        </p>
-      </section>
+    <div className="space-y-5">
+      <RuneMeaningCard label={t("meaningLabel")} body={content.short} />
 
-      <RunePremiumSection
-        label={t("deepMeaningLabel")}
-        visible={access.premiumActive || Boolean(content.deep)}
-        locked={!access.premiumActive}
-        body={content.deep}
-      />
+      {access.premiumActive && content.deep.trim() ? (
+        <RuneFieldCard label={t("deepMeaningLabel")} body={content.deep} />
+      ) : null}
 
-      <RunePremiumSection
-        label={t("actionLabel")}
-        visible={access.premiumActive || Boolean(content.action)}
-        locked={!access.premiumActive}
-        body={content.action}
-      />
+      {access.premiumActive && content.action.trim() ? (
+        <RuneFieldCard label={t("actionLabel")} body={content.action} />
+      ) : null}
 
-      <RunePremiumSection
-        label={t("warningLabel")}
-        visible={access.premiumActive || Boolean(content.warning)}
-        locked={!access.premiumActive}
-        body={content.warning}
-      />
+      {access.premiumActive && content.warning.trim() ? (
+        <RuneFieldCard
+          label={t("warningLabel")}
+          body={content.warning}
+          tone="muted"
+        />
+      ) : null}
 
-      <RunePremiumSection
-        label={t("affirmationLabel")}
-        visible={access.premiumActive || Boolean(content.affirmation)}
-        locked={!access.premiumActive}
-        body={content.affirmation}
-      />
+      {access.premiumActive && content.affirmation.trim() ? (
+        <RuneFieldCard label={t("affirmationLabel")} body={content.affirmation} />
+      ) : null}
 
-      <RunePremiumSection
-        label={t("reflectionLabel")}
-        visible={access.premiumActive || Boolean(content.reflection)}
-        locked={!access.premiumActive}
-        body={content.reflection}
-      />
+      {access.premiumActive && content.reflection.trim() ? (
+        <RuneFieldCard
+          label={t("reflectionLabel")}
+          body={content.reflection}
+          tone="muted"
+        />
+      ) : null}
+
+      {showPremiumLock ? (
+        <RunePremiumLockCard
+          title={t("premiumLockTitle")}
+          body={t("premiumLockBody")}
+          ctaLabel={t("premiumLockCta")}
+        />
+      ) : null}
     </div>
   );
 }

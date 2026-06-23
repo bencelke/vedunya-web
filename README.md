@@ -32,6 +32,22 @@ copy .env.example .env.local
 
 See `docs/setup/firebase-web-setup.md` for Firebase Console steps.
 
+## Visual parity status (2026-06-23)
+
+Mystic visual/product parity layer applied to auth, onboarding, app shell, Today, and Profile.
+
+| Area | Status |
+|------|--------|
+| Auth (login/register/forgot) | Light/gold Mystic shell, branded Google, Apple placeholder |
+| Onboarding | Step progress, makosh emblem, light shell |
+| App shell | Background JPG, refined header + bottom nav |
+| Today | Stronger hierarchy and brand — **engines unchanged** |
+| Profile | Account status card, subscription placeholder |
+
+Docs: `docs/migration/mystic-web-parity-report.md`
+
+**Note:** Flutter `mystic_app` was not on this MacBook — parity used prior read-only audit docs + migrated assets.
+
 ## Local development
 
 ```powershell

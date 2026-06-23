@@ -19,7 +19,11 @@ import {
   localizeMoonPhaseContent,
   resolveLocaleWithFallback,
 } from "@/features/moon/services/moon-content-service";
+import { hasMoonPremiumContent } from "@/features/moon/utils/moon-premium-content";
+import { getProfileSnapshot } from "@/features/profile/services/profile-repository";
+import { resolvePremiumAccess } from "@/features/profile/utils/premium-access";
 import { TIMEZONE_COOKIE } from "@/features/numerology/constants";
+import { getCurrentUser } from "@/lib/auth/current-user";
 import type {
   MoonGuidanceLoadResult,
   MoonGuidanceResult,
@@ -51,12 +55,27 @@ async function loadMoonGuidanceInternal(input: {
       timezone,
     });
     const calculation = calculateMoonContext(calculationInput);
+    const sessionUser = await getCurrentUser();
+    const profile = sessionUser
+      ? await getProfileSnapshot(sessionUser.uid)
+      : null;
+    const premiumActive = resolvePremiumAccess(profile);
+
     const phaseLoad = await getCachedMoonPhaseContent(calculation.phaseId);
     const lunarLoad = await getCachedLunarDayContent(calculation.lunarDay);
 
-    const phase = localizeMoonPhaseContent(phaseLoad.record, locale, true);
+    const phaseFull = localizeMoonPhaseContent(phaseLoad.record, locale, true);
+    const lunarFull = lunarLoad.record
+      ? localizeLunarDayContent(lunarLoad.record, locale, true)
+      : null;
+
+    const phase = premiumActive
+      ? phaseFull
+      : localizeMoonPhaseContent(phaseLoad.record, locale, false);
     const lunarDayContent = lunarLoad.record
-      ? localizeLunarDayContent(lunarLoad.record, locale, false)
+      ? premiumActive
+        ? lunarFull
+        : localizeLunarDayContent(lunarLoad.record, locale, false)
       : null;
 
     const guidance: MoonGuidanceResult = {
@@ -65,6 +84,13 @@ async function loadMoonGuidanceInternal(input: {
       calculation,
       phase,
       lunarDayContent,
+      premiumActive,
+      showPremiumLock:
+        !premiumActive &&
+        hasMoonPremiumContent({
+          phase: phaseFull,
+          lunarDayContent: lunarFull,
+        }),
       source: {
         phase: phaseLoad.source,
         lunarDay: lunarLoad.source,

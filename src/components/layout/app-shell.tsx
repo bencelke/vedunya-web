@@ -18,16 +18,13 @@ export function AppShell({ children, className }: AppShellProps) {
   const showBottomNav = shouldShowBottomNav(pathname);
 
   return (
-    <div className={cn("flex min-h-dvh flex-col", className)}>
-      <main
-        className={cn(
-          "flex-1",
-          showBottomNav && "pb-safe-nav",
-        )}
-      >
-        {children}
-      </main>
-      {showBottomNav ? <BottomNavigation /> : null}
+    <div className={cn("mystic-app-page", className)}>
+      <div className="mystic-app-canvas flex min-h-dvh flex-col">
+        <main className={cn("flex-1", showBottomNav && "pb-safe-nav")}>
+          {children}
+        </main>
+        {showBottomNav ? <BottomNavigation /> : null}
+      </div>
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 
 import { AuthErrorMessage } from "@/features/auth/components/auth-error-message";
+import { AuthFormCard } from "@/features/auth/components/auth-form-card";
 import { sendPasswordReset } from "@/features/auth/services/auth-service";
 import { forgotPasswordSchema } from "@/features/auth/schemas/auth-schema";
 import {
@@ -12,6 +13,8 @@ import {
   type AuthErrorKey,
 } from "@/features/auth/utils/auth-error-map";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export function ForgotPasswordForm() {
   const t = useTranslations("auth.forgotPasswordForm");
@@ -49,29 +52,40 @@ export function ForgotPasswordForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <AuthErrorMessage errorKey={errorKey} />
-      {sent ? (
-        <p className="rounded-[var(--radius-card)] border border-border-subtle bg-surface-primary px-4 py-3 text-sm text-text-muted">
-          {t("success")}
-        </p>
-      ) : null}
-      <div className="space-y-2">
-        <label htmlFor="forgot-email" className="text-sm text-text-muted">
-          {t("emailLabel")}
-        </label>
-        <input
-          id="forgot-email"
-          type="email"
-          autoComplete="email"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-          className="min-h-12 w-full rounded-[var(--radius-card)] border border-border-subtle bg-surface-primary px-4 text-sm text-text-primary outline-none focus-visible:ring-2 focus-visible:ring-focus-ring"
-        />
-      </div>
-      <Button type="submit" className="w-full" disabled={submitting}>
-        {submitting ? t("submitting") : t("submit")}
-      </Button>
-    </form>
+    <AuthFormCard>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <AuthErrorMessage errorKey={errorKey} tone="auth" />
+        {sent ? (
+          <p
+            role="status"
+            className="rounded-[var(--radius-md)] border border-auth-border bg-auth-surface-muted px-4 py-3 text-sm leading-relaxed text-auth-text-muted"
+          >
+            {t("success")}
+          </p>
+        ) : null}
+        <div className="space-y-2">
+          <Label htmlFor="forgot-email" tone="auth">
+            {t("emailLabel")}
+          </Label>
+          <Input
+            id="forgot-email"
+            type="email"
+            autoComplete="email"
+            tone="auth"
+            variant="underline"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+          />
+        </div>
+        <Button
+          type="submit"
+          variant="authPrimary"
+          className="w-full"
+          disabled={submitting || sent}
+        >
+          {submitting ? t("submitting") : t("submit")}
+        </Button>
+      </form>
+    </AuthFormCard>
   );
 }

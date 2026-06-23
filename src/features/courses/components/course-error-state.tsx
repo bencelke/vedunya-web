@@ -10,7 +10,7 @@ export function CourseErrorState({
   return (
     <div
       aria-live="polite"
-      className={`min-w-0 overflow-hidden rounded-[var(--radius-card)] border border-border-subtle bg-surface-elevated ${
+      className={`mystic-cosmic-card min-w-0 overflow-hidden ${
         compact ? "p-4" : "p-6 text-center"
       }`}
     >

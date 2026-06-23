@@ -30,7 +30,6 @@ export async function DailyGuidanceExperience({
         <DailyGuidanceHeader
           formattedDate={model.incomplete.formattedDate}
           greetingName={model.incomplete.greetingName}
-          showProfile
         />
         <DailyGuidanceIncomplete incomplete={model.incomplete} />
       </>
@@ -50,7 +49,6 @@ export async function DailyGuidanceExperience({
       <DailyGuidanceHeader
         formattedDate={model.guidance.formattedDate}
         greetingName={model.guidance.greetingName}
-        showProfile
       />
       <DailyGuidanceAuthenticated guidance={model.guidance} />
     </>

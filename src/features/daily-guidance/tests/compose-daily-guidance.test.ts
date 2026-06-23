@@ -76,9 +76,8 @@ const moonResult = {
   phase: {
     title: "Waning gibbous",
     short: "Refine and release.",
-    deep: "",
-    action: "",
-    warning: "",
+    guidance: "Let excess fall away gently.",
+    action: "Complete one small release today.",
   },
   lunarDayContent: null,
   source: { phase: "fallback" as const, lunarDay: "missing" as const },
@@ -88,6 +87,7 @@ function composeAll(input: Partial<Parameters<typeof composeAuthenticatedGuidanc
   return composeAuthenticatedGuidance({
     formattedDate: "Friday, June 13",
     greetingName: "Maria",
+    premiumActive: false,
     labels,
     numerology: numerologyResult,
     moon: moonResult,
@@ -130,7 +130,8 @@ describe("composeAuthenticatedGuidance", () => {
     expect(guidance?.moon.status).toBe("ready");
     expect(guidance?.rune.status).toBe("ready");
     if (guidance && isGuidanceReady(guidance.rune)) {
-      expect(guidance.rune.data.action).toBeTruthy();
+      expect(guidance.rune.data.showPremiumDeepLock).toBe(true);
+      expect(guidance.rune.data.action).toBeNull();
     }
   });
 
@@ -200,6 +201,7 @@ describe("composeAuthenticatedGuidance", () => {
       sameActionRune,
       labels.runeUnavailable,
       numerologyResult.content.doAdvice,
+      { premiumActive: true },
     );
 
     expect(rune.status).toBe("ready");
@@ -227,6 +229,7 @@ describe("composeAuthenticatedGuidance", () => {
     const input = {
       formattedDate: "Friday, June 13",
       greetingName: "Maria",
+      premiumActive: false,
       labels,
       numerology: numerologyResult,
       moon: moonResult,
@@ -278,13 +281,57 @@ describe("composeNumerologySection", () => {
 });
 
 describe("composeReflectionNote", () => {
-  it("uses avoidAdvice when distinct from primary message and action", () => {
+  it("uses avoidAdvice when distinct from primary message and action for premium users", () => {
     const reflection = composeReflectionNote(
       numerologyResult,
       numerologyResult.content.summary,
       numerologyResult.content.doAdvice,
+      true,
     );
     expect(reflection).toBe(numerologyResult.content.avoidAdvice);
+  });
+
+  it("hides reflection for free users", () => {
+    const reflection = composeReflectionNote(
+      numerologyResult,
+      numerologyResult.content.summary,
+      numerologyResult.content.doAdvice,
+      false,
+    );
+    expect(reflection).toBeNull();
+  });
+});
+
+describe("premium gating", () => {
+  it("hides moon deep content for free users", () => {
+    const moon = composeMoonSection(moonResult, "Moon unavailable", false);
+    expect(moon.status).toBe("ready");
+    if (isGuidanceReady(moon)) {
+      expect(moon.data.deep).toBeNull();
+      expect(moon.data.showPremiumDeepLock).toBe(true);
+    }
+  });
+
+  it("shows moon deep content for premium users", () => {
+    const moon = composeMoonSection(moonResult, "Moon unavailable", true);
+    expect(moon.status).toBe("ready");
+    if (isGuidanceReady(moon)) {
+      expect(moon.data.deep).toBe("Let excess fall away gently.");
+      expect(moon.data.action).toBe("Complete one small release today.");
+    }
+  });
+
+  it("exposes premium depth for premium users in composed guidance", () => {
+    const guidance = composeAll({
+      premiumActive: true,
+      runeDeep: "A deeper symbolic read.",
+    });
+
+    expect(guidance?.premiumActive).toBe(true);
+    expect(guidance?.reflection).toBeTruthy();
+    if (guidance && isGuidanceReady(guidance.rune)) {
+      expect(guidance.rune.data.deep).toBe("A deeper symbolic read.");
+    }
   });
 });
 
@@ -300,7 +347,7 @@ describe("shouldShowRuneAction", () => {
 
 describe("composeMoonSection", () => {
   it("returns unavailable when moon is missing", () => {
-    expect(composeMoonSection(null, "Moon unavailable").status).toBe(
+    expect(composeMoonSection(null, "Moon unavailable", false).status).toBe(
       "unavailable",
     );
   });
@@ -317,7 +364,7 @@ describe("anonymous preview model", () => {
         message: "Example message",
         action: "Example action",
       },
-      moon: composeMoonSection(moonResult, "Moon unavailable"),
+      moon: composeMoonSection(moonResult, "Moon unavailable", false),
       runePreview: {
         title: "Fehu",
         summary: "Example symbolic focus.",

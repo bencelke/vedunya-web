@@ -12,8 +12,11 @@ import {
   mapZodIssueToAuthError,
   type AuthErrorKey,
 } from "@/features/auth/utils/auth-error-map";
+import { AuthFormCard } from "@/features/auth/components/auth-form-card";
 import { bootstrapUserProfile } from "@/features/profile/services/profile-bootstrap-service";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import type { SupportedLocale } from "@/config/app-config";
 
 type RegisterFormProps = {
@@ -70,62 +73,69 @@ export function RegisterForm({ locale, onSuccess }: RegisterFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <AuthErrorMessage errorKey={errorKey} />
-      <div className="space-y-2">
-        <label htmlFor="register-email" className="text-sm text-text-muted">
-          {t("emailLabel")}
+    <AuthFormCard>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <AuthErrorMessage errorKey={errorKey} tone="auth" />
+        <div className="space-y-2">
+          <Label htmlFor="register-email" tone="auth">
+            {t("emailLabel")}
+          </Label>
+          <Input
+            id="register-email"
+            type="email"
+            autoComplete="email"
+            tone="auth"
+            variant="underline"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="register-password" tone="auth">
+            {t("passwordLabel")}
+          </Label>
+          <Input
+            id="register-password"
+            type="password"
+            autoComplete="new-password"
+            tone="auth"
+            variant="underline"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="register-confirm-password" tone="auth">
+            {t("confirmPasswordLabel")}
+          </Label>
+          <Input
+            id="register-confirm-password"
+            type="password"
+            autoComplete="new-password"
+            tone="auth"
+            variant="underline"
+            value={confirmPassword}
+            onChange={(event) => setConfirmPassword(event.target.value)}
+          />
+        </div>
+        <label className="flex items-start gap-3 text-sm leading-relaxed text-auth-text-muted">
+          <input
+            type="checkbox"
+            checked={acceptTerms}
+            onChange={(event) => setAcceptTerms(event.target.checked)}
+            className="mt-1 h-4 w-4 rounded border-auth-border accent-auth-accent-gold"
+          />
+          <span>{t("termsLabel")}</span>
         </label>
-        <input
-          id="register-email"
-          type="email"
-          autoComplete="email"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-          className="min-h-12 w-full rounded-[var(--radius-card)] border border-border-subtle bg-surface-primary px-4 text-sm text-text-primary outline-none focus-visible:ring-2 focus-visible:ring-focus-ring"
-        />
-      </div>
-      <div className="space-y-2">
-        <label htmlFor="register-password" className="text-sm text-text-muted">
-          {t("passwordLabel")}
-        </label>
-        <input
-          id="register-password"
-          type="password"
-          autoComplete="new-password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          className="min-h-12 w-full rounded-[var(--radius-card)] border border-border-subtle bg-surface-primary px-4 text-sm text-text-primary outline-none focus-visible:ring-2 focus-visible:ring-focus-ring"
-        />
-      </div>
-      <div className="space-y-2">
-        <label
-          htmlFor="register-confirm-password"
-          className="text-sm text-text-muted"
+        <Button
+          type="submit"
+          variant="authPrimary"
+          className="w-full"
+          disabled={submitting}
         >
-          {t("confirmPasswordLabel")}
-        </label>
-        <input
-          id="register-confirm-password"
-          type="password"
-          autoComplete="new-password"
-          value={confirmPassword}
-          onChange={(event) => setConfirmPassword(event.target.value)}
-          className="min-h-12 w-full rounded-[var(--radius-card)] border border-border-subtle bg-surface-primary px-4 text-sm text-text-primary outline-none focus-visible:ring-2 focus-visible:ring-focus-ring"
-        />
-      </div>
-      <label className="flex items-start gap-3 text-sm text-text-muted">
-        <input
-          type="checkbox"
-          checked={acceptTerms}
-          onChange={(event) => setAcceptTerms(event.target.checked)}
-          className="mt-1 h-4 w-4 rounded border-border-subtle"
-        />
-        <span>{t("termsLabel")}</span>
-      </label>
-      <Button type="submit" className="w-full" disabled={submitting}>
-        {submitting ? t("submitting") : t("submit")}
-      </Button>
-    </form>
+          {submitting ? t("submitting") : t("submit")}
+        </Button>
+      </form>
+    </AuthFormCard>
   );
 }

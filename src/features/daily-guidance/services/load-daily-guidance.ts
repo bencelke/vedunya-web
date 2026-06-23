@@ -17,6 +17,8 @@ import { parseDateKey } from "@/features/runes/engine/date-key";
 import { buildDailyRuneResult } from "@/features/runes/services/daily-rune-service";
 import { formatDateOfBirth } from "@/features/profile/schemas/onboarding-schema";
 import { getProfileSnapshot } from "@/features/profile/services/profile-repository";
+import { resolvePremiumAccess } from "@/features/profile/utils/premium-access";
+import { getCachedRuneDeepContent } from "@/features/runes/repositories/rune-content-repository";
 import {
   composeAuthenticatedGuidance,
   composeMoonSection,
@@ -124,6 +126,7 @@ async function buildPreviewModel(
   const moon = composeMoonSection(
     await loadMoonSection(locale),
     labels.moonUnavailable,
+    false,
   );
 
   return {
@@ -187,11 +190,9 @@ export async function loadDailyGuidance(
     };
   }
 
-  const contentLocale =
-    profile.language === "ru" || profile.language === "en"
-      ? profile.language
-      : locale;
+  const contentLocale = locale;
 
+  const premiumActive = resolvePremiumAccess(profile);
   const birthDate = formatDateOfBirth(profile.dateOfBirth);
 
   const [numerology, moonLoaded, rune] = await Promise.all([
@@ -213,9 +214,20 @@ export async function loadDailyGuidance(
     ),
   ]);
 
+  let runeDeep: string | null = null;
+  if (premiumActive && rune) {
+    const deepContent = await getCachedRuneDeepContent(
+      rune.selection.runeId,
+      contentLocale,
+    );
+    runeDeep = deepContent?.content.deep?.trim() || null;
+  }
+
   const guidance = composeAuthenticatedGuidance({
     formattedDate: context.formattedDate,
     greetingName: profile.displayName ?? null,
+    premiumActive,
+    runeDeep,
     labels,
     numerology,
     moon: moonLoaded,

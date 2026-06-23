@@ -3,8 +3,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { hasLocale } from "next-intl";
 
-import { AppHeader } from "@/components/layout/app-header";
-import { Container } from "@/components/ui/container";
+import { AuthBrandHeader } from "@/features/auth/components/auth-brand-header";
+import { AuthLanguageBar } from "@/features/auth/components/auth-language-bar";
+import { AuthShell } from "@/features/auth/components/auth-shell";
 import { ForgotPasswordForm } from "@/features/auth/components/forgot-password-form";
 import { routing } from "@/i18n/routing";
 import { Link } from "@/i18n/navigation";
@@ -34,27 +35,39 @@ export default async function ForgotPasswordPage({
 
   setRequestLocale(locale);
   const t = await getTranslations("auth.forgotPassword");
+  const tAuth = await getTranslations("auth");
   const configured =
     validateFirebaseConfig().configured &&
     validateFirebaseAdminConfig().configured;
 
   return (
-    <>
-      <AppHeader showLogin={false} />
-      <Container narrow className="space-y-6 py-8">
-        <header className="space-y-2">
-          <h1 className="text-2xl font-medium text-text-primary">{t("heading")}</h1>
-          <p className="text-sm leading-relaxed text-text-muted">{t("description")}</p>
-        </header>
+    <AuthShell
+      topBar={
+        <AuthLanguageBar
+          backHref="/login"
+          backLabel={t("backToLogin")}
+          tone="auth"
+        />
+      }
+    >
+      <div className="space-y-8">
+        <AuthBrandHeader headline={t("heading")} subtitle={t("description")} />
         {configured ? (
           <ForgotPasswordForm />
         ) : (
-          <p className="text-sm text-text-muted">{t("configurationRequired")}</p>
+          <p className="text-center text-sm leading-relaxed text-auth-text-muted">
+            {tAuth("configuration.body")}
+          </p>
         )}
-        <Link href="/login" className="text-sm text-text-muted underline-offset-4 hover:underline">
-          {t("backToLogin")}
-        </Link>
-      </Container>
-    </>
+        <p className="text-center">
+          <Link
+            href="/login"
+            className="text-sm text-auth-text-muted underline-offset-4 hover:text-auth-text-primary hover:underline"
+          >
+            {t("backToLogin")}
+          </Link>
+        </p>
+      </div>
+    </AuthShell>
   );
 }

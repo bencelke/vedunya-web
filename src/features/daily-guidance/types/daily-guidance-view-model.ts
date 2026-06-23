@@ -24,6 +24,9 @@ export type MoonRhythmSummaryData = {
   phaseTitle: string;
   lunarDay: number;
   summary: string;
+  deep: string | null;
+  action: string | null;
+  showPremiumDeepLock: boolean;
   assetPath: string | null;
   href: "/moon";
 };
@@ -32,7 +35,9 @@ export type DailyRuneSummaryData = {
   runeId: string;
   title: string;
   summary: string;
+  deep: string | null;
   action: string | null;
+  showPremiumDeepLock: boolean;
   assetPath: string;
   href: string;
 };
@@ -47,6 +52,7 @@ export type DailyGuidanceRuneSection = GuidanceSection<DailyRuneSummaryData>;
 export type DailyGuidanceViewModel = {
   formattedDate: string;
   greetingName: string | null;
+  premiumActive: boolean;
   primary: DailyGuidancePrimary;
   numerology: DailyGuidanceNumerologySection;
   moon: DailyGuidanceMoonSection;

@@ -4,16 +4,22 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
-import { Container } from "@/components/ui/container";
+import { Card, CardLabel } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useAuth } from "@/features/auth/hooks/use-auth";
 import {
   sendPasswordReset,
   userHasPasswordProvider,
 } from "@/features/auth/services/auth-service";
+import { disablePushOnLogout } from "@/features/notifications/utils/push-subscription";
 import {
   formatDateOfBirth,
   profileUpdateSchema,
 } from "@/features/profile/schemas/onboarding-schema";
+import { NotificationSettingsCard } from "@/features/notifications/components/notification-settings-card";
+import type { PushStatusSummary } from "@/features/notifications/types/push";
+import { PwaInstallSection } from "@/features/pwa/components/pwa-install-section";
 import { formatAuthProviderLabel } from "@/features/profile/utils/format-auth-provider";
 import { updateUserProfileFields } from "@/features/profile/services/profile-bootstrap-service";
 import type { ProfileSnapshot } from "@/features/profile/types/user-profile";
@@ -23,9 +29,10 @@ import type { SupportedLocale } from "@/config/app-config";
 type ProfileContentProps = {
   locale: SupportedLocale;
   profile: ProfileSnapshot;
+  pushStatus: PushStatusSummary;
 };
 
-export function ProfileContent({ locale, profile }: ProfileContentProps) {
+export function ProfileContent({ locale, profile, pushStatus }: ProfileContentProps) {
   const t = useTranslations("auth.profile");
   const router = useRouter();
   const { user, signOut } = useAuth();
@@ -84,6 +91,7 @@ export function ProfileContent({ locale, profile }: ProfileContentProps) {
   }
 
   async function handleLogout() {
+    await disablePushOnLogout();
     await signOut();
     router.replace("/");
     router.refresh();
@@ -96,22 +104,39 @@ export function ProfileContent({ locale, profile }: ProfileContentProps) {
         ? user.providerData.map((item) => item.providerId)
         : [];
 
+  const accountStatus = profile.profileComplete ? t("statusComplete") : t("statusIncomplete");
+
   return (
-    <Container className="space-y-6 py-6">
+    <div className="mystic-reading-column space-y-6 px-[var(--spacing-page)] py-6">
       <header className="space-y-2">
-        <h1 className="text-2xl font-medium text-text-primary">{t("heading")}</h1>
-        <p className="text-sm text-text-muted">{t("description")}</p>
+        <CardLabel>{t("eyebrow")}</CardLabel>
+        <h1 className="text-[1.75rem] font-medium leading-tight text-text-primary">
+          {profile.displayName ?? t("heading")}
+        </h1>
+        <p className="text-sm leading-relaxed text-text-muted">{t("description")}</p>
       </header>
 
       {message ? (
-        <p className="rounded-[var(--radius-card)] border border-border-subtle bg-surface-primary px-4 py-3 text-sm text-text-muted">
+        <p className="rounded-[var(--radius-card)] border border-border-subtle bg-surface-primary/80 px-4 py-3 text-sm text-text-muted backdrop-blur-sm">
           {message}
         </p>
       ) : null}
 
-      <div className="space-y-4 rounded-[var(--radius-card)] border border-border-subtle bg-surface-primary p-5">
+      <Card elevated className="border-accent-gold/15 bg-surface-elevated/90 backdrop-blur-sm">
+        <CardLabel>{t("accountStatus")}</CardLabel>
+        <p className="mt-2 text-sm text-text-primary">{accountStatus}</p>
+        <p className="mt-3 text-xs leading-relaxed text-text-subtle">
+          {t("subscriptionPlaceholder")}
+        </p>
+      </Card>
+
+      <PwaInstallSection />
+
+      <NotificationSettingsCard locale={locale} initialStatus={pushStatus} />
+
+      <Card elevated className="bg-surface-elevated/90 backdrop-blur-sm">
         {!editing ? (
-          <>
+          <div className="space-y-4">
             <ProfileRow label={t("name")} value={profile.displayName ?? t("notSet")} />
             <ProfileRow label={t("email")} value={profile.email ?? t("notSet")} />
             <ProfileRow
@@ -134,7 +159,7 @@ export function ProfileContent({ locale, profile }: ProfileContentProps) {
                   : t("notSet")
               }
             />
-          </>
+          </div>
         ) : (
           <div className="space-y-4">
             <Field
@@ -168,7 +193,7 @@ export function ProfileContent({ locale, profile }: ProfileContentProps) {
             </div>
           </div>
         )}
-      </div>
+      </Card>
 
       <div className="flex flex-col gap-3">
         {editing ? (
@@ -207,14 +232,16 @@ export function ProfileContent({ locale, profile }: ProfileContentProps) {
           {t("backToToday")}
         </Link>
       </div>
-    </Container>
+    </div>
   );
 }
 
 function ProfileRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="space-y-1">
-      <p className="text-xs uppercase tracking-[0.12em] text-text-subtle">{label}</p>
+    <div className="space-y-1 border-b border-border-subtle/60 pb-4 last:border-b-0 last:pb-0">
+      <p className="text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-text-subtle">
+        {label}
+      </p>
       <p className="text-sm text-text-primary">{value}</p>
     </div>
   );
@@ -235,15 +262,12 @@ function Field({
 }) {
   return (
     <div className="space-y-2">
-      <label htmlFor={id} className="text-sm text-text-muted">
-        {label}
-      </label>
-      <input
+      <Label htmlFor={id}>{label}</Label>
+      <Input
         id={id}
         type={type}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="min-h-11 w-full rounded-[var(--radius-card)] border border-border-subtle bg-surface-elevated px-4 text-sm text-text-primary outline-none focus-visible:ring-2 focus-visible:ring-focus-ring"
       />
     </div>
   );
