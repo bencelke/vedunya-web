@@ -56,6 +56,11 @@ export const onboardingCompleteSchema = z.object({
 
 export const profileUpdateSchema = onboardingCompleteSchema;
 
+export const profilePersonalDetailsSchema = z.object({
+  displayName: displayNameSchema,
+  dateOfBirth: dateOfBirthSchema,
+});
+
 export type OnboardingCompleteInput = z.infer<typeof onboardingCompleteSchema>;
 export type ProfileUpdateInputValidated = z.infer<typeof profileUpdateSchema>;
 

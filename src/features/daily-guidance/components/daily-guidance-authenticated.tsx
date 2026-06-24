@@ -5,8 +5,9 @@ import { PersonalDayIndicator } from "@/features/daily-guidance/components/perso
 import { PrimaryGuidanceCard } from "@/features/daily-guidance/components/primary-guidance-card";
 import type { DailyGuidanceViewModel } from "@/features/daily-guidance/types/daily-guidance-view-model";
 import { isGuidanceReady } from "@/features/daily-guidance/types/daily-guidance-view-model";
+import { UniverseRequestSection } from "@/features/universe-request/components/universe-request-section";
+import { MysticPlusLockCard } from "@/features/premium/components/mystic-plus-lock-card";
 import { TodayActionCard } from "@/features/today/components/today-action-card";
-import { TodayPremiumLockCard } from "@/features/today/components/today-premium-lock-card";
 import { TodayRuneAnchor } from "@/features/today/components/today-rune-anchor";
 
 type DailyGuidanceAuthenticatedProps = {
@@ -17,6 +18,7 @@ export async function DailyGuidanceAuthenticated({
   guidance,
 }: DailyGuidanceAuthenticatedProps) {
   const t = await getTranslations("dailyGuidance");
+  const tPremium = await getTranslations("premium");
   const tMoon = await getTranslations("moon");
   const tRunes = await getTranslations("runes");
 
@@ -33,6 +35,8 @@ export async function DailyGuidanceAuthenticated({
 
   return (
     <div className="space-y-8">
+      <UniverseRequestSection model={guidance.universeRequest} />
+
       <PrimaryGuidanceCard
         primary={guidance.primary}
         actionLabel={t("actionLabel")}
@@ -50,10 +54,6 @@ export async function DailyGuidanceAuthenticated({
       />
 
       <div className="space-y-5">
-        <PersonalDayIndicator
-          numerology={guidance.numerology}
-          label={t("dailyRhythmLabel")}
-        />
         <MoonRhythmSummary
           moon={guidance.moon}
           label={t("moonRhythmLabel")}
@@ -66,6 +66,10 @@ export async function DailyGuidanceAuthenticated({
           phaseVisualAlt={tMoon("phaseVisualA11y", { phase: moonPhaseTitle })}
           deepLabel={t("deepMeaningLabel")}
           actionLabel={t("actionLabel")}
+        />
+        <PersonalDayIndicator
+          numerology={guidance.numerology}
+          label={t("dailyRhythmLabel")}
         />
       </div>
 
@@ -93,11 +97,12 @@ export async function DailyGuidanceAuthenticated({
       ) : null}
 
       {showPremiumLock ? (
-        <TodayPremiumLockCard
-          title={t("premiumLockTitle")}
-          body={t("premiumLockBody")}
-          ctaLabel={t("premiumLockCta")}
-        />
+        <div className="space-y-3">
+          <p className="text-center text-xs leading-relaxed text-text-subtle">
+            {tPremium("todayDepthNote")}
+          </p>
+          <MysticPlusLockCard />
+        </div>
       ) : null}
     </div>
   );

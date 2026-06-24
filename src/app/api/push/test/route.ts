@@ -1,21 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { getNotificationCopy } from "@/features/notifications/content/notification-copy";
 import { pushTestRequestSchema } from "@/features/notifications/schemas/push-schema";
 import { isWebPushConfigured } from "@/features/notifications/server/web-push-config";
 import { sendWebPushToEndpoint } from "@/features/notifications/server/send-web-push";
 import { requireApiUser } from "@/lib/auth/require-api-user";
 import { jsonError } from "@/lib/auth/request-guards";
-
-const TEST_COPY = {
-  en: {
-    title: "Mystic",
-    body: "Mystic reminders are working on this device.",
-  },
-  ru: {
-    title: "Mystic",
-    body: "Напоминания Mystic работают на этом устройстве.",
-  },
-} as const;
 
 export async function POST(request: NextRequest): Promise<Response> {
   const auth = await requireApiUser();
@@ -40,7 +30,7 @@ export async function POST(request: NextRequest): Promise<Response> {
   }
 
   const locale = parsed.data.locale === "ru" ? "ru" : "en";
-  const copy = TEST_COPY[locale];
+  const copy = getNotificationCopy(locale, "test");
 
   try {
     const result = await sendWebPushToEndpoint({

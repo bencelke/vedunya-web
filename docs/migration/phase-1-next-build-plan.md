@@ -128,7 +128,15 @@ Files: `course-catalog.tsx`, `course-card.tsx`, `course-detail-hero.tsx`, `lesso
 
 ---
 
-## Phase 12 — Vercel deployment
+## Phase 12 — Text parity and Request the Universe
+
+**Phase 12A — complete:** Full Mystic text parity (`docs/migration/phase-12a-full-mystic-text-parity.md`)
+
+**Phase 12B — complete:** Request the Universe as top Today feature (`docs/migration/phase-12b-request-the-universe.md`)
+
+---
+
+## Phase 12 (deployment) — Vercel deployment
 
 - Production env, domains, `app.vedunya.com`
 - Firebase authorized domains

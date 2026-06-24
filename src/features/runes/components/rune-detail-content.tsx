@@ -1,8 +1,8 @@
 import { useTranslations } from "next-intl";
 
+import { MysticPlusLockCard } from "@/features/premium/components/mystic-plus-lock-card";
 import { RuneFieldCard } from "@/features/runes/components/rune-field-card";
 import { RuneMeaningCard } from "@/features/runes/components/rune-meaning-card";
-import { RunePremiumLockCard } from "@/features/runes/components/rune-premium-lock-card";
 import type { RuneDetailResult } from "@/features/runes/types/rune";
 
 type RuneDetailContentProps = {
@@ -45,13 +45,7 @@ export function RuneDetailContent({ detail }: RuneDetailContentProps) {
         />
       ) : null}
 
-      {showPremiumLock ? (
-        <RunePremiumLockCard
-          title={t("premiumLockTitle")}
-          body={t("premiumLockBody")}
-          ctaLabel={t("premiumLockCta")}
-        />
-      ) : null}
+      {showPremiumLock ? <MysticPlusLockCard /> : null}
     </div>
   );
 }

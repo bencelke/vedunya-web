@@ -26,6 +26,7 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
   const { locale, slug } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("courses");
+  const tPremium = await getTranslations("premium");
 
   if (!isKnownCourseSlug(slug)) {
     notFound();
@@ -55,12 +56,16 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
       ? t("resumePath")
       : t("startCourse");
 
-  const lockedTitle = detail.access.showComingSoon
-    ? t("comingSoon")
-    : t("purchaseUnavailableTitle");
-  const lockedMessage = detail.access.showComingSoon
-    ? t("comingSoonCourseMessage")
-    : t("purchaseUnavailable");
+  const lockedTitle = detail.access.isPremiumLocked
+    ? tPremium("lockTitle")
+    : detail.access.showComingSoon
+      ? t("comingSoon")
+      : t("purchaseUnavailableTitle");
+  const lockedMessage = detail.access.isPremiumLocked
+    ? tPremium("lockBody")
+    : detail.access.showComingSoon
+      ? t("comingSoonCourseMessage")
+      : t("purchaseUnavailable");
 
   return (
     <CourseDetailScreen

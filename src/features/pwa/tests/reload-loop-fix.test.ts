@@ -51,9 +51,9 @@ describe("PWA reload loop fix", () => {
     expect(sw).toContain("NEVER_CACHE_PATTERNS");
   });
 
-  it("landing locale route does not redirect to itself", () => {
+  it("landing redirects authenticated users via auth helper, not client loops", () => {
     const landing = readSource("src/app/[locale]/page.tsx");
-    expect(landing).not.toContain("redirect(");
+    expect(landing).toContain("redirectAuthenticatedFromLogin");
     expect(landing).not.toContain("router.replace");
   });
 

@@ -1,4 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
+import { notFound } from "next/navigation";
+import { hasLocale } from "next-intl";
 
 import { FinalCta } from "@/components/landing/final-cta";
 import { HowItWorks } from "@/components/landing/how-it-works";
@@ -6,14 +8,24 @@ import { LandingHero } from "@/components/landing/landing-hero";
 import { ValuePreview } from "@/components/landing/value-preview";
 import { AppHeader } from "@/components/layout/app-header";
 import { Container } from "@/components/ui/container";
+import type { SupportedLocale } from "@/config/app-config";
+import { redirectAuthenticatedFromLogin } from "@/lib/auth/require-user";
+import { routing } from "@/i18n/routing";
 
 type LandingPageProps = {
   params: Promise<{ locale: string }>;
 };
 
 export default async function LandingPage({ params }: LandingPageProps) {
-  const { locale } = await params;
+  const { locale: localeParam } = await params;
+
+  if (!hasLocale(routing.locales, localeParam)) {
+    notFound();
+  }
+
+  const locale = localeParam as SupportedLocale;
   setRequestLocale(locale);
+  await redirectAuthenticatedFromLogin(locale);
 
   return (
     <>

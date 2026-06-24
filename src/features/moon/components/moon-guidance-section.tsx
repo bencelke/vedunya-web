@@ -1,9 +1,9 @@
 import { useTranslations } from "next-intl";
 
+import { MysticPlusLockCard } from "@/features/premium/components/mystic-plus-lock-card";
 import { MoonHero } from "@/features/moon/components/moon-hero";
 import { MoonLunarDayCard } from "@/features/moon/components/moon-lunar-day-card";
 import { MoonPhaseCard } from "@/features/moon/components/moon-phase-card";
-import { MoonPremiumLockCard } from "@/features/moon/components/moon-premium-lock-card";
 import type { MoonGuidanceResult } from "@/features/moon/types/moon";
 
 type MoonGuidanceSectionProps = {
@@ -45,13 +45,7 @@ export function MoonGuidanceSection({ guidance }: MoonGuidanceSectionProps) {
         premiumActive={premiumActive}
       />
 
-      {showPremiumLock ? (
-        <MoonPremiumLockCard
-          title={t("premiumLockTitle")}
-          body={t("premiumLockBody")}
-          ctaLabel={t("premiumLockCta")}
-        />
-      ) : null}
+      {showPremiumLock ? <MysticPlusLockCard /> : null}
 
       <p className="text-xs leading-relaxed text-text-subtle">{t("infoNote")}</p>
     </div>

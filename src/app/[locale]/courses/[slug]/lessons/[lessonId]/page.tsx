@@ -37,6 +37,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
   const { locale, slug, lessonId } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("courses");
+  const tPremium = await getTranslations("premium");
 
   if (!isKnownCourseSlug(slug)) {
     notFound();
@@ -65,12 +66,16 @@ export default async function LessonPage({ params }: LessonPageProps) {
     }
   }
 
-  const lockedTitle = data.access.showComingSoon
-    ? t("comingSoon")
-    : t("purchaseUnavailableTitle");
-  const lockedMessage = data.access.showComingSoon
-    ? t("comingSoonCourseMessage")
-    : t("purchaseUnavailable");
+  const lockedTitle = data.access.isPremiumLocked
+    ? tPremium("lockTitle")
+    : data.access.showComingSoon
+      ? t("comingSoon")
+      : t("purchaseUnavailableTitle");
+  const lockedMessage = data.access.isPremiumLocked
+    ? tPremium("lockBody")
+    : data.access.showComingSoon
+      ? t("comingSoonCourseMessage")
+      : t("purchaseUnavailable");
 
   return (
     <LessonReaderScreen

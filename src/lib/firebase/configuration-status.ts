@@ -38,6 +38,7 @@ function mapClientMissingKeys(
     storageBucket: "NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET",
     messagingSenderId: "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID",
     appId: "NEXT_PUBLIC_FIREBASE_APP_ID",
+    measurementId: "NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID",
   };
 
   return missingKeys.map((key) => keyMap[key]);

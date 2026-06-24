@@ -1,4 +1,5 @@
 import type { SupportedLocale } from "@/config/app-config";
+import type { UniverseRequestViewModel } from "@/features/universe-request/types";
 
 export type DailyGuidanceLocale = SupportedLocale;
 
@@ -58,7 +59,13 @@ export type DailyGuidanceViewModel = {
   moon: DailyGuidanceMoonSection;
   rune: DailyGuidanceRuneSection;
   reflection: string | null;
+  universeRequest: UniverseRequestViewModel;
 };
+
+export type DailyGuidanceAuthenticatedCore = Omit<
+  DailyGuidanceViewModel,
+  "universeRequest"
+>;
 
 export type DailyGuidancePreviewModel = {
   formattedDate: string;

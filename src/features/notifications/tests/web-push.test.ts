@@ -27,9 +27,13 @@ describe("Web Push env documentation", () => {
 });
 
 describe("Web Push Profile UI", () => {
-  it("renders notification settings card in Profile", () => {
+  it("renders notification settings in Profile reminders section", () => {
     const profile = readSource("src/features/profile/components/profile-content.tsx");
-    expect(profile).toContain("NotificationSettingsCard");
+    expect(profile).toContain("ProfileRemindersSection");
+    const reminders = readSource(
+      "src/features/profile/components/profile-reminders-section.tsx",
+    );
+    expect(reminders).toContain("NotificationSettingsCard");
   });
 
   it("shows iPhone install requirement component", () => {
@@ -116,14 +120,14 @@ describe("Web Push service worker", () => {
 
 describe("Web Push localization", () => {
   it("includes EN/RU reminder copy", () => {
-    expect(en.notifications.morningCopy).toContain("daily guidance");
+    expect(en.notifications.morningCopy).toContain("quiet start");
     expect(en.notifications.middayCopy).toContain("clear step");
-    expect(en.notifications.eveningCopy).toContain("reflect");
+    expect(en.notifications.eveningCopy).toContain("matter");
     expect(en.notifications.testCopy).toContain("working on this device");
 
-    expect(ru.notifications.morningCopy).toContain("подсказка дня");
+    expect(ru.notifications.morningCopy).toContain("Спокойное начало");
     expect(ru.notifications.middayCopy).toContain("точный шаг");
-    expect(ru.notifications.eveningCopy).toContain("итог дня");
+    expect(ru.notifications.eveningCopy).toContain("главным");
     expect(ru.notifications.testCopy).toContain("работают на этом устройстве");
   });
 });
@@ -161,9 +165,10 @@ describe("Web Push schemas", () => {
   it("validates notification preferences", () => {
     const parsed = notificationPreferencesSchema.safeParse({
       enabled: true,
-      morning: { enabled: true, time: "08:00" },
+      morning: { enabled: true, time: "08:30" },
       midday: { enabled: true, time: "13:00" },
-      evening: { enabled: true, time: "21:00" },
+      evening: { enabled: true, time: "20:30" },
+      universeRequest: { enabled: false, time: "09:00" },
       timezone: "UTC",
       locale: "en",
     });

@@ -31,16 +31,22 @@ describe("Today UI parity — shell and layout", () => {
 });
 
 describe("Today visual hierarchy", () => {
-  it("renders large rune anchor before rhythm sections", () => {
+  it("renders Today sections in Mystic order", () => {
     const source = readSource(
       "src/features/daily-guidance/components/daily-guidance-authenticated.tsx",
     );
-    expect(source).toContain("TodayRuneAnchor");
-    const runeAnchorPos = source.indexOf("<TodayRuneAnchor");
-    const personalDayPos = source.indexOf("<PersonalDayIndicator");
-    expect(runeAnchorPos).toBeGreaterThan(-1);
-    expect(personalDayPos).toBeGreaterThan(-1);
-    expect(runeAnchorPos).toBeLessThan(personalDayPos);
+    const jsx = source.slice(source.indexOf("return ("));
+
+    const requestIndex = jsx.indexOf("UniverseRequestSection");
+    const primaryIndex = jsx.indexOf("PrimaryGuidanceCard");
+    const runeAnchorPos = jsx.indexOf("<TodayRuneAnchor");
+    const moonPos = jsx.indexOf("<MoonRhythmSummary");
+    const personalDayPos = jsx.indexOf("<PersonalDayIndicator");
+
+    expect(requestIndex).toBeGreaterThan(-1);
+    expect(requestIndex).toBeLessThan(primaryIndex);
+    expect(runeAnchorPos).toBeLessThan(moonPos);
+    expect(moonPos).toBeLessThan(personalDayPos);
   });
 
   it("uses large rune visual in TodayRuneAnchor", () => {
@@ -133,7 +139,7 @@ describe("Today premium gating", () => {
     const source = readSource(
       "src/features/daily-guidance/components/daily-guidance-authenticated.tsx",
     );
-    expect(source).toContain("TodayPremiumLockCard");
+    expect(source).toContain("MysticPlusLockCard");
     expect(source).toContain("showPremiumDeepLock");
   });
 
@@ -150,13 +156,13 @@ describe("Today localization", () => {
   it("includes polished EN Today copy", () => {
     expect(en.dailyGuidance.focusLabel).toContain("Today's focus");
     expect(en.dailyGuidance.runeOfDayLabel).toBeTruthy();
-    expect(en.dailyGuidance.premiumLockTitle).toContain("Mystic Plus");
+    expect(en.premium.lockTitle).toContain("Mystic Plus");
   });
 
   it("includes polished RU Today copy", () => {
     expect(ru.dailyGuidance.focusLabel).toContain("Фокус дня");
     expect(ru.dailyGuidance.moonRhythmLabel).toContain("Лунный ритм");
-    expect(ru.dailyGuidance.premiumLockCta).toContain("Mystic Plus");
+    expect(ru.premium.lockTitle).toContain("Mystic Plus");
   });
 });
 

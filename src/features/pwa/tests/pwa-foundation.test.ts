@@ -59,9 +59,13 @@ describe("PWA service worker", () => {
 });
 
 describe("PWA install UX", () => {
-  it("renders install section in Profile", () => {
+  it("renders install section in Profile reminders", () => {
+    const reminders = readSource(
+      "src/features/profile/components/profile-reminders-section.tsx",
+    );
+    expect(reminders).toContain("PwaInstallSection");
     const profile = readSource("src/features/profile/components/profile-content.tsx");
-    expect(profile).toContain("PwaInstallSection");
+    expect(profile).toContain("ProfileRemindersSection");
   });
 
   it("hides install prompt logic when standalone", () => {

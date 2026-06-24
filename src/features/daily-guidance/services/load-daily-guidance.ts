@@ -18,6 +18,7 @@ import { buildDailyRuneResult } from "@/features/runes/services/daily-rune-servi
 import { formatDateOfBirth } from "@/features/profile/schemas/onboarding-schema";
 import { getProfileSnapshot } from "@/features/profile/services/profile-repository";
 import { resolvePremiumAccess } from "@/features/profile/utils/premium-access";
+import { loadUniverseRequestViewModel } from "@/features/universe-request/server/load-universe-request";
 import { getCachedRuneDeepContent } from "@/features/runes/repositories/rune-content-repository";
 import {
   composeAuthenticatedGuidance,
@@ -195,7 +196,7 @@ export async function loadDailyGuidance(
   const premiumActive = resolvePremiumAccess(profile);
   const birthDate = formatDateOfBirth(profile.dateOfBirth);
 
-  const [numerology, moonLoaded, rune] = await Promise.all([
+  const [numerology, moonLoaded, rune, universeRequest] = await Promise.all([
     Promise.resolve(
       loadPersonalDayForProfile({
         birthDate,
@@ -212,6 +213,11 @@ export async function loadDailyGuidance(
         locale: contentLocale,
       }),
     ),
+    loadUniverseRequestViewModel({
+      uid: sessionUser.uid,
+      locale: contentLocale,
+      dateKey: context.dateKey,
+    }),
   ]);
 
   let runeDeep: string | null = null;
@@ -238,7 +244,10 @@ export async function loadDailyGuidance(
     return { kind: "session-error" };
   }
 
-  return { kind: "authenticated", guidance };
+  return {
+    kind: "authenticated",
+    guidance: { ...guidance, universeRequest },
+  };
 }
 
 export { sanitizeGuidanceForDiagnostics } from "@/features/daily-guidance/services/sanitize-guidance-diagnostics";

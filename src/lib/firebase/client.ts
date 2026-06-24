@@ -19,6 +19,11 @@ export function getFirebaseApp(): FirebaseApp | null {
     return firebaseApp;
   }
 
-  firebaseApp = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+  firebaseApp = getApps().length > 0 ? getApp() : initializeApp(resolveClientFirebaseConfig());
   return firebaseApp;
+}
+
+function resolveClientFirebaseConfig() {
+  const { measurementId, ...required } = firebaseConfig;
+  return measurementId ? { ...required, measurementId } : required;
 }

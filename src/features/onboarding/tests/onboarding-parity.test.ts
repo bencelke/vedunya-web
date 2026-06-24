@@ -171,7 +171,7 @@ describe("Onboarding profile completion contract", () => {
 
 describe("Onboarding localization", () => {
   it("includes polished EN onboarding copy", () => {
-    expect(en.auth.onboarding.steps.welcome.title).toContain("personalize");
+    expect(en.auth.onboarding.steps.welcome.title).toContain("daily practice");
     expect(en.auth.onboarding.steps.dob.body).toContain("daily rhythm");
     expect(en.auth.onboarding.steps.ready.title).toContain("ready");
     expect(en.auth.onboarding.errors.nameRequired).toBeTruthy();
@@ -179,7 +179,7 @@ describe("Onboarding localization", () => {
 
   it("includes polished RU onboarding copy", () => {
     expect(ru.auth.onboarding.steps.welcome.title).toContain("практику");
-    expect(ru.auth.onboarding.steps.dob.body).toContain("личный ритм");
+    expect(ru.auth.onboarding.steps.dob.body).toContain("нумерологии");
     expect(ru.auth.onboarding.steps.language.body).toContain("профиле");
     expect(ru.auth.onboarding.errors.dobFuture).toBeTruthy();
   });

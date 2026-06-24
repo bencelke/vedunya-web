@@ -142,7 +142,7 @@ describe("Auth UI parity — localization", () => {
   it("includes polished EN auth copy", () => {
     expect(en.auth.brandWordmark).toBe("Vedunya Maria");
     expect(en.auth.welcomeHeadline).toContain("Mystic by Vedunya Maria");
-    expect(en.auth.loginDescription).toContain("daily guidance");
+    expect(en.auth.loginDescription).toContain("daily practice");
     expect(en.auth.google.continue).toBe("Continue with Google");
     expect(en.auth.apple.continue).toContain("coming later");
   });

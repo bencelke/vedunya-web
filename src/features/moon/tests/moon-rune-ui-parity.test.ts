@@ -60,7 +60,7 @@ describe("Moon UI parity", () => {
     const source = readSource(
       "src/features/moon/components/moon-guidance-section.tsx",
     );
-    expect(source).toContain("MoonPremiumLockCard");
+    expect(source).toContain("MysticPlusLockCard");
     expect(source).toContain("showPremiumLock");
   });
 
@@ -166,7 +166,7 @@ describe("Rune aliases and gating", () => {
 describe("Moon/Rune localization", () => {
   it("includes polished EN Moon/Rune labels", () => {
     expect(en.moon.practiceLabel).toContain("Today's practice");
-    expect(en.moon.premiumLockTitle).toContain("Mystic Plus");
+    expect(en.premium.lockTitle).toContain("Mystic Plus");
     expect(en.runes.meaningLabel).toContain("Rune meaning");
   });
 

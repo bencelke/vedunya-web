@@ -84,9 +84,10 @@ export function defaultNotificationPreferences(
 ): NotificationPreferencesRecord {
   return {
     enabled: false,
-    morning: { enabled: true, time: "08:00" },
+    morning: { enabled: true, time: "08:30" },
     midday: { enabled: true, time: "13:00" },
-    evening: { enabled: true, time: "21:00" },
+    evening: { enabled: true, time: "20:30" },
+    universeRequest: { enabled: false, time: "09:00" },
     timezone,
     locale,
     updatedAt: new Date().toISOString(),
@@ -115,9 +116,10 @@ function normalizePreferences(
 
   return {
     enabled: data.enabled === true,
-    morning: readSlot(data.morning, "08:00"),
+    morning: readSlot(data.morning, "08:30"),
     midday: readSlot(data.midday, "13:00"),
-    evening: readSlot(data.evening, "21:00"),
+    evening: readSlot(data.evening, "20:30"),
+    universeRequest: readSlot(data.universeRequest, "09:00"),
     timezone:
       typeof data.timezone === "string" && data.timezone.trim()
         ? data.timezone.trim()

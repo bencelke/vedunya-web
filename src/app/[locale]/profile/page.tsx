@@ -7,7 +7,9 @@ import { AppHeader } from "@/components/layout/app-header";
 import { AppShell } from "@/components/layout/app-shell";
 import { ProfileContent } from "@/features/profile/components/profile-content";
 import { getPushStatusSummary } from "@/features/notifications/server/push-status";
+import { loadProfileSettingsSummary } from "@/features/profile/server/load-profile-settings-summary";
 import { getProfileSnapshot } from "@/features/profile/services/profile-repository";
+import { readUniverseRequest } from "@/features/universe-request/server/universe-request-repository";
 import { requireUser } from "@/lib/auth/current-user";
 import { routing } from "@/i18n/routing";
 import type { SupportedLocale } from "@/config/app-config";
@@ -20,7 +22,7 @@ export async function generateMetadata({
   params,
 }: ProfilePageProps): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "auth.profile" });
+  const t = await getTranslations({ locale, namespace: "profile" });
   return { title: t("metaTitle") };
 }
 
@@ -40,13 +42,23 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     notFound();
   }
 
-  const pushStatus = await getPushStatusSummary(user.uid, locale);
+  const [pushStatus, hasActiveUniverseRequest, settingsSummary] = await Promise.all([
+    getPushStatusSummary(user.uid, locale),
+    readUniverseRequest(user.uid).then((request) => request !== null),
+    loadProfileSettingsSummary({ uid: user.uid }),
+  ]);
 
   return (
     <>
       <AppHeader showLogin={false} showProfile />
       <AppShell>
-        <ProfileContent locale={locale} profile={profile} pushStatus={pushStatus} />
+        <ProfileContent
+          locale={locale}
+          profile={profile}
+          pushStatus={pushStatus}
+          hasActiveUniverseRequest={hasActiveUniverseRequest}
+          settingsSummary={settingsSummary}
+        />
       </AppShell>
     </>
   );

@@ -2,7 +2,12 @@ import type { SupportedLocale } from "@/config/app-config";
 
 export type PushPlatform = "ios" | "android" | "desktop" | "unknown";
 
-export type ReminderType = "morning" | "midday" | "evening" | "test";
+export type ReminderType =
+  | "morning"
+  | "midday"
+  | "evening"
+  | "universeRequest"
+  | "test";
 
 export type PushSubscriptionKeys = {
   p256dh: string;
@@ -35,6 +40,7 @@ export type NotificationPreferencesRecord = {
   morning: ReminderSlotPreference;
   midday: ReminderSlotPreference;
   evening: ReminderSlotPreference;
+  universeRequest: ReminderSlotPreference;
   timezone: string;
   locale: SupportedLocale;
   updatedAt: string;

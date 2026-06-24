@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { mergeNotificationPreferences } from "@/features/notifications/repositories/push-repository";
 import { notificationPreferencesSchema } from "@/features/notifications/schemas/push-schema";
+import { syncUniverseRequestReminderMirror } from "@/features/notifications/server/sync-universe-request-reminder";
 import { requireApiUser } from "@/lib/auth/require-api-user";
 import { jsonError } from "@/lib/auth/request-guards";
 
@@ -30,6 +31,11 @@ export async function POST(request: NextRequest): Promise<Response> {
         ...parsed.data,
         updatedAt: new Date().toISOString(),
       },
+    });
+
+    await syncUniverseRequestReminderMirror({
+      uid: auth.user.uid,
+      universeRequest: preferences.universeRequest,
     });
 
     return NextResponse.json({ ok: true, preferences });

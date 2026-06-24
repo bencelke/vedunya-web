@@ -12,6 +12,7 @@ import type {
   DailyGuidanceNumerologySection,
   DailyGuidanceRuneSection,
   DailyGuidanceViewModel,
+  DailyGuidanceAuthenticatedCore,
 } from "@/features/daily-guidance/types/daily-guidance-view-model";
 
 type ComposeAuthenticatedInput = {
@@ -155,7 +156,7 @@ export function composeRuneSection(
 
 export function composeAuthenticatedGuidance(
   input: ComposeAuthenticatedInput,
-): DailyGuidanceViewModel | null {
+): DailyGuidanceAuthenticatedCore | null {
   const primary = composePrimaryMessage({
     primaryLabel: input.labels.primaryLabel,
     numerology: input.numerology,

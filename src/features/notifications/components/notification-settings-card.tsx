@@ -16,11 +16,13 @@ import type { PushStatusSummary } from "@/features/notifications/types/push";
 type NotificationSettingsCardProps = {
   locale: SupportedLocale;
   initialStatus: PushStatusSummary;
+  hasActiveUniverseRequest: boolean;
 };
 
 export function NotificationSettingsCard({
   locale,
   initialStatus,
+  hasActiveUniverseRequest,
 }: NotificationSettingsCardProps) {
   const t = useTranslations("notifications");
   const {
@@ -121,6 +123,7 @@ export function NotificationSettingsCard({
             <ReminderPreferenceForm
               key={preferences.updatedAt}
               preferences={preferences}
+              hasActiveUniverseRequest={hasActiveUniverseRequest}
               disabled={busy}
               onSave={savePreferences}
             />

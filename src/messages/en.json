@@ -4,7 +4,7 @@
     "save": "Save",
     "continue": "Continue",
     "back": "Back",
-    "mockNotice": "Preview content — not connected to a live backend yet."
+    "mockNotice": "Sample day — sign in for guidance shaped to you."
   },
   "navigation": {
     "today": "Today",
@@ -65,7 +65,7 @@
     "actionTitle": "One step for today",
     "moonLabel": "Moon rhythm",
     "saveCta": "Save this guidance",
-    "saveHint": "Sign in will be required in a later release."
+    "saveHint": "Sign in to save meaningful days."
   },
   "dailyGuidance": {
     "brandWordmark": "Vedunya Maria",
@@ -83,9 +83,6 @@
     "runeDeepLabel": "Deeper meaning",
     "deepMeaningLabel": "Deeper meaning",
     "reflectionLabel": "Reflection",
-    "premiumLockTitle": "Go deeper with Mystic Plus",
-    "premiumLockBody": "Unlock deeper rune, moon, and reflection guidance when Mystic Plus is available on web.",
-    "premiumLockCta": "Mystic Plus coming soon",
     "viewMoonDetails": "View moon rhythm",
     "viewRuneDetails": "View rune meaning",
     "previewLabel": "Preview — guidance below is an example, not calculated for you.",
@@ -113,9 +110,6 @@
     "viewDetails": "View moon details",
     "loadError": "Unable to load moon information right now.",
     "lunarDayMissing": "Lunar-day guidance is not available for this day yet.",
-    "premiumLockTitle": "Go deeper with Mystic Plus",
-    "premiumLockBody": "Unlock deeper lunar guidance, practice notes, and reflection when Mystic Plus is available on web.",
-    "premiumLockCta": "Mystic Plus coming soon",
     "infoNote": "Phase and lunar-day estimates use a synodic model. Timezone refines your calendar day label; core math follows the same UTC instant as Mystic mobile.",
     "timezoneFallbackNote": "Using UTC until your device timezone is synchronized.",
     "phaseVisualA11y": "Moon phase illustration: {phase}",
@@ -137,13 +131,28 @@
     "reflectionLabel": "Reflection",
     "viewMeaning": "View rune meaning",
     "loadError": "Unable to load the rune right now.",
-    "premiumLockTitle": "Go deeper with Mystic Plus",
-    "premiumLockBody": "Unlock deeper rune interpretation, action, and reflection when Mystic Plus is available on web.",
-    "premiumLockCta": "Mystic Plus coming soon",
-    "premiumSoon": "Premium access will be available soon.",
     "backToToday": "Back to Today",
     "invalidRune": "Rune not found",
     "symbolA11y": "Rune symbol: {rune}"
+  },
+  "premium": {
+    "productName": "Mystic Plus",
+    "positioning": "Deeper daily guidance, personal reminders, and premium spiritual practices.",
+    "webComingSoon": "Mystic Plus will open soon on the web version.",
+    "sectionPartOfPlus": "This section is part of Mystic Plus.",
+    "lockTitle": "Mystic Plus",
+    "lockBody": "Unlock deeper guidance and premium practices when Mystic Plus opens on the web.",
+    "todayDepthNote": "More depth will be available with Mystic Plus.",
+    "paymentComingLater": "Payment setup coming later",
+    "profileLink": "View in Profile",
+    "statusFree": "Status: Free",
+    "statusActive": "Status: Active",
+    "profileActivePremium": "Your Mystic Plus access is active on this account.",
+    "profileActiveOwner": "Owner access is active on this account.",
+    "profileActiveDevOverride": "Premium preview access is active on this account.",
+    "coursePurchaseTitle": "Course purchase",
+    "coursePurchaseSoon": "This course will be available for purchase soon.",
+    "courseSeparateNote": "Paid courses are separate from Mystic Plus."
   },
   "courses": {
     "metaTitle": "Courses",
@@ -158,8 +167,8 @@
     "continueLearning": "Continue learning",
     "resumeCourse": "Resume course",
     "courseCompleted": "Course completed",
-    "purchaseUnavailableTitle": "Purchase unavailable",
-    "purchaseUnavailable": "Course purchase is not available on the web yet. You can review the course overview here.",
+    "purchaseUnavailableTitle": "Course purchase",
+    "purchaseUnavailable": "This course will be available for purchase soon. Paid courses are separate from Mystic Plus.",
     "comingSoonCourseMessage": "This course will open soon. You can preview the path here until enrollment is available on web.",
     "comingSoonMessage": "This course is not available yet.",
     "signInToSaveProgress": "Sign in to save your progress.",
@@ -202,9 +211,9 @@
     "offlineBackToToday": "Back to Today"
   },
   "notifications": {
-    "sectionLabel": "Notifications",
-    "title": "Daily reminders",
-    "description": "Gentle reminders for morning guidance, midday focus, and evening reflection.",
+    "sectionLabel": "Reminders",
+    "title": "Reminders",
+    "description": "Gentle reminders for morning guidance, midday reset, evening reflection, and your Universe request.",
     "loading": "Loading reminder settings…",
     "preferencesLabel": "Reminder schedule",
     "enableAction": "Enable reminders",
@@ -212,19 +221,24 @@
     "disableAction": "Disable reminders",
     "disabling": "Disabling…",
     "savePreferences": "Save reminder times",
+    "savingPreferences": "Saving…",
     "timezoneLabel": "Timezone: {timezone}",
+    "schedulerNote": "Reminder settings are ready. Automatic delivery will work after scheduled notifications are enabled on the server.",
     "morningLabel": "Morning guidance",
-    "morningCopy": "Your daily guidance is ready.",
-    "middayLabel": "Midday focus",
-    "middayCopy": "Pause for one clear step.",
+    "morningCopy": "A quiet start for your day is ready.",
+    "middayLabel": "Midday reset",
+    "middayCopy": "Pause for a minute. Choose your next clear step.",
     "eveningLabel": "Evening reflection",
-    "eveningCopy": "Take a moment to reflect on your day.",
+    "eveningCopy": "Return to the day gently. Notice what mattered.",
+    "universeRequestLabel": "Request the Universe",
+    "universeRequestCopy": "Return to your request for one quiet minute.",
+    "universeRequestNeedsRequest": "Create a request first to use this reminder.",
     "testAction": "Send test notification",
     "testSending": "Sending…",
     "testHint": "Sends one reminder to this device only.",
     "testCopy": "Mystic reminders are working on this device.",
     "iosInstallTitle": "Add Mystic to your Home Screen first",
-    "iosInstallBody": "On iPhone, web reminders work only after you add Mystic to the Home Screen and open it from that icon.",
+    "iosInstallBody": "On iPhone, install Mystic to your Home Screen first, then open it from the icon to enable reminders.",
     "statusUnsupported": "This browser does not support Mystic reminders yet.",
     "statusDevUnavailable": "Reminders are available in the installed production app over HTTPS, not in local development.",
     "statusNotConfigured": "Reminder delivery is not configured on this server yet.",
@@ -253,7 +267,98 @@
   "profile": {
     "metaTitle": "Profile",
     "heading": "Profile",
-    "description": "Your account details and preferences."
+    "description": "Your account, preferences, and Mystic settings.",
+    "eyebrow": "Settings",
+    "backToToday": "Back to Today",
+    "messageSaved": "Profile updated.",
+    "messageSaveError": "We couldn’t save your profile. Try again.",
+    "messageValidationError": "Check the entered details and try again.",
+    "messageResetSent": "If this account uses email sign-in, reset instructions have been sent.",
+    "account": {
+      "label": "Account",
+      "signedInAs": "Signed in as",
+      "email": "Email",
+      "provider": "Sign-in method",
+      "status": "Account status",
+      "statusComplete": "Profile complete — personal guidance is active.",
+      "statusIncomplete": "Profile incomplete — finish setup to unlock personal guidance.",
+      "notSet": "Not set",
+      "resetPassword": "Send password reset email"
+    },
+    "personalDetails": {
+      "label": "Personal details",
+      "title": "Personal details",
+      "description": "Your date of birth is used for your personal day rhythm.",
+      "name": "Name",
+      "birthDate": "Birth date",
+      "edit": "Edit details",
+      "save": "Save changes",
+      "saving": "Saving…",
+      "cancel": "Cancel"
+    },
+    "language": {
+      "label": "Language",
+      "title": "Language",
+      "description": "Choose the language for your app experience.",
+      "english": "English",
+      "russian": "Russian",
+      "save": "Save language",
+      "saving": "Saving…",
+      "saved": "Language updated."
+    },
+    "universeRequest": {
+      "label": "Request the Universe",
+      "title": "Request the Universe",
+      "description": "View or edit the request you return to each day.",
+      "activeSummary": "Your current request",
+      "noRequest": "Create your request on Today.",
+      "openToday": "Open on Today"
+    },
+    "reminders": {
+      "label": "Reminders"
+    },
+    "subscription": {
+      "label": "Mystic Plus",
+      "title": "Mystic Plus",
+      "description": "Unlock deeper guidance, request reminders, and premium practices.",
+      "statusFree": "Status: Free",
+      "statusActive": "Status: Active",
+      "statusComingSoon": "Status: Coming soon",
+      "webNote": "Premium features will open soon on the web version.",
+      "activeNote": "Your Mystic Plus access is active on this account."
+    },
+    "courses": {
+      "label": "Learning",
+      "title": "Learning",
+      "description": "Continue your courses and spiritual practice paths.",
+      "openCourses": "Open courses",
+      "progress": "{percent}% complete",
+      "notStarted": "You have not started this path yet."
+    },
+    "legal": {
+      "label": "Legal & trust",
+      "title": "Legal & trust",
+      "disclaimer": "Disclaimer",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Use",
+      "support": "Support",
+      "about": "About",
+      "dataDeletion": "Data deletion",
+      "disclaimerText": "Mystic is created for reflection, spiritual practice, and personal guidance. It is not medical, legal, financial, or emergency advice."
+    },
+    "support": {
+      "label": "Support",
+      "title": "Support",
+      "description": "Need help with your account, access, reminders, or courses? Contact support.",
+      "email": "vedunyamaria@gmail.com",
+      "openPage": "Open support page"
+    },
+    "logout": {
+      "action": "Sign out"
+    },
+    "pwa": {
+      "label": "Install app"
+    }
   },
   "auth": {
     "loginMetaTitle": "Sign in",
@@ -261,8 +366,8 @@
     "welcomeHeadline": "Welcome to Mystic by Vedunya Maria",
     "loginTitle": "Sign in",
     "registerTitle": "Create your account",
-    "loginDescription": "Sign in to continue your daily guidance.",
-    "registerDescription": "Create an account to keep your profile, language, and daily guidance in sync across devices.",
+    "loginDescription": "Sign in to continue your daily practice.",
+    "registerDescription": "Create an account to keep your profile, language, and daily rhythm in sync across devices.",
     "divider": "or",
     "switchToRegister": "Create your account",
     "switchToLogin": "Already have an account? Sign in",
@@ -275,8 +380,8 @@
     },
     "loading": "Checking your session…",
     "configuration": {
-      "title": "Firebase is not configured yet",
-      "body": "Add the Firebase Web and Admin environment variables to `.env.local`, then restart the development server."
+      "title": "Sign-in is not configured yet",
+      "body": "Firebase is not set up for this environment. Add the required variables and redeploy, or contact support if you are testing the live app."
     },
     "loginForm": {
       "emailLabel": "Email",
@@ -288,7 +393,7 @@
       "emailLabel": "Email",
       "passwordLabel": "Password",
       "confirmPasswordLabel": "Confirm password",
-      "termsLabel": "I agree to the terms that will be published before launch.",
+      "termsLabel": "I agree to the Mystic terms and privacy policy.",
       "submit": "Create account",
       "submitting": "Creating account…"
     },
@@ -300,7 +405,7 @@
       "metaTitle": "Reset password",
       "heading": "Reset your password",
       "description": "Enter your email and we will send reset instructions if an account exists.",
-      "configurationRequired": "Password reset requires Firebase configuration in `.env.local`.",
+      "configurationRequired": "Password reset requires Firebase to be configured for this environment.",
       "backToLogin": "Back to sign in"
     },
     "forgotPasswordForm": {
@@ -345,8 +450,8 @@
       },
       "steps": {
         "welcome": {
-          "title": "Let’s personalize your daily guidance",
-          "body": "A short setup helps Mystic address you by name and prepare your personal rhythm for each day."
+          "title": "Let’s set up your daily practice",
+          "body": "A short setup helps Mystic greet you by name and prepare your personal rhythm for each day."
         },
         "name": {
           "title": "What should we call you?",
@@ -356,7 +461,7 @@
         },
         "dob": {
           "title": "When were you born?",
-          "body": "Your birth date helps Mystic calculate your daily rhythm and personalize your guidance.",
+          "body": "Your birth date helps Mystic calculate your daily rhythm. We use it only for numerology and personalization — calmly and respectfully.",
           "fieldLabel": "Date of birth",
           "helper": "Used for numerology rhythm and personalization only. You can update this later in Profile."
         },
@@ -368,7 +473,7 @@
         },
         "ready": {
           "title": "Your practice is ready",
-          "body": "We’ll save your profile and open Today with guidance shaped around your name, birth date, and the current day."
+          "body": "We’ll save your profile and open Today with support shaped around your name, birth date, and the current day."
         }
       }
     },
@@ -406,7 +511,7 @@
       "setupRequired": "Finish profile setup to unlock personal guidance and saving.",
       "setupCta": "Complete profile setup",
       "guestPreview": "Sign in to see guidance based on your birth date and today’s calendar day.",
-      "signedInPreview": "You are signed in. Personal calculations will connect in the next release.",
+      "signedInPreview": "Finish profile setup to unlock personal guidance for your day.",
       "saveRequiresSetup": "Complete profile setup before saving guidance."
     }
   },
@@ -428,8 +533,240 @@
     "description": "Access your guidance, saved days, and personal settings."
   },
   "onboarding": {
-    "metaTitle": "Onboarding",
-    "heading": "Personalize your guidance",
-    "description": "Share a few details so future readings can feel more personal."
+    "metaTitle": "Profile setup",
+    "heading": "Personalize your practice",
+    "description": "A few details help each day feel more personal and grounded."
+  },
+  "trust": {
+    "disclaimer": "Mystic is created for reflection, spiritual practice, and personal guidance. It is not medical, legal, financial, or emergency advice."
+  },
+  "legal": {
+    "common": {
+      "backToProfile": "Back to Profile",
+      "prototypeNoteTitle": "Prototype notice",
+      "prototypeNote": "This page is prototype copy for testing Mystic on the web. It should be reviewed by legal counsel before public launch."
+    },
+    "disclaimer": {
+      "metaTitle": "Disclaimer",
+      "title": "Disclaimer",
+      "paragraph1": "Mystic by Vedunya Maria is created for reflection, spiritual practice, and personal guidance.",
+      "paragraph2": "The app does not provide medical, legal, financial, psychological, or emergency advice. If you need professional help, contact a qualified professional or local emergency services.",
+      "paragraph3": "Daily guidance, moon rhythm, numerology, runes, reminders, and personal requests are intended as supportive reflection tools. They should not replace your judgment, responsibility, or professional support."
+    },
+    "privacy": {
+      "metaTitle": "Privacy Policy",
+      "title": "Privacy Policy",
+      "intro": "This prototype policy describes how Mystic on the web handles information today. It should be reviewed before public launch.",
+      "sections": {
+        "collect": {
+          "title": "What we collect",
+          "body": "When you use Mystic, we may store your account email, display name, date of birth, language preference, daily guidance-related profile data, optional Universe request text, course progress, and notification preferences if you enable reminders."
+        },
+        "use": {
+          "title": "How we use it",
+          "body": "We use this information to sign you in, personalize your daily practice, save your preferences, and show content in your chosen language. We do not sell your personal data."
+        },
+        "firebase": {
+          "title": "Firebase and authentication",
+          "body": "We use Firebase services for authentication, profile storage, and app data. Your session is managed through standard secure sign-in flows."
+        },
+        "profile": {
+          "title": "Profile and date of birth",
+          "body": "Your name, date of birth, and language help personalize numerology and daily guidance. You can update these details in Profile."
+        },
+        "request": {
+          "title": "Request the Universe",
+          "body": "If you create a personal request, its text and optional category are stored in your account so you can return to it on Today."
+        },
+        "notifications": {
+          "title": "Reminders and notifications",
+          "body": "If you enable reminders, we store your reminder preferences and a push subscription for this device. We do not expose subscription details in the app interface."
+        },
+        "courses": {
+          "title": "Courses and progress",
+          "body": "If you open courses, we may store lesson progress linked to your account so you can continue where you left off."
+        },
+        "payments": {
+          "title": "Payments",
+          "body": "Payments are not active in the current web prototype. When payments are added, this policy should be reviewed and updated."
+        },
+        "cookies": {
+          "title": "Cookies, local storage, and session",
+          "body": "The web app may use cookies or browser storage for sign-in session, language, timezone, and installed app behavior. This supports normal app function, not advertising profiles."
+        },
+        "deletion": {
+          "title": "Data deletion",
+          "body": "You can request account or data deletion by contacting support from the email connected to your account. Automated self-service deletion is not available in this prototype yet."
+        },
+        "contact": {
+          "title": "Contact",
+          "body": "For privacy questions, contact vedunyamaria@gmail.com from the email linked to your Mystic account."
+        }
+      }
+    },
+    "terms": {
+      "metaTitle": "Terms of Use",
+      "title": "Terms of Use",
+      "intro": "Plain-language prototype terms for Mystic on the web. Review with legal counsel before public launch.",
+      "sections": {
+        "use": {
+          "title": "Use of the app",
+          "body": "Mystic is offered for personal reflection and spiritual practice. You agree to use it respectfully and lawfully."
+        },
+        "reflection": {
+          "title": "Reflection and spiritual practice only",
+          "body": "Guidance, moon rhythm, numerology, runes, and reminders are supportive tools — not professional advice or guaranteed outcomes."
+        },
+        "accounts": {
+          "title": "Accounts",
+          "body": "You are responsible for your account access and for keeping your sign-in details secure. Provide accurate profile information where requested."
+        },
+        "payments": {
+          "title": "Subscriptions and payments",
+          "body": "Mystic Plus and course payments are not active in the current web prototype. When billing is added, these terms should be updated."
+        },
+        "content": {
+          "title": "Courses and content",
+          "body": "Course materials, rune content, and guidance text belong to Vedunya Maria and licensors. You may use them for personal practice, not for unauthorized redistribution."
+        },
+        "misuse": {
+          "title": "No harmful misuse",
+          "body": "Do not misuse the app to harass others, attempt unauthorized access, or interfere with normal operation."
+        },
+        "availability": {
+          "title": "Availability",
+          "body": "We aim for a calm, reliable experience, but features may change, pause, or be unavailable during prototype testing."
+        },
+        "responsibility": {
+          "title": "Limitation of responsibility",
+          "body": "Mystic is provided as-is for reflection support. You remain responsible for your decisions and for seeking professional help when needed."
+        },
+        "changes": {
+          "title": "Changes",
+          "body": "These prototype terms may change as Mystic on the web evolves. Material updates should be communicated before public launch."
+        },
+        "contact": {
+          "title": "Contact",
+          "body": "Questions about these terms: vedunyamaria@gmail.com"
+        }
+      }
+    }
+  },
+  "support": {
+    "metaTitle": "Support",
+    "title": "Support",
+    "intro": "Need help with your account, access, reminders, or courses? Contact support.",
+    "contactTitle": "Contact support",
+    "contactBody": "Email us from the address connected to your Mystic account:",
+    "deletionLink": "Data deletion instructions",
+    "topics": {
+      "account": {
+        "title": "Account and profile",
+        "body": "For name, date of birth, or language updates, open Profile. If something will not save, contact support with your account email."
+      },
+      "login": {
+        "title": "Sign-in help",
+        "body": "If you cannot sign in, try password reset from the login screen. For Google sign-in issues, check that pop-ups are allowed in your browser."
+      },
+      "courses": {
+        "title": "Courses and access",
+        "body": "Course purchase is not active on the web prototype yet. You can review course overviews; paid access will open in a later release."
+      },
+      "notifications": {
+        "title": "Reminders and PWA",
+        "body": "Reminders require a supported browser and, on iPhone, installing Mystic to your Home Screen. Open Profile → Reminders for setup help."
+      },
+      "payments": {
+        "title": "Mystic Plus and payments",
+        "body": "Mystic Plus payments are not active on the web prototype yet. Status and future billing will appear in Profile when available."
+      },
+      "deletion": {
+        "title": "Data deletion",
+        "body": "To request account or data deletion, see the data deletion page or email support from your account address."
+      }
+    }
+  },
+  "about": {
+    "metaTitle": "About",
+    "title": "Mystic by Vedunya Maria",
+    "intro": "A daily spiritual practice app for reflection, moon rhythm, runes, personal requests, and calm guidance.",
+    "sections": {
+      "practice": {
+        "title": "Daily practice",
+        "body": "Mystic offers a calm daily rhythm: guidance for today, moon context, symbolic runes, personal requests, and optional reminders — designed for real life, not hype."
+      },
+      "brand": {
+        "title": "Vedunya Maria",
+        "body": "Mystic is created by Vedunya Maria as a thoughtful space for reflection and inner pacing. It is supportive, not sensational."
+      },
+      "web": {
+        "title": "Web prototype",
+        "body": "This web version is a prototype for testing. Some features, payments, and scheduled reminders may arrive in later releases."
+      }
+    }
+  },
+  "dataDeletion": {
+    "metaTitle": "Data deletion",
+    "title": "Account and data deletion",
+    "intro": "How to request removal of your Mystic account or associated data.",
+    "requestBody": "To request account or data deletion, contact support from the email connected to your account.",
+    "manualNote": "Automated self-service deletion is not available in this web prototype yet. We will process requests manually after verifying account ownership.",
+    "contactTitle": "Contact",
+    "contactBody": "Email support at:",
+    "includesTitle": "What may be deleted",
+    "includesBody": "A deletion request may include your profile, private profile fields, Universe request, course progress, notification preferences, and push subscriptions linked to your account."
+  },
+  "universeRequest": {
+    "title": "Request the Universe",
+    "empty": {
+      "heading": "Create your request",
+      "body": "Write one clear request you want to return to each day. Keep it simple, honest, and focused."
+    },
+    "form": {
+      "textLabel": "Your request",
+      "textPlaceholder": "One clear intention you want to hold today…",
+      "categoryLabel": "Category (optional)",
+      "charCount": "{count} / {max}",
+      "reminderProfileHint": "Daily request reminders are configured in Profile.",
+      "save": "Save request",
+      "saving": "Saving…",
+      "cancel": "Cancel"
+    },
+    "categories": {
+      "love": "Love",
+      "family": "Family",
+      "money": "Money",
+      "protection": "Protection",
+      "health": "Health",
+      "path": "Path",
+      "work": "Work",
+      "other": "Other"
+    },
+    "active": {
+      "edit": "Edit",
+      "pause": "Pause request",
+      "pausing": "Pausing…",
+      "reflectionLabel": "Today’s reflection",
+      "savedNote": "Your request is saved. Return to it daily. Keep one clear focus."
+    },
+    "reminder": {
+      "toggleLabel": "Daily reminder for this request",
+      "timeLabel": "Reminder time",
+      "honestNote": "Request reminders will be available after reminders are enabled on this device.",
+      "profileHint": "Manage this reminder in",
+      "profileLink": "Profile",
+      "statusOn": "Scheduled for {time} when reminders are enabled.",
+      "statusOff": "Off. Turn it on in Profile when you are ready.",
+      "statusGlobalOff": "Reminders are off. Enable them in Profile first."
+    },
+    "profile": {
+      "title": "Request the Universe",
+      "body": "View or edit your current request on Today."
+    },
+    "errors": {
+      "saveFailed": "We couldn’t save your request. Please try again.",
+      "textRequired": "Write your request before saving.",
+      "textTooLong": "Keep your request under 240 characters."
+    }
   }
 }

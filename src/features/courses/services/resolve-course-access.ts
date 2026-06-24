@@ -3,11 +3,12 @@ import {
   LIVING_THE_RUNES_PRODUCT_ID,
   resolveCourseIdFromSlug,
 } from "@/features/courses/constants/course-ids";
+import { COURSE_PURCHASE_FLOW_WIRED } from "@/features/premium/constants";
 import type { ProfileSnapshot } from "@/features/profile/types/user-profile";
 import type { CourseAccessState } from "@/features/courses/types/course";
 
-/** Web stage: checkout is not implemented. */
-export const COURSE_PURCHASE_FLOW_WIRED = false;
+/** @deprecated Import from @/features/premium/constants */
+export { COURSE_PURCHASE_FLOW_WIRED };
 
 const SUPER_ADMIN_EMAILS = new Set([
   "boris.prigozin@gmail.com",

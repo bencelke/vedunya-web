@@ -30,6 +30,7 @@ export const notificationPreferencesSchema = z.object({
   morning: reminderSlotSchema,
   midday: reminderSlotSchema,
   evening: reminderSlotSchema,
+  universeRequest: reminderSlotSchema,
   timezone: z.string().min(1).max(64),
   locale: z.enum(["en", "ru"]),
 });

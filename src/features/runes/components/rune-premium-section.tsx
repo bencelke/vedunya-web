@@ -13,7 +13,7 @@ export function RunePremiumSection({
   visible,
   locked,
 }: RunePremiumSectionProps) {
-  const t = useTranslations("runes");
+  const t = useTranslations("premium");
 
   if (!visible) {
     return null;
@@ -25,7 +25,7 @@ export function RunePremiumSection({
         <h2 className="text-xs font-medium uppercase tracking-[0.14em] text-text-subtle">
           {label}
         </h2>
-        <p className="mt-3 text-sm text-text-muted">{t("premiumSoon")}</p>
+        <p className="mt-3 text-sm text-text-muted">{t("sectionPartOfPlus")}</p>
       </section>
     );
   }
