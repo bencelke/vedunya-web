@@ -63,6 +63,15 @@ npm run build
 npm run start
 ```
 
+## Deployment (Vercel)
+
+Live HTTPS prototype deployment is documented in:
+
+- `docs/setup/vercel-deployment.md` — import repo, env vars, deploy steps
+- `docs/setup/firebase-production-domain-checklist.md` — Firebase Auth domains + Google OAuth for production URLs
+
+Copy `.env.example` to `.env.local` locally. Add the same variable **names** in Vercel project settings — never commit secrets to Git.
+
 ## Tests
 
 ```powershell
