@@ -5,7 +5,7 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
 const nextConfig: NextConfig = {
   // Keep firebase-admin out of the Turbopack server bundle (Vercel ESM/CJS fix).
-  serverExternalPackages: ["firebase-admin"],
+  serverExternalPackages: ["firebase-admin", "jwks-rsa", "jose"],
   turbopack: {
     root: process.cwd(),
   },

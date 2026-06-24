@@ -153,7 +153,7 @@ ERR_REQUIRE_ESM: require() of ES Module jose from jwks-rsa (firebase-admin auth 
 
 Next.js 16 Turbopack production bundle failed to load `firebase-admin` on Vercel. Static SSG pages (`/en/about`, `/manifest.webmanifest`) returned 200.
 
-**Fix:** `serverExternalPackages: ["firebase-admin"]` in `next.config.ts` and `next build --webpack` for production builds.
+**Fix:** `serverExternalPackages: ["firebase-admin", "jwks-rsa", "jose"]` in `next.config.ts`, `next build --webpack` for production builds, and npm `overrides` pinning `jose` to `4.15.9` (jwks-rsa cannot `require()` jose v6 ESM on Vercel Node runtime).
 
 ### Secondary issue (Vercel dashboard, not code)
 
