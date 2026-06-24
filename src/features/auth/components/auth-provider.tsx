@@ -47,6 +47,7 @@ export function AuthProvider({
   const syncingRef = useRef(false);
   const redirectHandledRef = useRef(false);
   const bootstrappedRedirectRef = useRef(false);
+  const hadFirebaseUserRef = useRef(false);
 
   const syncSession = useCallback(async (nextUser: User | null) => {
     if (!adminConfigured) {
@@ -55,11 +56,17 @@ export function AuthProvider({
     }
 
     if (!nextUser) {
-      await clearServerSession();
-      resetSessionSyncState();
+      if (hadFirebaseUserRef.current) {
+        await clearServerSession();
+        resetSessionSyncState();
+      }
+
+      hadFirebaseUserRef.current = false;
       setSessionReady(false);
       return;
     }
+
+    hadFirebaseUserRef.current = true;
 
     if (syncingRef.current) {
       return;

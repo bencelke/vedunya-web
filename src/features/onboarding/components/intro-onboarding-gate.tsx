@@ -4,7 +4,7 @@ import { useEffect, useSyncExternalStore } from "react";
 
 import { IntroOnboardingFlow } from "@/features/onboarding/components/intro-onboarding-flow";
 import { isIntroOnboardingSeen } from "@/features/onboarding/utils/intro-onboarding-storage";
-import { useRouter } from "@/i18n/navigation";
+import { usePathname, useRouter } from "@/i18n/navigation";
 
 function subscribeToIntroStorage(): () => void {
   return () => {};
@@ -12,6 +12,7 @@ function subscribeToIntroStorage(): () => void {
 
 export function IntroOnboardingGate() {
   const router = useRouter();
+  const pathname = usePathname();
   const seen = useSyncExternalStore(
     subscribeToIntroStorage,
     isIntroOnboardingSeen,
@@ -19,10 +20,12 @@ export function IntroOnboardingGate() {
   );
 
   useEffect(() => {
-    if (seen) {
-      router.replace("/login");
+    if (!seen || pathname === "/login") {
+      return;
     }
-  }, [router, seen]);
+
+    router.replace("/login");
+  }, [pathname, router, seen]);
 
   if (seen) {
     return (

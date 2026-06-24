@@ -76,6 +76,8 @@ describe("Phase 9.2 hard stop dev reload loop", () => {
     const script = readSource("src/components/pwa/dev-service-worker-cleanup-script.tsx");
     expect(script).toContain("beforeInteractive");
     expect(script).toContain("unregister");
+    expect(script).toContain("DEV_SW_CLEANUP_KEY");
+    expect(script).toContain("sessionStorage.getItem");
   });
 
   it("keeps /api routes excluded from service worker cache", () => {

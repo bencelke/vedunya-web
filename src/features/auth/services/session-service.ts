@@ -1,14 +1,25 @@
 let lastSyncedToken: string | null = null;
+let lastSyncSucceeded = false;
 let syncPromise: Promise<boolean> | null = null;
+let logoutPromise: Promise<void> | null = null;
+let serverSessionCleared = false;
 
 export async function createServerSession(idToken: string): Promise<boolean> {
   if (!idToken) {
     return false;
   }
 
-  if (lastSyncedToken === idToken && syncPromise) {
-    return syncPromise;
+  if (lastSyncedToken === idToken) {
+    if (syncPromise) {
+      return syncPromise;
+    }
+
+    if (lastSyncSucceeded) {
+      return true;
+    }
   }
+
+  serverSessionCleared = false;
 
   syncPromise = fetch("/api/auth/session", {
     method: "POST",
@@ -17,7 +28,13 @@ export async function createServerSession(idToken: string): Promise<boolean> {
     },
     body: JSON.stringify({ idToken }),
   })
-    .then((response) => response.ok)
+    .then((response) => {
+      lastSyncSucceeded = response.ok;
+      if (response.ok) {
+        serverSessionCleared = false;
+      }
+      return response.ok;
+    })
     .finally(() => {
       syncPromise = null;
     });
@@ -28,7 +45,25 @@ export async function createServerSession(idToken: string): Promise<boolean> {
 
 export async function clearServerSession(): Promise<void> {
   lastSyncedToken = null;
-  await fetch("/api/auth/logout", { method: "POST" });
+  lastSyncSucceeded = false;
+
+  if (serverSessionCleared) {
+    return;
+  }
+
+  if (logoutPromise) {
+    return logoutPromise;
+  }
+
+  logoutPromise = fetch("/api/auth/logout", { method: "POST" })
+    .then(() => {
+      serverSessionCleared = true;
+    })
+    .finally(() => {
+      logoutPromise = null;
+    });
+
+  return logoutPromise;
 }
 
 export async function fetchSessionUser(): Promise<{
@@ -58,5 +93,8 @@ export async function fetchSessionUser(): Promise<{
 
 export function resetSessionSyncState(): void {
   lastSyncedToken = null;
+  lastSyncSucceeded = false;
   syncPromise = null;
+  logoutPromise = null;
+  serverSessionCleared = false;
 }

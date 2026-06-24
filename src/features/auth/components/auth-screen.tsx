@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 
 import { AuthBrandHeader } from "@/features/auth/components/auth-brand-header";
@@ -10,7 +10,7 @@ import { AuthShell } from "@/features/auth/components/auth-shell";
 import { LoginForm } from "@/features/auth/components/login-form";
 import { RegisterForm } from "@/features/auth/components/register-form";
 import { useAuth } from "@/features/auth/hooks/use-auth";
-import { Link, useRouter } from "@/i18n/navigation";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import type { SupportedLocale } from "@/config/app-config";
 
 type AuthMode = "login" | "register";
@@ -33,14 +33,26 @@ async function fetchProfileComplete(): Promise<boolean> {
 export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
   const t = useTranslations("auth");
   const router = useRouter();
+  const pathname = usePathname();
   const { configured, adminConfigured, loading, user, sessionReady } = useAuth();
   const [mode, setMode] = useState<AuthMode>(initialMode);
+  const redirectStartedRef = useRef(false);
 
   const redirectAfterAuth = useCallback(async () => {
+    if (redirectStartedRef.current) {
+      return;
+    }
+
+    redirectStartedRef.current = true;
+
     const complete = await fetchProfileComplete();
-    router.replace(complete ? "/today" : "/onboarding");
-    router.refresh();
-  }, [router]);
+    const destination = complete ? "/today" : "/onboarding";
+
+    if (pathname !== destination) {
+      router.replace(destination);
+      router.refresh();
+    }
+  }, [pathname, router]);
 
   useEffect(() => {
     if (!loading && user && sessionReady) {

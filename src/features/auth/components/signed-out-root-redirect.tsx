@@ -3,15 +3,20 @@
 import { useEffect } from "react";
 
 import { isIntroOnboardingSeen } from "@/features/onboarding/utils/intro-onboarding-storage";
-import { useRouter } from "@/i18n/navigation";
+import { usePathname, useRouter } from "@/i18n/navigation";
 
 export function SignedOutRootRedirect() {
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     const destination = isIntroOnboardingSeen() ? "/login" : "/onboarding";
+    if (pathname === destination) {
+      return;
+    }
+
     router.replace(destination);
-  }, [router]);
+  }, [pathname, router]);
 
   return (
     <div className="mystic-auth-page">
