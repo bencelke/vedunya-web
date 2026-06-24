@@ -8,8 +8,6 @@ import {
   SESSION_COOKIE_MAX_AGE_MS,
 } from "@/lib/firebase-admin/config";
 
-const MAX_ID_TOKEN_AGE_MS = 5 * 60 * 1000;
-
 type SessionRequestBody = {
   idToken?: string;
 };
@@ -45,12 +43,7 @@ export async function POST(request: NextRequest): Promise<Response> {
   }
 
   try {
-    const decoded = await adminAuth.verifyIdToken(idToken, true);
-
-    const authTimeMs = (decoded.auth_time ?? 0) * 1000;
-    if (authTimeMs > 0 && Date.now() - authTimeMs > MAX_ID_TOKEN_AGE_MS) {
-      return jsonError("Sign-in is too old. Please sign in again.", 401);
-    }
+    await adminAuth.verifyIdToken(idToken, true);
 
     const sessionCookie = await adminAuth.createSessionCookie(idToken, {
       expiresIn: SESSION_COOKIE_MAX_AGE_MS,

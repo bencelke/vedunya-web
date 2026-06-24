@@ -19,7 +19,14 @@ describe("Phase 16C — Today reload loop guards", () => {
     const source = readSource("src/features/auth/services/session-service.ts");
     expect(source).toContain("lastSyncSucceeded");
     expect(source).toContain("serverSessionCleared");
+    expect(source).toContain("syncServerSession");
     expect(source).toMatch(/if \(lastSyncedToken === idToken\)[\s\S]*lastSyncSucceeded/);
+  });
+
+  it("syncs server session via auth provider without direct createServerSession", () => {
+    const source = readSource("src/features/auth/components/auth-provider.tsx");
+    expect(source).toContain("syncServerSession");
+    expect(source).not.toContain("createServerSession(token");
   });
 
   it("does not replace auth routes with the current pathname", () => {
@@ -64,5 +71,13 @@ describe("Phase 16C — Today reload loop guards", () => {
     expect(todayPage).not.toContain("useEffect");
     expect(todayPage).not.toContain("router.replace");
     expect(todayPage).not.toContain("router.refresh");
+  });
+
+  it("redirects signed-in complete profile from root only when server session exists", () => {
+    const root = readSource("src/app/[locale]/page.tsx");
+    expect(root).toContain("getCurrentUser()");
+    expect(root).toContain("getTodayRedirectPath");
+    expect(root).toContain("SignedOutRootRedirect");
+    expect(root).not.toContain("router.replace");
   });
 });

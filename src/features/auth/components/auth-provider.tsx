@@ -20,8 +20,8 @@ import {
 } from "@/features/auth/services/auth-service";
 import {
   clearServerSession,
-  createServerSession,
   resetSessionSyncState,
+  syncServerSession,
 } from "@/features/auth/services/session-service";
 import { bootstrapUserProfile } from "@/features/profile/services/profile-bootstrap-service";
 import type { SupportedLocale } from "@/config/app-config";
@@ -75,7 +75,7 @@ export function AuthProvider({
     syncingRef.current = true;
     try {
       const token = await nextUser.getIdToken();
-      const ok = await createServerSession(token);
+      const ok = await syncServerSession(token, nextUser.uid);
       setSessionReady(ok);
     } finally {
       syncingRef.current = false;

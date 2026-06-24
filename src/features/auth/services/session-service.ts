@@ -43,6 +43,34 @@ export async function createServerSession(idToken: string): Promise<boolean> {
   return syncPromise;
 }
 
+export async function syncServerSession(
+  idToken: string,
+  firebaseUid: string,
+): Promise<boolean> {
+  if (!idToken || !firebaseUid) {
+    return false;
+  }
+
+  if (lastSyncedToken === idToken) {
+    if (syncPromise) {
+      return syncPromise;
+    }
+
+    if (lastSyncSucceeded) {
+      return true;
+    }
+  }
+
+  const existingUser = await fetchSessionUser();
+  if (existingUser?.uid === firebaseUid) {
+    lastSyncedToken = idToken;
+    lastSyncSucceeded = true;
+    return true;
+  }
+
+  return createServerSession(idToken);
+}
+
 export async function clearServerSession(): Promise<void> {
   lastSyncedToken = null;
   lastSyncSucceeded = false;

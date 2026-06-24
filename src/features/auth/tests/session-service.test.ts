@@ -4,6 +4,7 @@ import {
   clearServerSession,
   createServerSession,
   resetSessionSyncState,
+  syncServerSession,
 } from "@/features/auth/services/session-service";
 
 describe("session-service deduplication", () => {
@@ -13,6 +14,10 @@ describe("session-service deduplication", () => {
       "fetch",
       vi.fn(async (input: RequestInfo) => {
         const url = typeof input === "string" ? input : input.url;
+
+        if (url.endsWith("/api/auth/me")) {
+          return Response.json({ user: null });
+        }
 
         if (url.endsWith("/api/auth/session")) {
           return new Response(JSON.stringify({ ok: true }), { status: 200 });
@@ -85,5 +90,62 @@ describe("session-service deduplication", () => {
     );
 
     expect(logoutCalls).toHaveLength(2);
+  });
+
+  it("does not POST session when server already has the same Firebase user", async () => {
+    const fetchMock = vi.mocked(globalThis.fetch);
+    fetchMock.mockImplementation(async (input: RequestInfo) => {
+      const url = typeof input === "string" ? input : input.url;
+
+      if (url.endsWith("/api/auth/me")) {
+        return Response.json({
+          user: {
+            uid: "uid-1",
+            email: "user@example.com",
+            emailVerified: true,
+          },
+        });
+      }
+
+      if (url.endsWith("/api/auth/session")) {
+        return new Response(JSON.stringify({ ok: true }), { status: 200 });
+      }
+
+      return new Response(null, { status: 404 });
+    });
+
+    await expect(syncServerSession("token-a", "uid-1")).resolves.toBe(true);
+    await expect(syncServerSession("token-a", "uid-1")).resolves.toBe(true);
+
+    const sessionCalls = fetchMock.mock.calls.filter(([input]) =>
+      String(input).endsWith("/api/auth/session"),
+    );
+
+    expect(sessionCalls).toHaveLength(0);
+  });
+
+  it("POSTs session when server user is missing or mismatched", async () => {
+    const fetchMock = vi.mocked(globalThis.fetch);
+    fetchMock.mockImplementation(async (input: RequestInfo) => {
+      const url = typeof input === "string" ? input : input.url;
+
+      if (url.endsWith("/api/auth/me")) {
+        return Response.json({ user: null });
+      }
+
+      if (url.endsWith("/api/auth/session")) {
+        return new Response(JSON.stringify({ ok: true }), { status: 200 });
+      }
+
+      return new Response(null, { status: 404 });
+    });
+
+    await expect(syncServerSession("token-a", "uid-1")).resolves.toBe(true);
+
+    const sessionCalls = fetchMock.mock.calls.filter(([input]) =>
+      String(input).endsWith("/api/auth/session"),
+    );
+
+    expect(sessionCalls).toHaveLength(1);
   });
 });

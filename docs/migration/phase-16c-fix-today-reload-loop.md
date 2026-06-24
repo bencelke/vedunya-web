@@ -20,14 +20,21 @@ encoded new value:              Europe%2FMoscow
 
 The comparison always failed for IANA zones containing `/`, so `document.cookie` was rewritten on every remount. That invalidated the dynamic RSC payload, Next.js refetched `/today`, the component remounted, and the loop repeated.
 
-## Fix
+## Root cause (update)
 
-1. **`src/features/numerology/utils/timezone-cookie.ts`** — pure helpers:
-   - `safeDecodeCookieValue`
-   - `getCookieValue`
-   - `shouldWriteTimezoneCookie` (decoded existing value vs raw timezone)
-   - `formatTimezoneCookieAssignment`
-2. **`src/features/numerology/components/timezone-cookie-sync.tsx`** — only writes when `shouldWriteTimezoneCookie` is true.
+The timezone cookie fix was necessary but **not sufficient** for signed-in users.
+
+**Primary remaining trigger:** `AuthProvider` called `createServerSession()` on every mount. Each successful `POST /api/auth/session` returned a new `Set-Cookie`, which invalidated the dynamic `/today` RSC payload and caused another refetch. Module-level dedupe did not survive full refetches/reloads, so the POST → Set-Cookie → `GET /ru/today` cycle repeated.
+
+A secondary bug made this worse: `POST /api/auth/session` rejected valid Firebase ID tokens for users signed in longer than 5 minutes because it compared `auth_time` (original sign-in) instead of token freshness.
+
+## Fix (update)
+
+1. **`syncServerSession()`** — call `GET /api/auth/me` first; skip `POST /api/auth/session` when the HttpOnly session already matches the Firebase UID.
+2. **`auth-provider.tsx`** — use `syncServerSession(token, uid)` instead of `createServerSession(token)`.
+3. **`/api/auth/session`** — remove incorrect `auth_time` age gate; `verifyIdToken` already validates the token.
+
+Timezone cookie decoded comparison fix from `21bb6d9` remains in place.
 
 ## Secondary hardening (preserved)
 
