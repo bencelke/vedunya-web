@@ -71,6 +71,7 @@ export function ReminderPreferenceForm({
       </p>
 
       <p className="text-xs leading-relaxed text-text-subtle">{t("schedulerNote")}</p>
+      <p className="text-xs leading-relaxed text-text-subtle">{t("deliveryDependsNote")}</p>
 
       {slots.map((slot) => {
         const slotDisabled =

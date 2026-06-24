@@ -1,58 +1,62 @@
 # Web Push scheduled reminders
 
-Phase 9 stores subscriptions and reminder preferences, supports manual test notifications, and documents scheduled delivery honestly. There is no Firebase Functions package in this repository yet, so scheduled reminders are **not running automatically**.
+Phase 14 adds server-side scheduled dispatch. Phase 9–12 built subscription storage, preferences UI, test send, and service worker display.
 
-## What exists in Phase 9
+## What exists now
 
 - Firestore subscription storage under `users/{uid}/pushSubscriptions/{subscriptionHash}`
 - Firestore reminder preferences under `users/{uid}/notificationPreferences/default`
 - Profile UI for enable/disable, reminder types, and times
 - Authenticated test send via `POST /api/push/test`
 - Service worker push display and click handling
+- **Vercel Cron** → `GET /api/cron/send-reminders` (every 15 minutes)
+- Duplicate-send protection via `users/{uid}/notificationDeliveries/{yyyyMMdd_type}`
+- Expired subscription cleanup on push 404/410
 
-## What does not exist yet
+## Cron route
 
-- No Cloud Scheduler job
-- No Firebase Cloud Function for daily reminder dispatch
-- No Vercel Cron route for reminder fan-out
+| Item | Value |
+|------|--------|
+| Path | `/api/cron/send-reminders` |
+| Auth | `Authorization: Bearer ${SCHEDULED_REMINDERS_SECRET}` |
+| Dry run | `?dryRun=1` |
+| Type filter | `?type=morning` |
 
-## Recommended Phase 9B options
+See `docs/migration/phase-14-scheduled-notification-dispatch.md` for full architecture.
 
-Choose one deployment path:
+## Reminder types
 
-### Option A — Firebase Cloud Scheduler + Cloud Functions
+- Morning guidance
+- Midday reset
+- Evening reflection
+- Request the Universe (only when an active request exists)
 
-1. Add a `functions/` package to the Firebase project.
-2. Create a scheduled function such as `sendDailyReminderPush`.
-3. Query enabled subscriptions whose local time matches morning/midday/evening preferences.
-4. Send via the same VAPID `web-push` utility used by the Next.js API.
-5. Remove or disable subscriptions that return HTTP 404/410.
-
-### Option B — Vercel Cron + secure API route
-
-1. Add a protected cron route or server job.
-2. Use a secret bearer token checked server-side.
-3. Scan Firestore for due reminders and send with `web-push`.
-4. Rate-limit and log failures safely.
-
-### Option C — Manual test only
-
-Until a scheduler is deployed, use Profile → **Send test notification** to verify device delivery.
-
-## Reminder types for V1
-
-- Morning guidance reminder
-- Midday focus reminder
-- Evening reflection reminder
-
-## Safety requirements for scheduled delivery
+## Safety requirements (implemented)
 
 - Respect `notificationPreferences.enabled` and per-slot toggles
-- Use timezone from preferences, not server UTC only
-- Never include private profile data in notification payloads
-- Disable/remove expired subscriptions after push provider 404/410 responses
-- Add light rate limiting before broad fan-out
+- Use timezone from preferences (invalid → UTC fallback)
+- Never include private request text in notification payloads
+- Remove expired subscriptions after push provider 404/410
+- One delivery per reminder type per local day per user
 
-## Current status
+## Vercel setup
 
-**Scheduled reminders are documented only.** Manual test notifications are available after VAPID env setup.
+1. Set `SCHEDULED_REMINDERS_SECRET` in Production and Preview
+2. Set `CRON_SECRET` to the same value (Vercel auto-sends this bearer on cron invocations)
+3. Ensure VAPID keys are configured
+4. Redeploy
+
+## Manual test
+
+Use Profile → **Send test notification** for a single-device check.
+
+For scheduler dry-run:
+
+```bash
+curl -H "Authorization: Bearer YOUR_SECRET" \
+  "https://YOUR-DOMAIN/api/cron/send-reminders?dryRun=1"
+```
+
+## Alternative: Firebase Cloud Functions
+
+Option A (Cloud Scheduler + Functions) remains valid for teams that prefer Firebase-native scheduling instead of Vercel Cron.

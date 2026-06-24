@@ -162,6 +162,7 @@ function parsePushPayload(event) {
         parsed.reminderType === "morning" ||
         parsed.reminderType === "midday" ||
         parsed.reminderType === "evening" ||
+        parsed.reminderType === "universeRequest" ||
         parsed.reminderType === "test"
           ? parsed.reminderType
           : undefined,

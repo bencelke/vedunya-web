@@ -111,7 +111,7 @@ describe("Phase 12C — Profile reminders UI", () => {
     expect(ruNotifications).not.toContain("Daily reminders");
     expect(ruNotifications).not.toContain("Morning guidance");
     expect(ruNotifications).not.toContain("Enable reminders");
-    expect(ru.notifications.schedulerNote).toContain("Автоматическая отправка");
+    expect(ru.notifications.schedulerNote).toContain("отправляются сервером");
   });
 });
 
@@ -181,7 +181,7 @@ describe("Phase 12C — honest scheduler status", () => {
       "src/features/notifications/components/reminder-preference-form.tsx",
     );
     expect(form).toContain("schedulerNote");
-    expect(en.notifications.schedulerNote).toContain("Automatic delivery");
-    expect(ru.notifications.schedulerNote).toContain("Автоматическая отправка");
+    expect(en.notifications.schedulerNote).toContain("scheduled from the server");
+    expect(ru.notifications.schedulerNote).toContain("отправляются сервером");
   });
 });

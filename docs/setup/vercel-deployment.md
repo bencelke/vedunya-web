@@ -32,7 +32,7 @@ Do not commit secrets. Add all sensitive values only in Vercel project settings 
 | Output Directory | *(default — leave empty)* |
 | Node.js Version | 20.x or 22.x (Vercel default is fine) |
 
-No custom `vercel.json` is required for this app.
+No custom `vercel.json` is required for the app shell. Scheduled reminders use `vercel.json` for the cron schedule (`/api/cron/send-reminders` every 15 minutes).
 
 ## 3. Environment variables
 
@@ -79,6 +79,19 @@ WEB_PUSH_SUBJECT=mailto:support@vedunya.com
 ```
 
 Generate keys locally: `npx web-push generate-vapid-keys` (see `docs/setup/web-push-vapid-setup.md`).
+
+### Scheduled reminders (cron)
+
+```env
+SCHEDULED_REMINDERS_SECRET=
+```
+
+- Add a strong random value to **Production** and **Preview**.
+- Vercel Cron sends `Authorization: Bearer <CRON_SECRET>` when `CRON_SECRET` is set — use the **same value** for both `SCHEDULED_REMINDERS_SECRET` and `CRON_SECRET`, or set only `SCHEDULED_REMINDERS_SECRET` and call the endpoint manually with that bearer token.
+- Redeploy after adding the secret.
+- Dry-run test: `curl -H "Authorization: Bearer YOUR_SECRET" "https://YOUR-DOMAIN/api/cron/send-reminders?dryRun=1"`
+
+See `docs/migration/phase-14-scheduled-notification-dispatch.md`.
 
 ### Optional — PWA toggle
 

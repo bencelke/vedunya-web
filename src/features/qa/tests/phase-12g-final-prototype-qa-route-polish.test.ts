@@ -142,8 +142,8 @@ describe("Phase 12G — privacy and honesty", () => {
   });
 
   it("uses honest scheduler note for notifications", () => {
-    expect(en.notifications.schedulerNote).toContain("Automatic delivery");
-    expect(ru.notifications.schedulerNote).toContain("Автоматическая отправка");
+    expect(en.notifications.schedulerNote).toContain("scheduled from the server");
+    expect(ru.notifications.schedulerNote).toContain("отправляются сервером");
     expect(en.notifications.schedulerNote).not.toMatch(/already sending|live now/i);
   });
 

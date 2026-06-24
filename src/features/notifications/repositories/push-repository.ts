@@ -6,6 +6,7 @@ import type {
   PushPlatform,
   PushSubscriptionKeys,
   PushSubscriptionRecord,
+  ReminderType,
 } from "@/features/notifications/types/push";
 import { hashSubscriptionEndpoint } from "@/features/notifications/utils/subscription-hash";
 import { getFirebaseAdminFirestore } from "@/lib/firebase-admin/firestore";
@@ -14,6 +15,14 @@ const USERS_COLLECTION = "users";
 const PUSH_SUBSCRIPTIONS_SUBCOLLECTION = "pushSubscriptions";
 const NOTIFICATION_PREFERENCES_COLLECTION = "notificationPreferences";
 const NOTIFICATION_PREFERENCES_DOC_ID = "default";
+const NOTIFICATION_DELIVERIES_SUBCOLLECTION = "notificationDeliveries";
+
+export type NotificationDeliveryRecord = {
+  reminderType: Exclude<ReminderType, "test">;
+  localDate: string;
+  sentAt: string;
+  timezone: string;
+};
 
 export { hashSubscriptionEndpoint };
 
@@ -271,6 +280,90 @@ export async function removePushSubscription(input: {
     .collection(PUSH_SUBSCRIPTIONS_SUBCOLLECTION)
     .doc(docId)
     .delete();
+}
+
+export function buildNotificationDeliveryDocId(
+  localDate: string,
+  reminderType: Exclude<ReminderType, "test">,
+): string {
+  return `${localDate.replace(/-/g, "")}_${reminderType}`;
+}
+
+export async function hasNotificationDelivery(
+  uid: string,
+  deliveryDocId: string,
+): Promise<boolean> {
+  const db = getFirebaseAdminFirestore();
+  if (!db) {
+    return false;
+  }
+
+  const snap = await db
+    .collection(USERS_COLLECTION)
+    .doc(uid)
+    .collection(NOTIFICATION_DELIVERIES_SUBCOLLECTION)
+    .doc(deliveryDocId)
+    .get();
+
+  return snap.exists;
+}
+
+export async function writeNotificationDelivery(input: {
+  uid: string;
+  deliveryDocId: string;
+  reminderType: Exclude<ReminderType, "test">;
+  localDate: string;
+  timezone: string;
+}): Promise<void> {
+  const db = getFirebaseAdminFirestore();
+  if (!db) {
+    throw new Error("push_unavailable");
+  }
+
+  await db
+    .collection(USERS_COLLECTION)
+    .doc(input.uid)
+    .collection(NOTIFICATION_DELIVERIES_SUBCOLLECTION)
+    .doc(input.deliveryDocId)
+    .set({
+      reminderType: input.reminderType,
+      localDate: input.localDate,
+      timezone: input.timezone,
+      sentAt: Timestamp.now(),
+    });
+}
+
+export async function listEnabledNotificationPreferences(): Promise<
+  Array<{ uid: string; preferences: NotificationPreferencesRecord }>
+> {
+  const db = getFirebaseAdminFirestore();
+  if (!db) {
+    return [];
+  }
+
+  const snap = await db
+    .collectionGroup(NOTIFICATION_PREFERENCES_COLLECTION)
+    .where("enabled", "==", true)
+    .get();
+
+  const results: Array<{ uid: string; preferences: NotificationPreferencesRecord }> =
+    [];
+
+  for (const doc of snap.docs) {
+    const uid = doc.ref.parent.parent?.id;
+    if (!uid) {
+      continue;
+    }
+
+    const preferences = normalizePreferences(doc.data(), "en");
+    if (preferences.enabled !== true) {
+      continue;
+    }
+
+    results.push({ uid, preferences });
+  }
+
+  return results;
 }
 
 export async function readEnabledPushSubscriptions(

@@ -8,6 +8,7 @@ import {
   readPushSubscriptionByEndpoint,
 } from "@/features/notifications/repositories/push-repository";
 import { getWebPushConfig } from "@/features/notifications/server/web-push-config";
+import { isExpiredPushSubscriptionError } from "@/features/notifications/server/remove-expired-subscriptions";
 import type { PushNotificationPayload } from "@/features/notifications/types/push";
 
 export type SendWebPushResult = {
@@ -24,15 +25,6 @@ function configureWebPush(): boolean {
 
   webpush.setVapidDetails(config.subject, config.publicKey, config.privateKey);
   return true;
-}
-
-function isExpiredSubscriptionError(error: unknown): boolean {
-  if (!error || typeof error !== "object") {
-    return false;
-  }
-
-  const statusCode = (error as { statusCode?: number }).statusCode;
-  return statusCode === 404 || statusCode === 410;
 }
 
 export async function sendWebPushToEndpoint(input: {
@@ -68,7 +60,7 @@ export async function sendWebPushToEndpoint(input: {
     });
     return "sent";
   } catch (error) {
-    if (isExpiredSubscriptionError(error)) {
+    if (isExpiredPushSubscriptionError(error)) {
       await markPushSubscriptionResult({
         uid: input.uid,
         endpoint: input.endpoint,
