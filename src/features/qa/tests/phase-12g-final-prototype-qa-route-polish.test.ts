@@ -133,8 +133,8 @@ describe("Phase 12G — privacy and honesty", () => {
     expect(copy).not.toMatch(/gdpr certified/);
   });
 
-  it("keeps Mystic Plus payment unwired", () => {
-    expect(WEB_MYSTIC_PLUS_PAYMENT_WIRED).toBe(false);
+  it("wires Mystic Plus PayPal checkout on Profile when configured", () => {
+    expect(WEB_MYSTIC_PLUS_PAYMENT_WIRED).toBe(true);
     const lockCard = readSource("src/features/premium/components/mystic-plus-lock-card.tsx");
     expect(lockCard).toContain("paymentComingLater");
     expect(lockCard).toContain("disabled");

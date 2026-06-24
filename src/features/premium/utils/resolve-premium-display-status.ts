@@ -1,3 +1,4 @@
+import type { MysticPlusEntitlement } from "@/features/payments/types/payment";
 import type { ProfileSnapshot } from "@/features/profile/types/user-profile";
 import { resolvePremiumAccess } from "@/features/profile/utils/premium-access";
 import type { PremiumDisplayStatus } from "@/features/premium/types/premium-display-status";
@@ -6,9 +7,10 @@ export type { PremiumDisplayStatus } from "@/features/premium/types/premium-disp
 
 export function resolvePremiumDisplayStatus(
   profile: ProfileSnapshot | null,
+  mysticPlus?: MysticPlusEntitlement | null,
 ): PremiumDisplayStatus {
   if (!profile?.publicProfile) {
-    return "free";
+    return mysticPlus?.status === "active" ? "premium" : "free";
   }
 
   const { isOwner, isPremium, premiumOverride } = profile.publicProfile;
@@ -17,7 +19,7 @@ export function resolvePremiumDisplayStatus(
     return "owner";
   }
 
-  if (isPremium === true) {
+  if (isPremium === true || mysticPlus?.status === "active") {
     return "premium";
   }
 
@@ -28,6 +30,9 @@ export function resolvePremiumDisplayStatus(
   return "free";
 }
 
-export function hasPremiumEntitlement(profile: ProfileSnapshot | null): boolean {
-  return resolvePremiumAccess(profile);
+export function hasPremiumEntitlement(
+  profile: ProfileSnapshot | null,
+  mysticPlus?: MysticPlusEntitlement | null,
+): boolean {
+  return resolvePremiumAccess(profile, mysticPlus);
 }

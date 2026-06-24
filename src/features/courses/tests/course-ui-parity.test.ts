@@ -85,11 +85,11 @@ describe("Courses access locking", () => {
     expect(access.isPaidLocked).toBe(true);
   });
 
-  it("does not wire fake checkout", () => {
-    expect(COURSE_PURCHASE_FLOW_WIRED).toBe(false);
+  it("wires PayPal course purchase flow", () => {
+    expect(COURSE_PURCHASE_FLOW_WIRED).toBe(true);
   });
 
-  it("shows honest coming soon state for locked paid course", () => {
+  it("shows paid lock state for locked course without coming soon", () => {
     const access = resolveCourseAccess({
       accessType: "paid",
       status: "available",
@@ -97,8 +97,9 @@ describe("Courses access locking", () => {
       profile: null,
       isPremiumUser: false,
     });
-    expect(access.showComingSoon).toBe(true);
-    expect(access.showPurchaseUnavailable).toBe(true);
+    expect(access.showComingSoon).toBe(false);
+    expect(access.showPurchaseUnavailable).toBe(false);
+    expect(access.isPaidLocked).toBe(true);
   });
 });
 

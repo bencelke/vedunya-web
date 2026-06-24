@@ -6,6 +6,11 @@ import { hasLocale } from "next-intl";
 import { AppHeader } from "@/components/layout/app-header";
 import { AppShell } from "@/components/layout/app-shell";
 import { ProfileContent } from "@/features/profile/components/profile-content";
+import { loadUserEntitlements } from "@/features/payments/server/entitlement-repository";
+import {
+  isCoursePurchaseConfigured,
+  isMysticPlusPaymentConfigured,
+} from "@/features/payments/server/paypal-config";
 import { getPushStatusSummary } from "@/features/notifications/server/push-status";
 import { loadProfileSettingsSummary } from "@/features/profile/server/load-profile-settings-summary";
 import { getProfileSnapshot } from "@/features/profile/services/profile-repository";
@@ -42,11 +47,16 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     notFound();
   }
 
-  const [pushStatus, hasActiveUniverseRequest, settingsSummary] = await Promise.all([
+  const [pushStatus, hasActiveUniverseRequest, settingsSummary, entitlements] =
+    await Promise.all([
     getPushStatusSummary(user.uid, locale),
     readUniverseRequest(user.uid).then((request) => request !== null),
     loadProfileSettingsSummary({ uid: user.uid }),
+    loadUserEntitlements(user.uid),
   ]);
+
+  const paypalConfigured =
+    isMysticPlusPaymentConfigured() || isCoursePurchaseConfigured();
 
   return (
     <>
@@ -58,6 +68,8 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
           pushStatus={pushStatus}
           hasActiveUniverseRequest={hasActiveUniverseRequest}
           settingsSummary={settingsSummary}
+          mysticPlus={entitlements.mysticPlus}
+          paypalConfigured={paypalConfigured}
         />
       </AppShell>
     </>

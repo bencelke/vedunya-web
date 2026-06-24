@@ -135,6 +135,17 @@
     "invalidRune": "Rune not found",
     "symbolA11y": "Rune symbol: {rune}"
   },
+  "payments": {
+    "securePayPalNote": "Payment is processed securely by PayPal.",
+    "verifiedAccessNote": "Your access appears after payment is verified.",
+    "pendingVerification": "Payment is pending verification.",
+    "verificationFailed": "Payment could not be verified.",
+    "verifiedAccess": "Payment verified. Refresh if access has not updated yet.",
+    "setupUnavailable": "Payment setup is not configured yet.",
+    "monthlyPlan": "Monthly",
+    "yearlyPlan": "Yearly",
+    "cancelSubscriptionNote": "You can cancel your subscription in your PayPal account."
+  },
   "premium": {
     "productName": "Mystic Plus",
     "positioning": "Deeper daily guidance, personal reminders, and premium spiritual practices.",

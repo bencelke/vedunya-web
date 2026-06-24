@@ -1,8 +1,10 @@
 import { AppHeader } from "@/components/layout/app-header";
 import { AppShell } from "@/components/layout/app-shell";
 import { MobilePage } from "@/components/layout/mobile-page";
+import { PayPalScriptProviderWrapper } from "@/features/payments/components/PayPalScriptProviderWrapper";
 import { CourseDetailHero } from "@/features/courses/components/course-detail-hero";
 import { LessonList } from "@/features/courses/components/lesson-list";
+import type { SupportedLocale } from "@/config/app-config";
 import type { CourseAccessState, CourseLessonSummary } from "@/features/courses/types/course";
 import type { CourseProgress } from "@/features/courses/types/course-progress";
 
@@ -26,6 +28,9 @@ type CourseDetailScreenProps = {
   currentLabel: string;
   lockedLabel: string;
   getLessonIconAlt: (lesson: CourseLessonSummary) => string;
+  locale: SupportedLocale;
+  courseId: string;
+  showPurchase?: boolean;
 };
 
 export function CourseDetailScreen({
@@ -48,12 +53,16 @@ export function CourseDetailScreen({
   currentLabel,
   lockedLabel,
   getLessonIconAlt,
+  locale,
+  courseId,
+  showPurchase = false,
 }: CourseDetailScreenProps) {
   const completedIds = progress?.completedLessonIds ?? [];
 
   return (
-    <>
-      <AppHeader showLogin={false} />
+    <PayPalScriptProviderWrapper>
+      <>
+        <AppHeader showLogin={false} />
       <AppShell>
         <MobilePage className="mystic-today-column py-6 pt-safe-top">
           <CourseDetailHero
@@ -68,6 +77,9 @@ export function CourseDetailScreen({
             lockedTitle={lockedTitle}
             lockedMessage={lockedMessage}
             coverAlt={coverAlt}
+            locale={locale}
+            courseId={courseId}
+            showPurchase={showPurchase}
           />
 
           <div className="mt-8">
@@ -86,6 +98,7 @@ export function CourseDetailScreen({
           </div>
         </MobilePage>
       </AppShell>
-    </>
+      </>
+    </PayPalScriptProviderWrapper>
   );
 }

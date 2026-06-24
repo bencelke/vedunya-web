@@ -20,6 +20,7 @@ import {
   isPremiumUser,
   resolveLivingTheRunesAccess,
 } from "@/features/courses/services/resolve-course-access";
+import { loadOwnedCourseIds } from "@/features/payments/server/load-payment-access";
 import { getProfileSnapshot } from "@/features/profile/services/profile-repository";
 import { verifySessionCookie } from "@/lib/auth/session";
 import { jsonError } from "@/lib/auth/request-guards";
@@ -68,7 +69,12 @@ export async function POST(
   }
 
   const profile = await getProfileSnapshot(uid);
-  const access = resolveLivingTheRunesAccess(profile, isPremiumUser(profile));
+  const ownedCourseIds = await loadOwnedCourseIds(uid);
+  const access = resolveLivingTheRunesAccess(
+    profile,
+    isPremiumUser(profile),
+    ownedCourseIds,
+  );
   if (!access.canOpenLessons) {
     return jsonError("Course access required.", 403);
   }
@@ -116,7 +122,12 @@ export async function PUT(
   }
 
   const profile = await getProfileSnapshot(uid);
-  const access = resolveLivingTheRunesAccess(profile, isPremiumUser(profile));
+  const ownedCourseIds = await loadOwnedCourseIds(uid);
+  const access = resolveLivingTheRunesAccess(
+    profile,
+    isPremiumUser(profile),
+    ownedCourseIds,
+  );
   if (!access.canOpenLessons) {
     return jsonError("Course access required.", 403);
   }

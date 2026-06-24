@@ -30,8 +30,10 @@ export function resolveCourseAccess(input: {
   accessType: "free" | "paid" | "premium";
   status: "available" | "coming-soon";
   productId?: string;
+  courseId?: string;
   profile: ProfileSnapshot | null;
   isPremiumUser: boolean;
+  ownedCourseIds?: ReadonlySet<string>;
 }): CourseAccessState {
   if (input.status === "coming-soon") {
     return {
@@ -67,7 +69,9 @@ export function resolveCourseAccess(input: {
     };
   }
 
-  const purchased = hasDevelopmentCourseOverride(input.profile);
+  const purchased =
+    hasDevelopmentCourseOverride(input.profile) ||
+    (input.courseId ? input.ownedCourseIds?.has(input.courseId) === true : false);
 
   if (purchased) {
     return {
@@ -93,13 +97,16 @@ export function resolveCourseAccess(input: {
 export function resolveLivingTheRunesAccess(
   profile: ProfileSnapshot | null,
   isPremiumUser: boolean,
+  ownedCourseIds?: ReadonlySet<string>,
 ): CourseAccessState {
   return resolveCourseAccess({
     accessType: "paid",
     status: "available",
     productId: LIVING_THE_RUNES_PRODUCT_ID,
+    courseId: LIVING_THE_RUNES_COURSE_ID,
     profile,
     isPremiumUser,
+    ownedCourseIds,
   });
 }
 

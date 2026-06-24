@@ -85,14 +85,14 @@ describe("Phase 12D — Request and Reminders integration", () => {
 });
 
 describe("Phase 12D — Mystic Plus placeholder", () => {
-  it("shows honest subscription placeholder without checkout", () => {
+  it("shows PayPal subscription surface with honest verification copy", () => {
     const source = readSource("src/features/profile/components/profile-subscription-section.tsx");
     expect(source).toContain("resolvePremiumDisplayStatus");
-    expect(source).not.toContain("PayPal");
-    expect(source).not.toContain("checkout");
-    expect(source).not.toContain("restorePurchases");
-    expect(en.premium.webComingSoon).toContain("soon");
-    expect(ru.premium.webComingSoon).toContain("скоро");
+    expect(source).toContain("MysticPlusPayPalButtons");
+    expect(source).toContain("PaymentStatusNotice");
+    expect(source).toContain("paypalConfigured");
+    expect(en.payments.pendingVerification).toContain("pending verification");
+    expect(ru.payments.pendingVerification).toContain("ожидает подтверждения");
   });
 });
 

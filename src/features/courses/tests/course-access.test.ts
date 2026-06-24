@@ -46,11 +46,26 @@ describe("course access", () => {
     expect(access.isPurchased).toBe(true);
   });
 
-  it("does not wire fake checkout on web", () => {
-    expect(COURSE_PURCHASE_FLOW_WIRED).toBe(false);
+  it("unlocks paid course when ownedCourses entitlement is active", () => {
+    const access = resolveCourseAccess({
+      accessType: "paid",
+      status: "available",
+      productId: "course_runes_24_inner_strength",
+      courseId: "runes_24_inner_strength",
+      profile: null,
+      isPremiumUser: false,
+      ownedCourseIds: new Set(["runes_24_inner_strength"]),
+    });
+
+    expect(access.canOpenLessons).toBe(true);
+    expect(access.isPurchased).toBe(true);
   });
 
-  it("shows purchase unavailable instead of buy CTA when locked", () => {
+  it("wires course purchase flow for PayPal integration", () => {
+    expect(COURSE_PURCHASE_FLOW_WIRED).toBe(true);
+  });
+
+  it("shows purchase surface instead of coming soon when locked", () => {
     const access = resolveCourseAccess({
       accessType: "paid",
       status: "available",
@@ -59,6 +74,7 @@ describe("course access", () => {
       isPremiumUser: false,
     });
 
-    expect(access.showPurchaseUnavailable).toBe(true);
+    expect(access.showPurchaseUnavailable).toBe(false);
+    expect(access.isPaidLocked).toBe(true);
   });
 });

@@ -2,6 +2,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { isCoursePurchaseConfigured } from "@/features/payments/server/paypal-config";
 import { CourseDetailScreen } from "@/features/courses/components/course-detail-screen";
 import { isKnownCourseSlug } from "@/features/courses/constants/course-ids";
 import { loadCourseDetail } from "@/features/courses/services/load-course-detail";
@@ -91,6 +92,13 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
       completedLabel={t("lessonCompleted")}
       currentLabel={t("lessonCurrent")}
       lockedLabel={t("lessonLocked")}
+      locale={locale as SupportedLocale}
+      courseId={detail.summary.id}
+      showPurchase={
+        detail.access.isPaidLocked &&
+        !detail.access.showComingSoon &&
+        isCoursePurchaseConfigured()
+      }
       getLessonIconAlt={(lesson) => t("lessonIconA11y", { title: lesson.title })}
     />
   );

@@ -18,6 +18,7 @@ import {
   resolveResumeLessonId,
 } from "@/features/courses/services/resolve-course-resume";
 import type { CourseCatalogItem } from "@/features/courses/types/course";
+import { loadUserEntitlements } from "@/features/payments/server/entitlement-repository";
 import { getProfileSnapshot } from "@/features/profile/services/profile-repository";
 import { getCurrentUser } from "@/lib/auth/current-user";
 
@@ -30,6 +31,9 @@ export async function loadCourseCatalog(
   const profile = sessionUser
     ? await getProfileSnapshot(sessionUser.uid)
     : null;
+  const entitlements = sessionUser
+    ? await loadUserEntitlements(sessionUser.uid)
+    : null;
   const premium = isPremiumUser(profile);
 
   return Promise.all(
@@ -38,8 +42,10 @@ export async function loadCourseCatalog(
         accessType: course.accessType,
         status: course.status,
         productId: course.productId,
+        courseId: course.id,
         profile,
         isPremiumUser: premium,
+        ownedCourseIds: entitlements?.ownedCourseIds,
       });
 
       let progressPercent: number | null = null;

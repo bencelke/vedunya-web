@@ -135,6 +135,17 @@
     "invalidRune": "Руна не найдена",
     "symbolA11y": "Символ руны: {rune}"
   },
+  "payments": {
+    "securePayPalNote": "Оплата проходит через PayPal.",
+    "verifiedAccessNote": "Доступ появится после подтверждения оплаты.",
+    "pendingVerification": "Оплата ожидает подтверждения.",
+    "verificationFailed": "Не удалось подтвердить оплату.",
+    "verifiedAccess": "Оплата подтверждена. Обновите страницу, если доступ ещё не появился.",
+    "setupUnavailable": "Оплата пока не настроена на сервере.",
+    "monthlyPlan": "Месяц",
+    "yearlyPlan": "Год",
+    "cancelSubscriptionNote": "Подписку можно отменить в аккаунте PayPal."
+  },
   "premium": {
     "productName": "Mystic Plus",
     "positioning": "Более глубокие ежедневные подсказки, личные напоминания и премиум-практики.",

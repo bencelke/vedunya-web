@@ -17,6 +17,8 @@ import { ProfileLegalSection } from "@/features/profile/components/profile-legal
 import { ProfileLogoutSection } from "@/features/profile/components/profile-logout-section";
 import { ProfilePersonalDetailsSection } from "@/features/profile/components/profile-personal-details-section";
 import { ProfileRemindersSection } from "@/features/profile/components/profile-reminders-section";
+import { PayPalScriptProviderWrapper } from "@/features/payments/components/PayPalScriptProviderWrapper";
+import type { MysticPlusEntitlement } from "@/features/payments/types/payment";
 import { ProfileSubscriptionSection } from "@/features/profile/components/profile-subscription-section";
 import { ProfileSupportSection } from "@/features/profile/components/profile-support-section";
 import { ProfileUniverseRequestSection } from "@/features/profile/components/profile-universe-request-section";
@@ -37,6 +39,8 @@ type ProfileContentProps = {
   pushStatus: PushStatusSummary;
   hasActiveUniverseRequest: boolean;
   settingsSummary: ProfileSettingsSummary;
+  mysticPlus: MysticPlusEntitlement | null;
+  paypalConfigured: boolean;
 };
 
 export function ProfileContent({
@@ -45,6 +49,8 @@ export function ProfileContent({
   pushStatus,
   hasActiveUniverseRequest,
   settingsSummary,
+  mysticPlus,
+  paypalConfigured,
 }: ProfileContentProps) {
   const t = useTranslations("profile");
   const router = useRouter();
@@ -125,7 +131,8 @@ export function ProfileContent({
   }
 
   return (
-    <div className="mystic-reading-column space-y-6 px-[var(--spacing-page)] py-6">
+    <PayPalScriptProviderWrapper>
+      <div className="mystic-reading-column space-y-6 px-[var(--spacing-page)] py-6">
       <ProfileHeader profile={profile} />
 
       {message ? (
@@ -160,7 +167,12 @@ export function ProfileContent({
         hasActiveUniverseRequest={hasActiveUniverseRequest}
       />
 
-      <ProfileSubscriptionSection profile={profile} />
+      <ProfileSubscriptionSection
+        locale={locale}
+        profile={profile}
+        mysticPlus={mysticPlus}
+        paypalConfigured={paypalConfigured}
+      />
 
       <ProfileCoursesSection course={settingsSummary.course} />
 
@@ -169,6 +181,7 @@ export function ProfileContent({
       <ProfileSupportSection />
 
       <ProfileLogoutSection onLogout={() => void handleLogout()} />
-    </div>
+      </div>
+    </PayPalScriptProviderWrapper>
   );
 }

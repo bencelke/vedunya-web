@@ -1,7 +1,9 @@
 import Image from "next/image";
 
 import { CourseAccessNotice } from "@/features/courses/components/course-access-notice";
+import { CoursePurchaseSection } from "@/features/payments/components/CoursePurchaseSection";
 import type { CourseAccessState } from "@/features/courses/types/course";
+import type { SupportedLocale } from "@/config/app-config";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
@@ -19,6 +21,9 @@ type CourseDetailHeroProps = {
   lockedTitle: string;
   lockedMessage: string;
   coverAlt: string;
+  locale?: SupportedLocale;
+  courseId?: string;
+  showPurchase?: boolean;
 };
 
 export function CourseDetailHero({
@@ -33,6 +38,9 @@ export function CourseDetailHero({
   lockedTitle,
   lockedMessage,
   coverAlt,
+  locale,
+  courseId,
+  showPurchase = false,
 }: CourseDetailHeroProps) {
   const resolvedCover = coverPath ?? null;
   const showProgress =
@@ -85,7 +93,12 @@ export function CourseDetailHero({
                 {ctaLabel}
               </Link>
             ) : (
-              <CourseAccessNotice title={lockedTitle} message={lockedMessage} />
+              <div className="space-y-4">
+                <CourseAccessNotice title={lockedTitle} message={lockedMessage} />
+                {showPurchase && locale && courseId ? (
+                  <CoursePurchaseSection locale={locale} courseId={courseId} />
+                ) : null}
+              </div>
             )}
           </div>
         </div>

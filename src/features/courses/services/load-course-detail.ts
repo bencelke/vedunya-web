@@ -21,6 +21,7 @@ import {
   filterValidCompletedLessonIds,
   resolveResumeLessonId,
 } from "@/features/courses/services/resolve-course-resume";
+import { loadUserEntitlements } from "@/features/payments/server/entitlement-repository";
 import { getProfileSnapshot } from "@/features/profile/services/profile-repository";
 import { getCurrentUser } from "@/lib/auth/current-user";
 
@@ -43,6 +44,9 @@ export async function loadCourseDetail(slug: string, locale: SupportedLocale) {
   const progress = sessionUser
     ? await readCourseProgress(sessionUser.uid, courseId)
     : null;
+  const entitlements = sessionUser
+    ? await loadUserEntitlements(sessionUser.uid)
+    : null;
 
   const validIds = new Set(lessons.map((lesson) => lesson.id));
   const completedIds = progress
@@ -53,8 +57,10 @@ export async function loadCourseDetail(slug: string, locale: SupportedLocale) {
     accessType: summary.accessType,
     status: summary.status,
     productId: summary.productId,
+    courseId: summary.id,
     profile,
     isPremiumUser: isPremiumUser(profile),
+    ownedCourseIds: entitlements?.ownedCourseIds,
   });
 
   return {

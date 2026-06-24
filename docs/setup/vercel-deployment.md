@@ -93,6 +93,23 @@ SCHEDULED_REMINDERS_SECRET=
 
 See `docs/migration/phase-14-scheduled-notification-dispatch.md`.
 
+### PayPal payments (sandbox / live)
+
+```env
+PAYPAL_ENV=sandbox
+NEXT_PUBLIC_PAYPAL_CLIENT_ID=
+PAYPAL_CLIENT_ID=
+PAYPAL_CLIENT_SECRET=
+PAYPAL_WEBHOOK_ID=
+PAYPAL_MYSTIC_PLUS_MONTHLY_PLAN_ID=
+PAYPAL_MYSTIC_PLUS_YEARLY_PLAN_ID=
+PAYPAL_CURRENCY=EUR
+```
+
+- Add to **Production** and **Preview**, then redeploy.
+- Register webhook: `https://YOUR-DOMAIN/api/paypal/webhook`
+- See `docs/migration/phase-15-paypal-payments-entitlements.md`.
+
 ### Optional — PWA toggle
 
 ```env
