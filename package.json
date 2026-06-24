@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
@@ -15,7 +15,8 @@
     "content:check": "tsx scripts/live-content-check.ts",
     "sanity:check": "tsx scripts/sanity-check.ts",
     "courses:check": "tsx scripts/courses-check.ts",
-    "assets:check": "tsx scripts/validate-assets.ts"
+    "assets:check": "tsx scripts/validate-assets.ts",
+    "smoke:production": "tsx scripts/production-smoke-check.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",

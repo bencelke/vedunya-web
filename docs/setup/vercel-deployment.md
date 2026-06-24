@@ -3,7 +3,7 @@
 Deploy Mystic by Vedunya Maria as an HTTPS prototype for real-device PWA testing (iPhone/Android).
 
 **Repo:** `https://github.com/bencelke/vedunya-web`  
-**Checkpoint:** `481cbaf` and later on `main`
+**Checkpoint:** `0738717` and later on `main`
 
 Do not commit secrets. Add all sensitive values only in Vercel project settings or local `.env.local`.
 
@@ -27,7 +27,7 @@ Do not commit secrets. Add all sensitive values only in Vercel project settings 
 |---------|--------|
 | Framework Preset | **Next.js** |
 | Root Directory | `.` (repo root) |
-| Build Command | `npm run build` |
+| Build Command | `npm run build` (uses `next build --webpack` for Firebase Admin compatibility on Vercel) |
 | Install Command | `npm install` |
 | Output Directory | *(default — leave empty)* |
 | Node.js Version | 20.x or 22.x (Vercel default is fine) |
@@ -49,6 +49,7 @@ NEXT_PUBLIC_FIREBASE_PROJECT_ID=
 NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
 NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
 NEXT_PUBLIC_FIREBASE_APP_ID=
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=
 
 FIREBASE_ADMIN_PROJECT_ID=
 FIREBASE_ADMIN_CLIENT_EMAIL=
@@ -142,6 +143,16 @@ Push permission is **not** requested automatically on page load — only when th
 - [ ] Offline page: `/en/offline`
 - [ ] PWA install from Profile (production HTTPS)
 - [ ] Optional: test notification after enabling reminders
+
+## Post-deploy automated smoke check
+
+After the first deploy, run from your machine (no secrets required):
+
+```bash
+PRODUCTION_URL=https://<your-vercel-host>.vercel.app npm run smoke:production
+```
+
+This checks core routes, `/manifest.webmanifest`, and `/sw.js` HTTP status and basic shape.
 
 ## 9. Security reminders
 

@@ -29,14 +29,18 @@ export function getFirebaseAdminApp(): App | null {
     return null;
   }
 
-  adminApp = initializeApp({
-    credential: cert({
+  try {
+    adminApp = initializeApp({
+      credential: cert({
+        projectId: config.projectId,
+        clientEmail: config.clientEmail,
+        privateKey: config.privateKey,
+      }),
       projectId: config.projectId,
-      clientEmail: config.clientEmail,
-      privateKey: config.privateKey,
-    }),
-    projectId: config.projectId,
-  });
+    });
+  } catch {
+    return null;
+  }
 
   return adminApp;
 }
