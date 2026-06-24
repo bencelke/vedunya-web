@@ -5,7 +5,7 @@ Server-side Mystic reminders via Vercel Cron and a protected API route.
 ## Architecture
 
 ```text
-Vercel Cron (every 15 min)
+Vercel Cron (daily on Hobby — 09:00 UTC)
   → GET /api/cron/send-reminders
   → verify Authorization: Bearer secret
   → dispatchScheduledReminders()
@@ -60,13 +60,13 @@ No endpoints, emails, request text, or secrets are returned.
   "crons": [
     {
       "path": "/api/cron/send-reminders",
-      "schedule": "*/15 * * * *"
+      "schedule": "0 9 * * *"
     }
   ]
 }
 ```
 
-**Plan note:** Hobby supports cron jobs with minimum 1-hour intervals on some plans; Pro supports higher frequency. If Vercel rejects `*/15`, use the finest schedule your plan allows and document the wider delivery window.
+**Vercel Hobby compatibility:** On Vercel Hobby, scheduled reminders use a **daily** cron only (`0 9 * * *` — 09:00 UTC). **15-minute** reminder dispatch requires **Vercel Pro** or an external scheduler. The API route `/api/cron/send-reminders` remains available for manual invocation, dry-run, and future higher-frequency schedules. This is a **deployment compatibility** change, not a product behavior upgrade.
 
 ## Required env vars
 
@@ -114,9 +114,9 @@ Matches existing Phase 12 schema (`NotificationPreferencesRecord`):
 
 ## Due-time logic
 
-- 15-minute send window aligned with cron frequency
+- On **Vercel Hobby**, cron runs once daily at 09:00 UTC; due-time matching still uses the user's local `HH:mm` and timezone at dispatch time
+- With **Vercel Pro** or an external scheduler at 15-minute intervals, the original 15-minute send window applies: `localMinutes >= scheduledMinutes && localMinutes < scheduledMinutes + 15`
 - Compare user's local `HH:mm` (from `Intl` + timezone) to configured slot time
-- Slot due when `localMinutes >= scheduledMinutes && localMinutes < scheduledMinutes + 15`
 
 ## Duplicate protection
 
@@ -184,7 +184,7 @@ curl -i \
 ## Known limitations
 
 - Prototype scans all users with `enabled: true` — fine for early rollout; not optimized for large scale
-- Cron granularity depends on Vercel plan (target: 15 minutes)
+- **Vercel Hobby:** cron runs daily only (`0 9 * * *` UTC). Sub-15-minute reminder delivery requires Vercel Pro or an external scheduler calling `/api/cron/send-reminders`
 - No per-user retry queue; failed sends do not write delivery docs
 - Users without push subscriptions are skipped silently
 - Local `npm run dev` does not run Vercel Cron — test via curl

@@ -104,6 +104,20 @@ Boris must confirm these exist in **Production** and **Preview** (values not lis
 
 **Automated verification of Vercel dashboard env vars was not possible from this session.** Treat unconfirmed vars as manual blockers for auth, push, cron, and Shopify checkout.
 
+## Vercel Hobby cron (deploy blocker)
+
+Production deploy was blocked on Hobby because `vercel.json` used `*/15 * * * *` (every 15 minutes). **Vercel Hobby allows daily cron jobs only.**
+
+| Item | Value |
+|------|--------|
+| Route | `/api/cron/send-reminders` |
+| Hobby schedule | `0 9 * * *` (daily 09:00 UTC) |
+| Pro / external | `*/15 * * * *` or equivalent for 15-minute dispatch |
+
+On Vercel Hobby, scheduled reminders use a daily cron only. **15-minute** reminder dispatch requires **Vercel Pro** or another scheduler. The API route remains available. This is a deployment compatibility change, not a product behavior upgrade.
+
+Fixed in commit after `47f47ca` — see `vercel.json` and `docs/migration/phase-14-scheduled-notification-dispatch.md`.
+
 ## Firebase authorized domains
 
 **Manual confirmation required** in Firebase Console → Authentication → Settings → Authorized domains:

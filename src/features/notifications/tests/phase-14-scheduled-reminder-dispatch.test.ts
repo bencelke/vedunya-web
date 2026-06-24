@@ -249,10 +249,11 @@ describe("Phase 14 — Profile copy", () => {
 });
 
 describe("Phase 14 — Vercel cron config", () => {
-  it("defines a 15-minute cron schedule", () => {
+  it("defines a Hobby-compatible daily cron schedule", () => {
     const config = readSource("vercel.json");
     expect(config).toContain("/api/cron/send-reminders");
-    expect(config).toContain("*/15 * * * *");
+    expect(config).toContain("0 9 * * *");
+    expect(config).not.toContain("*/15 * * * *");
   });
 });
 
