@@ -81,10 +81,12 @@ describe("Phase 12G — core localized routes", () => {
 });
 
 describe("Phase 12G — root redirect behavior", () => {
-  it("redirects authenticated users away from locale landing", () => {
+  it("redirects authenticated users away from locale root entry", () => {
     const landing = readSource("src/app/[locale]/page.tsx");
-    expect(landing).toContain("redirectAuthenticatedFromLogin");
-    expect(landing).not.toContain('redirect("/today")');
+    expect(landing).toContain("getCurrentUser");
+    expect(landing).toContain("getTodayRedirectPath");
+    expect(landing).toContain("getOnboardingRedirectPath");
+    expect(landing).not.toContain("LandingHero");
   });
 });
 

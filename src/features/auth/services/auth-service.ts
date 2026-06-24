@@ -7,9 +7,12 @@ import {
   signInWithPopup,
   signInWithRedirect,
   GoogleAuthProvider,
+  OAuthProvider,
+  FacebookAuthProvider,
   getRedirectResult,
   type User,
   type UserCredential,
+  type AuthProvider,
 } from "firebase/auth";
 
 import { getFirebaseAuth, ensureAuthPersistence } from "@/lib/firebase/auth";
@@ -54,6 +57,25 @@ export async function loginWithEmail(
 }
 
 export async function loginWithGoogle(): Promise<UserCredential | null> {
+  return signInWithOAuthProvider(googleProvider);
+}
+
+export async function loginWithApple(): Promise<UserCredential | null> {
+  const provider = new OAuthProvider("apple.com");
+  provider.addScope("email");
+  provider.addScope("name");
+  return signInWithOAuthProvider(provider);
+}
+
+export async function loginWithFacebook(): Promise<UserCredential | null> {
+  const provider = new FacebookAuthProvider();
+  provider.addScope("email");
+  return signInWithOAuthProvider(provider);
+}
+
+async function signInWithOAuthProvider(
+  provider: AuthProvider,
+): Promise<UserCredential | null> {
   const auth = getFirebaseAuth();
   if (!auth) {
     throw new Error("configuration");
@@ -62,20 +84,25 @@ export async function loginWithGoogle(): Promise<UserCredential | null> {
   await ensureAuthPersistence();
 
   if (shouldUseRedirectFlow()) {
-    await signInWithRedirect(auth, googleProvider);
+    await signInWithRedirect(auth, provider);
     return null;
   }
 
-  return signInWithPopup(auth, googleProvider);
+  return signInWithPopup(auth, provider);
 }
 
-export async function resolveGoogleRedirectResult(): Promise<UserCredential | null> {
+export async function resolveOAuthRedirectResult(): Promise<UserCredential | null> {
   const auth = getFirebaseAuth();
   if (!auth) {
     return null;
   }
 
   return getRedirectResult(auth);
+}
+
+/** @deprecated Use resolveOAuthRedirectResult */
+export async function resolveGoogleRedirectResult(): Promise<UserCredential | null> {
+  return resolveOAuthRedirectResult();
 }
 
 export async function sendPasswordReset(email: string): Promise<void> {

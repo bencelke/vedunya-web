@@ -392,8 +392,12 @@
     "backToLanding": "Back to home",
     "legalNotice": "By continuing you agree to the Mystic terms and privacy policy for Vedunya Maria.",
     "apple": {
-      "continue": "Apple sign-in coming later",
-      "unavailableHint": "Apple sign-in on the web is coming in a later release."
+      "continue": "Continue with Apple",
+      "submitting": "Opening Apple…"
+    },
+    "facebook": {
+      "continue": "Continue with Facebook",
+      "submitting": "Opening Facebook…"
     },
     "loading": "Checking your session…",
     "configuration": {
@@ -447,6 +451,32 @@
       "configuration": "Authentication is not configured on this environment.",
       "passwordMismatch": "Passwords do not match.",
       "termsRequired": "Please accept the terms before creating an account."
+    },
+    "intro": {
+      "back": "Back",
+      "continue": "Continue",
+      "start": "Start",
+      "login": "Log in",
+      "createAccount": "Create account",
+      "skipToLogin": "Already explored Mystic? Log in",
+      "pages": {
+        "guidance": {
+          "title": "Daily guidance",
+          "body": "A calm daily practice with moon rhythm, runes, and one clear step."
+        },
+        "universe": {
+          "title": "Request the Universe",
+          "body": "Write one personal request and return to it each day."
+        },
+        "reminders": {
+          "title": "Reminders",
+          "body": "Gentle reminders help you keep your practice steady."
+        },
+        "courses": {
+          "title": "Courses and deeper practice",
+          "body": "Learn runes and spiritual practices at your own pace."
+        }
+      }
     },
     "onboarding": {
       "metaTitle": "Profile setup",

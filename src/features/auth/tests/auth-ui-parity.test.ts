@@ -62,22 +62,13 @@ describe("Auth UI parity — providers", () => {
     expect(source).toContain("mysticAssets.brand.googleIcon");
   });
 
-  it("keeps Apple sign-in disabled without fake auth behavior", () => {
-    const source = readSource(
-      "src/features/auth/components/apple-sign-in-placeholder.tsx",
-    );
-    expect(source).toContain("disabled");
-    expect(source).toContain('aria-disabled="true"');
-    expect(source).not.toContain("signInWith");
-    expect(source).not.toContain("loginWithApple");
-  });
-
-  it("groups provider buttons for login screen", () => {
+  it("groups provider buttons with flag-gated Apple and Facebook", () => {
     const source = readSource(
       "src/features/auth/components/auth-provider-buttons.tsx",
     );
     expect(source).toContain("GoogleSignInButton");
-    expect(source).toContain("AppleSignInPlaceholder");
+    expect(source).toContain("isAppleLoginEnabled");
+    expect(source).toContain("isFacebookLoginEnabled");
   });
 });
 
@@ -144,7 +135,7 @@ describe("Auth UI parity — localization", () => {
     expect(en.auth.welcomeHeadline).toContain("Mystic by Vedunya Maria");
     expect(en.auth.loginDescription).toContain("daily practice");
     expect(en.auth.google.continue).toBe("Continue with Google");
-    expect(en.auth.apple.continue).toContain("coming later");
+    expect(en.auth.apple.continue).toBe("Continue with Apple");
   });
 
   it("includes polished RU auth copy", () => {
@@ -152,7 +143,7 @@ describe("Auth UI parity — localization", () => {
     expect(ru.auth.welcomeHeadline).toContain("Mystic by Vedunya Maria");
     expect(ru.auth.loginDescription).toContain("ежедневную практику");
     expect(ru.auth.google.continue).toBe("Продолжить с Google");
-    expect(ru.auth.apple.continue).toContain("скоро");
+    expect(ru.auth.apple.continue).toBe("Продолжить с Apple");
   });
 });
 

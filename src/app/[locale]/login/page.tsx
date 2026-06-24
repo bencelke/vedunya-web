@@ -10,6 +10,7 @@ import { notFound } from "next/navigation";
 
 type LoginPageProps = {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ mode?: string }>;
 };
 
 export async function generateMetadata({
@@ -20,8 +21,12 @@ export async function generateMetadata({
   return { title: t("loginMetaTitle") };
 }
 
-export default async function LoginPage({ params }: LoginPageProps) {
+export default async function LoginPage({
+  params,
+  searchParams,
+}: LoginPageProps) {
   const { locale: localeParam } = await params;
+  const { mode } = await searchParams;
 
   if (!hasLocale(routing.locales, localeParam)) {
     notFound();
@@ -31,5 +36,7 @@ export default async function LoginPage({ params }: LoginPageProps) {
   setRequestLocale(locale);
   await redirectAuthenticatedFromLogin(locale);
 
-  return <AuthScreen locale={locale} initialMode="login" />;
+  const initialMode = mode === "register" ? "register" : "login";
+
+  return <AuthScreen locale={locale} initialMode={initialMode} />;
 }

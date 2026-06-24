@@ -1,22 +1,22 @@
 import { setRequestLocale } from "next-intl/server";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { hasLocale } from "next-intl";
 
-import { FinalCta } from "@/components/landing/final-cta";
-import { HowItWorks } from "@/components/landing/how-it-works";
-import { LandingHero } from "@/components/landing/landing-hero";
-import { ValuePreview } from "@/components/landing/value-preview";
-import { AppHeader } from "@/components/layout/app-header";
-import { Container } from "@/components/ui/container";
+import { SignedOutRootRedirect } from "@/features/auth/components/signed-out-root-redirect";
+import { getProfileSnapshot } from "@/features/profile/services/profile-repository";
 import type { SupportedLocale } from "@/config/app-config";
-import { redirectAuthenticatedFromLogin } from "@/lib/auth/require-user";
+import { getCurrentUser } from "@/lib/auth/current-user";
+import {
+  getOnboardingRedirectPath,
+  getTodayRedirectPath,
+} from "@/lib/auth/paths";
 import { routing } from "@/i18n/routing";
 
-type LandingPageProps = {
+type RootPageProps = {
   params: Promise<{ locale: string }>;
 };
 
-export default async function LandingPage({ params }: LandingPageProps) {
+export default async function RootPage({ params }: RootPageProps) {
   const { locale: localeParam } = await params;
 
   if (!hasLocale(routing.locales, localeParam)) {
@@ -25,17 +25,15 @@ export default async function LandingPage({ params }: LandingPageProps) {
 
   const locale = localeParam as SupportedLocale;
   setRequestLocale(locale);
-  await redirectAuthenticatedFromLogin(locale);
 
-  return (
-    <>
-      <AppHeader />
-      <Container className="space-y-12 pb-16 pt-6">
-        <LandingHero />
-        <ValuePreview />
-        <HowItWorks />
-        <FinalCta />
-      </Container>
-    </>
-  );
+  const user = await getCurrentUser();
+  if (user) {
+    const profile = await getProfileSnapshot(user.uid);
+    if (profile?.profileComplete === true) {
+      redirect(getTodayRedirectPath(locale));
+    }
+    redirect(getOnboardingRedirectPath(locale));
+  }
+
+  return <SignedOutRootRedirect />;
 }

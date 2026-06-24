@@ -15,7 +15,7 @@ import { useLocale } from "next-intl";
 
 import type { AuthContextValue } from "@/features/auth/types/auth-state";
 import {
-  resolveGoogleRedirectResult,
+  resolveOAuthRedirectResult,
   signOutFromFirebase,
 } from "@/features/auth/services/auth-service";
 import {
@@ -94,7 +94,7 @@ export function AuthProvider({
       if (!redirectHandledRef.current) {
         redirectHandledRef.current = true;
         try {
-          const redirectResult = await resolveGoogleRedirectResult();
+          const redirectResult = await resolveOAuthRedirectResult();
           if (
             redirectResult?.user &&
             !bootstrappedRedirectRef.current

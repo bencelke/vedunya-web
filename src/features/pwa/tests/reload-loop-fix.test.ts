@@ -51,10 +51,11 @@ describe("PWA reload loop fix", () => {
     expect(sw).toContain("NEVER_CACHE_PATTERNS");
   });
 
-  it("landing redirects authenticated users via auth helper, not client loops", () => {
+  it("root redirects authenticated users server-side, signed-out via client gate", () => {
     const landing = readSource("src/app/[locale]/page.tsx");
-    expect(landing).toContain("redirectAuthenticatedFromLogin");
-    expect(landing).not.toContain("router.replace");
+    expect(landing).toContain("getCurrentUser");
+    expect(landing).toContain("SignedOutRootRedirect");
+    expect(landing).not.toContain("LandingHero");
   });
 
   it("notification hook does not auto refresh or replace routes", () => {

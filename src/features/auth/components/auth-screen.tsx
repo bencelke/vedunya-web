@@ -52,13 +52,7 @@ export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
     void redirectAfterAuth();
   }
 
-  const topBar = (
-    <AuthLanguageBar
-      backHref="/"
-      backLabel={t("backToLanding")}
-      tone="auth"
-    />
-  );
+  const topBar = <AuthLanguageBar tone="auth" />;
 
   if (loading) {
     return (
