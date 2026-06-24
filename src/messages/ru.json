@@ -136,20 +136,24 @@
     "symbolA11y": "Символ руны: {rune}"
   },
   "payments": {
-    "securePayPalNote": "Оплата проходит через PayPal.",
-    "verifiedAccessNote": "Доступ появится после подтверждения оплаты.",
-    "pendingVerification": "Оплата ожидает подтверждения.",
-    "verificationFailed": "Не удалось подтвердить оплату.",
-    "verifiedAccess": "Оплата подтверждена. Обновите страницу, если доступ ещё не появился.",
-    "setupUnavailable": "Оплата пока не настроена на сервере.",
-    "monthlyPlan": "Месяц",
-    "yearlyPlan": "Год",
-    "cancelSubscriptionNote": "Подписку можно отменить в аккаунте PayPal."
+    "secureCheckoutNote": "Оплата проходит через Shopify.",
+    "verifiedAccessNote": "Доступ откроется после подтверждения заказа.",
+    "pendingVerification": "Оплата проверяется.",
+    "setupUnavailable": "Оплата пока не настроена."
+  },
+  "shopify": {
+    "buyThroughShopify": "Купить через Shopify",
+    "secureCheckoutNote": "Оплата проходит через Shopify. Доступ откроется после подтверждения заказа.",
+    "paypalInsideCheckoutNote": "Оплата проходит через Shopify. PayPal может быть доступен внутри checkout.",
+    "pendingVerification": "Оплата проверяется. Доступ появится после подтверждения заказа Shopify.",
+    "setupUnavailable": "Оплата пока не настроена.",
+    "startingCheckout": "Открываем checkout…",
+    "checkoutFailed": "Не удалось начать оплату. Попробуйте позже."
   },
   "premium": {
     "productName": "Mystic Plus",
     "positioning": "Более глубокие ежедневные подсказки, личные напоминания и премиум-практики.",
-    "webComingSoon": "Mystic Plus скоро откроется в веб-версии.",
+    "webComingSoon": "Оформление подписки Mystic Plus будет подключено позже.",
     "sectionPartOfPlus": "Этот раздел входит в Mystic Plus.",
     "lockTitle": "Mystic Plus",
     "lockBody": "Откройте более глубокие подсказки и премиум-практики, когда Mystic Plus станет доступен в веб-версии.",
@@ -345,7 +349,8 @@
       "description": "Продолжайте курсы и практики.",
       "openCourses": "Открыть курсы",
       "progress": "Пройдено {percent}%",
-      "notStarted": "Вы ещё не начали этот путь."
+      "notStarted": "Вы ещё не начали этот путь.",
+      "accessActive": "Доступ к курсу «Живые руны» активен для этого аккаунта."
     },
     "legal": {
       "label": "Правовая информация",

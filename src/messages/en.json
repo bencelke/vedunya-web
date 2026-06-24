@@ -136,20 +136,24 @@
     "symbolA11y": "Rune symbol: {rune}"
   },
   "payments": {
-    "securePayPalNote": "Payment is processed securely by PayPal.",
-    "verifiedAccessNote": "Your access appears after payment is verified.",
-    "pendingVerification": "Payment is pending verification.",
-    "verificationFailed": "Payment could not be verified.",
-    "verifiedAccess": "Payment verified. Refresh if access has not updated yet.",
+    "secureCheckoutNote": "Payment is handled securely by Shopify.",
+    "verifiedAccessNote": "Access is added after the order is confirmed.",
+    "pendingVerification": "Payment is being verified.",
+    "setupUnavailable": "Payment setup is not configured yet."
+  },
+  "shopify": {
+    "buyThroughShopify": "Buy through Shopify",
+    "secureCheckoutNote": "Payment is handled securely by Shopify. Access is added after the order is confirmed.",
+    "paypalInsideCheckoutNote": "Payment is handled securely by Shopify. PayPal may be available inside checkout.",
+    "pendingVerification": "Payment is being verified. Access appears here after Shopify confirms the order.",
     "setupUnavailable": "Payment setup is not configured yet.",
-    "monthlyPlan": "Monthly",
-    "yearlyPlan": "Yearly",
-    "cancelSubscriptionNote": "You can cancel your subscription in your PayPal account."
+    "startingCheckout": "Opening checkout…",
+    "checkoutFailed": "Unable to start checkout. Please try again later."
   },
   "premium": {
     "productName": "Mystic Plus",
     "positioning": "Deeper daily guidance, personal reminders, and premium spiritual practices.",
-    "webComingSoon": "Mystic Plus will open soon on the web version.",
+    "webComingSoon": "Mystic Plus subscription checkout will be configured later.",
     "sectionPartOfPlus": "This section is part of Mystic Plus.",
     "lockTitle": "Mystic Plus",
     "lockBody": "Unlock deeper guidance and premium practices when Mystic Plus opens on the web.",
@@ -345,7 +349,8 @@
       "description": "Continue your courses and spiritual practice paths.",
       "openCourses": "Open courses",
       "progress": "{percent}% complete",
-      "notStarted": "You have not started this path yet."
+      "notStarted": "You have not started this path yet.",
+      "accessActive": "Living the Runes course access is active on this account."
     },
     "legal": {
       "label": "Legal & trust",

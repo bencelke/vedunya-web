@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
 import {
@@ -61,8 +63,13 @@ describe("course access", () => {
     expect(access.isPurchased).toBe(true);
   });
 
-  it("wires course purchase flow for PayPal integration", () => {
+  it("wires course purchase flow for Shopify integration", () => {
     expect(COURSE_PURCHASE_FLOW_WIRED).toBe(true);
+    const hero = readFileSync(
+      resolve(process.cwd(), "src/features/courses/components/course-detail-hero.tsx"),
+      "utf8",
+    );
+    expect(hero).toContain("CourseShopifyPurchaseSection");
   });
 
   it("shows purchase surface instead of coming soon when locked", () => {

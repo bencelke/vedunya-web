@@ -1,9 +1,10 @@
 import Image from "next/image";
 
 import { CourseAccessNotice } from "@/features/courses/components/course-access-notice";
-import { CoursePurchaseSection } from "@/features/payments/components/CoursePurchaseSection";
+import { CourseShopifyPurchaseSection } from "@/features/shopify/components/CourseShopifyPurchaseSection";
 import type { CourseAccessState } from "@/features/courses/types/course";
 import type { SupportedLocale } from "@/config/app-config";
+import type { ShopifyProductKey } from "@/features/shopify/types";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
@@ -24,6 +25,9 @@ type CourseDetailHeroProps = {
   locale?: SupportedLocale;
   courseId?: string;
   showPurchase?: boolean;
+  productKey?: ShopifyProductKey | null;
+  shopifyConfigured?: boolean;
+  checkoutPending?: boolean;
 };
 
 export function CourseDetailHero({
@@ -41,6 +45,9 @@ export function CourseDetailHero({
   locale,
   courseId,
   showPurchase = false,
+  productKey = null,
+  shopifyConfigured = false,
+  checkoutPending = false,
 }: CourseDetailHeroProps) {
   const resolvedCover = coverPath ?? null;
   const showProgress =
@@ -95,8 +102,13 @@ export function CourseDetailHero({
             ) : (
               <div className="space-y-4">
                 <CourseAccessNotice title={lockedTitle} message={lockedMessage} />
-                {showPurchase && locale && courseId ? (
-                  <CoursePurchaseSection locale={locale} courseId={courseId} />
+                {showPurchase && locale && courseId && productKey ? (
+                  <CourseShopifyPurchaseSection
+                    locale={locale}
+                    productKey={productKey}
+                    checkoutPending={checkoutPending}
+                    shopifyConfigured={shopifyConfigured}
+                  />
                 ) : null}
               </div>
             )}

@@ -17,11 +17,11 @@ import { ProfileLegalSection } from "@/features/profile/components/profile-legal
 import { ProfileLogoutSection } from "@/features/profile/components/profile-logout-section";
 import { ProfilePersonalDetailsSection } from "@/features/profile/components/profile-personal-details-section";
 import { ProfileRemindersSection } from "@/features/profile/components/profile-reminders-section";
-import { PayPalScriptProviderWrapper } from "@/features/payments/components/PayPalScriptProviderWrapper";
 import type { MysticPlusEntitlement } from "@/features/payments/types/payment";
 import { ProfileSubscriptionSection } from "@/features/profile/components/profile-subscription-section";
 import { ProfileSupportSection } from "@/features/profile/components/profile-support-section";
 import { ProfileUniverseRequestSection } from "@/features/profile/components/profile-universe-request-section";
+import { ShopifyPaymentStatusNotice } from "@/features/shopify/components/ShopifyPaymentStatusNotice";
 import {
   formatDateOfBirth,
   profileUpdateSchema,
@@ -40,7 +40,8 @@ type ProfileContentProps = {
   hasActiveUniverseRequest: boolean;
   settingsSummary: ProfileSettingsSummary;
   mysticPlus: MysticPlusEntitlement | null;
-  paypalConfigured: boolean;
+  hasLivingTheRunesAccess: boolean;
+  checkoutPending?: boolean;
 };
 
 export function ProfileContent({
@@ -50,7 +51,8 @@ export function ProfileContent({
   hasActiveUniverseRequest,
   settingsSummary,
   mysticPlus,
-  paypalConfigured,
+  hasLivingTheRunesAccess,
+  checkoutPending = false,
 }: ProfileContentProps) {
   const t = useTranslations("profile");
   const router = useRouter();
@@ -131,14 +133,17 @@ export function ProfileContent({
   }
 
   return (
-    <PayPalScriptProviderWrapper>
-      <div className="mystic-reading-column space-y-6 px-[var(--spacing-page)] py-6">
+    <div className="mystic-reading-column space-y-6 px-[var(--spacing-page)] py-6">
       <ProfileHeader profile={profile} />
 
       {message ? (
         <p className="rounded-[var(--radius-card)] border border-border-subtle bg-surface-primary/80 px-4 py-3 text-sm text-text-muted backdrop-blur-sm">
           {message}
         </p>
+      ) : null}
+
+      {checkoutPending ? (
+        <ShopifyPaymentStatusNotice status="pending" />
       ) : null}
 
       <ProfileAccountSection
@@ -167,21 +172,18 @@ export function ProfileContent({
         hasActiveUniverseRequest={hasActiveUniverseRequest}
       />
 
-      <ProfileSubscriptionSection
-        locale={locale}
-        profile={profile}
-        mysticPlus={mysticPlus}
-        paypalConfigured={paypalConfigured}
-      />
+      <ProfileSubscriptionSection profile={profile} mysticPlus={mysticPlus} />
 
-      <ProfileCoursesSection course={settingsSummary.course} />
+      <ProfileCoursesSection
+        course={settingsSummary.course}
+        hasLivingTheRunesAccess={hasLivingTheRunesAccess}
+      />
 
       <ProfileLegalSection />
 
       <ProfileSupportSection />
 
       <ProfileLogoutSection onLogout={() => void handleLogout()} />
-      </div>
-    </PayPalScriptProviderWrapper>
+    </div>
   );
 }

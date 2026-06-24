@@ -9,9 +9,13 @@ import { cn } from "@/lib/utils";
 
 type ProfileCoursesSectionProps = {
   course: ProfileCourseSummary | null;
+  hasLivingTheRunesAccess?: boolean;
 };
 
-export function ProfileCoursesSection({ course }: ProfileCoursesSectionProps) {
+export function ProfileCoursesSection({
+  course,
+  hasLivingTheRunesAccess = false,
+}: ProfileCoursesSectionProps) {
   const t = useTranslations("profile.courses");
 
   const progressText =
@@ -21,7 +25,12 @@ export function ProfileCoursesSection({ course }: ProfileCoursesSectionProps) {
 
   return (
     <ProfileSectionCard label={t("label")} title={t("title")} description={t("description")}>
-      <p className="text-sm text-text-muted">{progressText}</p>
+      {hasLivingTheRunesAccess ? (
+        <p className="text-sm leading-relaxed text-text-muted">{t("accessActive")}</p>
+      ) : null}
+      <p className={cn("text-sm text-text-muted", hasLivingTheRunesAccess ? "mt-2" : undefined)}>
+        {progressText}
+      </p>
       <Link
         href="/courses"
         className={cn(

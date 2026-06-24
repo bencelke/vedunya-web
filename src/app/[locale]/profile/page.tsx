@@ -7,10 +7,7 @@ import { AppHeader } from "@/components/layout/app-header";
 import { AppShell } from "@/components/layout/app-shell";
 import { ProfileContent } from "@/features/profile/components/profile-content";
 import { loadUserEntitlements } from "@/features/payments/server/entitlement-repository";
-import {
-  isCoursePurchaseConfigured,
-  isMysticPlusPaymentConfigured,
-} from "@/features/payments/server/paypal-config";
+import { LIVING_THE_RUNES_COURSE_ID } from "@/features/courses/constants/course-ids";
 import { getPushStatusSummary } from "@/features/notifications/server/push-status";
 import { loadProfileSettingsSummary } from "@/features/profile/server/load-profile-settings-summary";
 import { getProfileSnapshot } from "@/features/profile/services/profile-repository";
@@ -21,6 +18,7 @@ import type { SupportedLocale } from "@/config/app-config";
 
 type ProfilePageProps = {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ checkout?: string }>;
 };
 
 export async function generateMetadata({
@@ -31,8 +29,12 @@ export async function generateMetadata({
   return { title: t("metaTitle") };
 }
 
-export default async function ProfilePage({ params }: ProfilePageProps) {
+export default async function ProfilePage({
+  params,
+  searchParams,
+}: ProfilePageProps) {
   const { locale: localeParam } = await params;
+  const { checkout } = await searchParams;
 
   if (!hasLocale(routing.locales, localeParam)) {
     notFound();
@@ -49,14 +51,15 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
 
   const [pushStatus, hasActiveUniverseRequest, settingsSummary, entitlements] =
     await Promise.all([
-    getPushStatusSummary(user.uid, locale),
-    readUniverseRequest(user.uid).then((request) => request !== null),
-    loadProfileSettingsSummary({ uid: user.uid }),
-    loadUserEntitlements(user.uid),
-  ]);
+      getPushStatusSummary(user.uid, locale),
+      readUniverseRequest(user.uid).then((request) => request !== null),
+      loadProfileSettingsSummary({ uid: user.uid }),
+      loadUserEntitlements(user.uid),
+    ]);
 
-  const paypalConfigured =
-    isMysticPlusPaymentConfigured() || isCoursePurchaseConfigured();
+  const hasLivingTheRunesAccess = entitlements.ownedCourseIds.has(
+    LIVING_THE_RUNES_COURSE_ID,
+  );
 
   return (
     <>
@@ -69,7 +72,8 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
           hasActiveUniverseRequest={hasActiveUniverseRequest}
           settingsSummary={settingsSummary}
           mysticPlus={entitlements.mysticPlus}
-          paypalConfigured={paypalConfigured}
+          hasLivingTheRunesAccess={hasLivingTheRunesAccess}
+          checkoutPending={checkout === "pending"}
         />
       </AppShell>
     </>

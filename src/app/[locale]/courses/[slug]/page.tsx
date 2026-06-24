@@ -2,7 +2,8 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { isCoursePurchaseConfigured } from "@/features/payments/server/paypal-config";
+import { isShopifyCoursePurchaseConfigured } from "@/features/shopify/server/shopify-config";
+import { getProductKeyForCourseId } from "@/features/shopify/server/shopify-products";
 import { CourseDetailScreen } from "@/features/courses/components/course-detail-screen";
 import { isKnownCourseSlug } from "@/features/courses/constants/course-ids";
 import { loadCourseDetail } from "@/features/courses/services/load-course-detail";
@@ -10,6 +11,7 @@ import type { SupportedLocale } from "@/config/app-config";
 
 type CourseDetailPageProps = {
   params: Promise<{ locale: string; slug: string }>;
+  searchParams: Promise<{ checkout?: string }>;
 };
 
 export async function generateMetadata({
@@ -23,8 +25,12 @@ export async function generateMetadata({
   return { title: detail?.summary.title ?? "Course" };
 }
 
-export default async function CourseDetailPage({ params }: CourseDetailPageProps) {
+export default async function CourseDetailPage({
+  params,
+  searchParams,
+}: CourseDetailPageProps) {
   const { locale, slug } = await params;
+  const { checkout } = await searchParams;
   setRequestLocale(locale);
   const t = await getTranslations("courses");
   const tPremium = await getTranslations("premium");
@@ -68,6 +74,9 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
       ? t("comingSoonCourseMessage")
       : t("purchaseUnavailable");
 
+  const productKey = getProductKeyForCourseId(detail.summary.id);
+  const shopifyConfigured = isShopifyCoursePurchaseConfigured();
+
   return (
     <CourseDetailScreen
       slug={slug}
@@ -97,8 +106,11 @@ export default async function CourseDetailPage({ params }: CourseDetailPageProps
       showPurchase={
         detail.access.isPaidLocked &&
         !detail.access.showComingSoon &&
-        isCoursePurchaseConfigured()
+        Boolean(productKey)
       }
+      productKey={productKey}
+      shopifyConfigured={shopifyConfigured}
+      checkoutPending={checkout === "pending"}
       getLessonIconAlt={(lesson) => t("lessonIconA11y", { title: lesson.title })}
     />
   );

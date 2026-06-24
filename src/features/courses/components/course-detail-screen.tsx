@@ -1,12 +1,12 @@
 import { AppHeader } from "@/components/layout/app-header";
 import { AppShell } from "@/components/layout/app-shell";
 import { MobilePage } from "@/components/layout/mobile-page";
-import { PayPalScriptProviderWrapper } from "@/features/payments/components/PayPalScriptProviderWrapper";
 import { CourseDetailHero } from "@/features/courses/components/course-detail-hero";
 import { LessonList } from "@/features/courses/components/lesson-list";
 import type { SupportedLocale } from "@/config/app-config";
 import type { CourseAccessState, CourseLessonSummary } from "@/features/courses/types/course";
 import type { CourseProgress } from "@/features/courses/types/course-progress";
+import type { ShopifyProductKey } from "@/features/shopify/types";
 
 type CourseDetailScreenProps = {
   slug: string;
@@ -31,6 +31,9 @@ type CourseDetailScreenProps = {
   locale: SupportedLocale;
   courseId: string;
   showPurchase?: boolean;
+  productKey?: ShopifyProductKey | null;
+  shopifyConfigured?: boolean;
+  checkoutPending?: boolean;
 };
 
 export function CourseDetailScreen({
@@ -56,13 +59,15 @@ export function CourseDetailScreen({
   locale,
   courseId,
   showPurchase = false,
+  productKey = null,
+  shopifyConfigured = false,
+  checkoutPending = false,
 }: CourseDetailScreenProps) {
   const completedIds = progress?.completedLessonIds ?? [];
 
   return (
-    <PayPalScriptProviderWrapper>
-      <>
-        <AppHeader showLogin={false} />
+    <>
+      <AppHeader showLogin={false} />
       <AppShell>
         <MobilePage className="mystic-today-column py-6 pt-safe-top">
           <CourseDetailHero
@@ -80,6 +85,9 @@ export function CourseDetailScreen({
             locale={locale}
             courseId={courseId}
             showPurchase={showPurchase}
+            productKey={productKey}
+            shopifyConfigured={shopifyConfigured}
+            checkoutPending={checkoutPending}
           />
 
           <div className="mt-8">
@@ -98,7 +106,6 @@ export function CourseDetailScreen({
           </div>
         </MobilePage>
       </AppShell>
-      </>
-    </PayPalScriptProviderWrapper>
+    </>
   );
 }

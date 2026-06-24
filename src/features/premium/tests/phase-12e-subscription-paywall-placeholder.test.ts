@@ -66,14 +66,14 @@ describe("Phase 12E — entitlement display", () => {
 });
 
 describe("Phase 12E — Profile Mystic Plus section", () => {
-  it("renders subscription section with premium namespace and PayPal buttons", () => {
+  it("renders subscription section with deferred Mystic Plus copy", () => {
     const source = readSource(
       "src/features/profile/components/profile-subscription-section.tsx",
     );
     expect(source).toContain("resolvePremiumDisplayStatus");
     expect(source).toContain('useTranslations("premium")');
-    expect(source).toContain("MysticPlusPayPalButtons");
-    expect(source).toContain("PaymentStatusNotice");
+    expect(source).toContain("webComingSoon");
+    expect(source).not.toContain("PayPal");
   });
 
   it("shows Mystic Plus labels in EN and RU", () => {

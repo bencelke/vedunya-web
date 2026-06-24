@@ -59,77 +59,12 @@ export async function readMysticPlusEntitlement(
   return {
     type: "mysticPlus",
     status: status as MysticPlusEntitlementStatus,
-    provider: "paypal",
-    paypalSubscriptionId:
-      typeof data.paypalSubscriptionId === "string"
-        ? data.paypalSubscriptionId
-        : undefined,
-    paypalPlanId:
-      typeof data.paypalPlanId === "string" ? data.paypalPlanId : undefined,
+    provider: "shopify",
     startedAt: timestampToIso(data.startedAt) ?? undefined,
     currentPeriodEnd: timestampToIso(data.currentPeriodEnd) ?? undefined,
     cancelledAt: timestampToIso(data.cancelledAt) ?? undefined,
     updatedAt: timestampToIso(data.updatedAt) ?? new Date().toISOString(),
   };
-}
-
-export async function writeMysticPlusEntitlement(input: {
-  uid: string;
-  entitlement: Omit<MysticPlusEntitlement, "type" | "provider" | "updatedAt">;
-}): Promise<void> {
-  const db = getFirebaseAdminFirestore();
-  if (!db) {
-    throw new Error("payments_unavailable");
-  }
-
-  const now = Timestamp.now();
-  const payload: Record<string, unknown> = {
-    type: "mysticPlus",
-    status: input.entitlement.status,
-    provider: "paypal",
-    updatedAt: now,
-  };
-
-  if (input.entitlement.paypalSubscriptionId) {
-    payload.paypalSubscriptionId = input.entitlement.paypalSubscriptionId;
-  }
-  if (input.entitlement.paypalPlanId) {
-    payload.paypalPlanId = input.entitlement.paypalPlanId;
-  }
-  if (input.entitlement.startedAt) {
-    payload.startedAt = Timestamp.fromDate(new Date(input.entitlement.startedAt));
-  }
-  if (input.entitlement.currentPeriodEnd) {
-    payload.currentPeriodEnd = Timestamp.fromDate(
-      new Date(input.entitlement.currentPeriodEnd),
-    );
-  }
-  if (input.entitlement.cancelledAt) {
-    payload.cancelledAt = Timestamp.fromDate(new Date(input.entitlement.cancelledAt));
-  }
-
-  await db
-    .collection(USERS_COLLECTION)
-    .doc(input.uid)
-    .collection(ENTITLEMENTS_COLLECTION)
-    .doc(MYSTIC_PLUS_DOC_ID)
-    .set(payload, { merge: true });
-
-  if (input.entitlement.status === "active") {
-    await db.collection(USERS_COLLECTION).doc(input.uid).set(
-      { isPremium: true, updatedAt: now },
-      { merge: true },
-    );
-  } else if (
-    input.entitlement.status === "cancelled" ||
-    input.entitlement.status === "inactive" ||
-    input.entitlement.status === "past_due"
-  ) {
-    await db.collection(USERS_COLLECTION).doc(input.uid).set(
-      { isPremium: false, updatedAt: now },
-      { merge: true },
-    );
-  }
 }
 
 export async function readOwnedCourseEntitlement(
@@ -163,11 +98,13 @@ export async function readOwnedCourseEntitlement(
   return {
     courseId,
     status: status as OwnedCourseStatus,
-    provider: "paypal",
-    paypalOrderId:
-      typeof data.paypalOrderId === "string" ? data.paypalOrderId : undefined,
-    paypalCaptureId:
-      typeof data.paypalCaptureId === "string" ? data.paypalCaptureId : undefined,
+    provider: "shopify",
+    shopifyOrderId:
+      typeof data.shopifyOrderId === "string" ? data.shopifyOrderId : undefined,
+    shopifyCheckoutId:
+      typeof data.shopifyCheckoutId === "string" ? data.shopifyCheckoutId : undefined,
+    shopifyLineItemId:
+      typeof data.shopifyLineItemId === "string" ? data.shopifyLineItemId : undefined,
     purchasedAt: timestampToIso(data.purchasedAt) ?? undefined,
     updatedAt: timestampToIso(data.updatedAt) ?? new Date().toISOString(),
   };
@@ -186,15 +123,18 @@ export async function writeOwnedCourseEntitlement(input: {
   const payload: Record<string, unknown> = {
     courseId: input.entitlement.courseId,
     status: input.entitlement.status,
-    provider: "paypal",
+    provider: "shopify",
     updatedAt: now,
   };
 
-  if (input.entitlement.paypalOrderId) {
-    payload.paypalOrderId = input.entitlement.paypalOrderId;
+  if (input.entitlement.shopifyOrderId) {
+    payload.shopifyOrderId = input.entitlement.shopifyOrderId;
   }
-  if (input.entitlement.paypalCaptureId) {
-    payload.paypalCaptureId = input.entitlement.paypalCaptureId;
+  if (input.entitlement.shopifyCheckoutId) {
+    payload.shopifyCheckoutId = input.entitlement.shopifyCheckoutId;
+  }
+  if (input.entitlement.shopifyLineItemId) {
+    payload.shopifyLineItemId = input.entitlement.shopifyLineItemId;
   }
   if (input.entitlement.purchasedAt) {
     payload.purchasedAt = Timestamp.fromDate(

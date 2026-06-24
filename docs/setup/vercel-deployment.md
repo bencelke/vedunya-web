@@ -93,22 +93,25 @@ SCHEDULED_REMINDERS_SECRET=
 
 See `docs/migration/phase-14-scheduled-notification-dispatch.md`.
 
-### PayPal payments (sandbox / live)
+### Shopify checkout (course purchases)
 
 ```env
-PAYPAL_ENV=sandbox
-NEXT_PUBLIC_PAYPAL_CLIENT_ID=
-PAYPAL_CLIENT_ID=
-PAYPAL_CLIENT_SECRET=
-PAYPAL_WEBHOOK_ID=
-PAYPAL_MYSTIC_PLUS_MONTHLY_PLAN_ID=
-PAYPAL_MYSTIC_PLUS_YEARLY_PLAN_ID=
-PAYPAL_CURRENCY=EUR
+NEXT_PUBLIC_APP_URL=https://app.vedunya.com
+SHOPIFY_STORE_DOMAIN=
+SHOPIFY_API_VERSION=
+SHOPIFY_STOREFRONT_ACCESS_TOKEN=
+SHOPIFY_ADMIN_ACCESS_TOKEN=
+SHOPIFY_WEBHOOK_SECRET=
+SHOPIFY_LIVING_THE_RUNES_VARIANT_ID=
+SHOPIFY_CURRENCY=EUR
 ```
 
 - Add to **Production** and **Preview**, then redeploy.
-- Register webhook: `https://YOUR-DOMAIN/api/paypal/webhook`
-- See `docs/migration/phase-15-paypal-payments-entitlements.md`.
+- Register webhook: `https://YOUR-DOMAIN/api/shopify/webhook`
+- Subscribe to `orders/paid`, `orders/cancelled`, `refunds/create`
+- See `docs/migration/phase-15-shopify-checkout-entitlements.md`
+
+For temporary Vercel domain testing, set `NEXT_PUBLIC_APP_URL` to your `*.vercel.app` hostname.
 
 ### Optional — PWA toggle
 

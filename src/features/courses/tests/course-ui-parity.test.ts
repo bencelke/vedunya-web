@@ -85,8 +85,10 @@ describe("Courses access locking", () => {
     expect(access.isPaidLocked).toBe(true);
   });
 
-  it("wires PayPal course purchase flow", () => {
+  it("wires Shopify course purchase flow", () => {
     expect(COURSE_PURCHASE_FLOW_WIRED).toBe(true);
+    const source = readSource("src/features/shopify/components/CourseShopifyCheckoutButton.tsx");
+    expect(source).toContain("/api/shopify/checkout/create");
   });
 
   it("shows paid lock state for locked course without coming soon", () => {
