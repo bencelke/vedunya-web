@@ -52,16 +52,18 @@ describe("Phase 16B — root entry", () => {
 describe("Phase 16B — intro onboarding", () => {
   it("renders four intro pages with EN copy", () => {
     expect(en.auth.intro.pages.guidance.title).toBe("Daily guidance");
-    expect(en.auth.intro.pages.universe.title).toContain("Universe");
+    expect(en.auth.intro.pages.universe.title).toBe("Request to the Universe");
     expect(en.auth.intro.pages.reminders.title).toBe("Reminders");
-    expect(en.auth.intro.pages.courses.title).toContain("Courses");
+    expect(en.auth.intro.pages.courses.title).toBe("Courses and deeper practice");
+    expect(en.auth.intro.pages.guidance.body).toContain("number of the day");
   });
 
   it("renders four intro pages with RU copy", () => {
     expect(ru.auth.intro.pages.guidance.title).toBe("Ежедневная подсказка");
-    expect(ru.auth.intro.pages.universe.title).toContain("Вселенной");
+    expect(ru.auth.intro.pages.universe.title).toBe("Просьба к Вселенной");
     expect(ru.auth.intro.pages.reminders.title).toBe("Напоминания");
-    expect(ru.auth.intro.pages.courses.title).toContain("Курсы");
+    expect(ru.auth.intro.pages.courses.title).toBe("Курсы и глубокая практика");
+    expect(ru.auth.intro.pages.guidance.body).toContain("число дня");
   });
 
   it("marks intro seen and routes final CTA to login", () => {

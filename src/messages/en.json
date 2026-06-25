@@ -460,22 +460,43 @@
       "login": "Log in",
       "createAccount": "Create account",
       "skipToLogin": "Already explored Mystic? Log in",
+      "brandNote": "Mystic by Vedunya Maria — calm daily practice.",
       "pages": {
         "guidance": {
           "title": "Daily guidance",
-          "body": "A calm daily practice with moon rhythm, runes, and one clear step."
+          "body": "A calm morning anchor: moon rhythm, runes, your number of the day, and one clear step.",
+          "highlights": {
+            "moon": "Moon rhythm",
+            "rune": "Daily rune",
+            "number": "Your number"
+          }
         },
         "universe": {
-          "title": "Request the Universe",
-          "body": "Write one personal request and return to it each day."
+          "title": "Request to the Universe",
+          "body": "Write one personal request and return to it each day — without pressure or noise.",
+          "highlights": {
+            "request": "One request",
+            "return": "Daily return",
+            "focus": "Quiet focus"
+          }
         },
         "reminders": {
           "title": "Reminders",
-          "body": "Gentle reminders help you keep your practice steady."
+          "body": "Gentle messages help you keep your focus and stay connected to your practice.",
+          "highlights": {
+            "gentle": "Gentle nudges",
+            "practice": "Your practice",
+            "rhythm": "Daily rhythm"
+          }
         },
         "courses": {
           "title": "Courses and deeper practice",
-          "body": "Learn runes and spiritual practices at your own pace."
+          "body": "Learn runes and spiritual practices at your own pace when you are ready to go deeper.",
+          "highlights": {
+            "runes": "Runes",
+            "depth": "Go deeper",
+            "pace": "Your pace"
+          }
         }
       }
     },

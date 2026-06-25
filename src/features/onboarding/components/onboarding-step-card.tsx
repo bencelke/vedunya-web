@@ -31,7 +31,7 @@ export function OnboardingStepCard({
           align === "center" ? "mx-auto max-w-[22rem]" : "max-w-[24rem]",
         )}
       >
-        <h1 className="text-[clamp(1.625rem,5vw,2rem)] font-normal leading-[1.08] tracking-[-0.02em] text-auth-text-primary">
+        <h1 className="text-[clamp(1.75rem,5.4vw,2.25rem)] font-normal leading-[1.06] tracking-[-0.03em] text-auth-text-primary">
           {title}
         </h1>
         <p className="text-sm leading-[1.72] text-auth-text-muted">{body}</p>
