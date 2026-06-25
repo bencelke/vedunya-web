@@ -51,7 +51,11 @@ export function LoginForm({ locale, onSuccess }: LoginFormProps) {
       );
       await bootstrapUserProfile(credential.user, locale);
       const token = await credential.user.getIdToken(true);
-      await createServerSession(token);
+      const sessionOk = await createServerSession(token);
+      if (!sessionOk) {
+        setErrorKey("generic");
+        return;
+      }
       onSuccess();
     } catch (error) {
       if (error instanceof Error && error.message === "configuration") {

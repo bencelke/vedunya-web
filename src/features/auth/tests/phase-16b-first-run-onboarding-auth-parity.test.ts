@@ -142,8 +142,7 @@ describe("Phase 16B — signed-in redirects", () => {
   it("redirects complete profile away from onboarding page", () => {
     const page = readSource("src/app/[locale]/onboarding/page.tsx");
     expect(page).toContain("getTodayRedirectPath");
-    expect(page).toContain("OnboardingFlow");
-    expect(page).toContain("IntroOnboardingGate");
+    expect(page).toContain("OnboardingRoute");
   });
 
   it("preserves auth redirect after login", () => {

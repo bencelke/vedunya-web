@@ -19,6 +19,7 @@ import {
   writeOnboardingDraft,
   type OnboardingDraft,
 } from "@/features/onboarding/utils/onboarding-draft";
+import { resolveOnboardingStep } from "@/features/onboarding/utils/resolve-onboarding-step";
 import {
   mapOnboardingZodIssue,
   type OnboardingErrorKey,
@@ -51,7 +52,9 @@ export function OnboardingFlow({ locale, initialProfile }: OnboardingFlowProps) 
   const tAuth = useTranslations("auth");
   const router = useRouter();
   const { user, sessionReady } = useAuth();
-  const [step, setStep] = useState(initialDraft.step ?? 0);
+  const [step, setStep] = useState(() =>
+    resolveOnboardingStep(initialDraft, initialProfile),
+  );
   const [displayName, setDisplayName] = useState(
     initialDraft.displayName ?? initialProfile?.displayName ?? "",
   );

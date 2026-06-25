@@ -37,6 +37,7 @@ export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
   const { configured, adminConfigured, loading, user, sessionReady } = useAuth();
   const [mode, setMode] = useState<AuthMode>(initialMode);
   const redirectStartedRef = useRef(false);
+  const pendingRedirectRef = useRef<"login" | "register" | null>(null);
 
   const redirectAfterAuth = useCallback(
     async (forceOnboarding = false) => {
@@ -62,16 +63,34 @@ export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
 
   useEffect(() => {
     if (!loading && user && sessionReady) {
+      if (pendingRedirectRef.current === "register") {
+        pendingRedirectRef.current = null;
+        void redirectAfterAuth(true);
+        return;
+      }
+
+      if (pendingRedirectRef.current === "login") {
+        pendingRedirectRef.current = null;
+        void redirectAfterAuth();
+        return;
+      }
+
       void redirectAfterAuth();
     }
   }, [loading, redirectAfterAuth, sessionReady, user]);
 
   function handleAuthSuccess() {
-    void redirectAfterAuth();
+    pendingRedirectRef.current = "login";
+    if (sessionReady) {
+      void redirectAfterAuth();
+    }
   }
 
   function handleRegisterSuccess() {
-    void redirectAfterAuth(true);
+    pendingRedirectRef.current = "register";
+    if (sessionReady) {
+      void redirectAfterAuth(true);
+    }
   }
 
   const topBar = <AuthLanguageBar tone="auth" />;
