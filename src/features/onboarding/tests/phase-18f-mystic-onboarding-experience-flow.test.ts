@@ -12,11 +12,13 @@ function readSource(relativePath: string): string {
 }
 
 describe("Phase 18F — signed-out first glimpse", () => {
-  it("includes first glimpse step after intro carousel", () => {
+  it("includes first glimpse then DOB before login CTAs", () => {
     const flow = readSource("src/features/onboarding/components/intro-onboarding-flow.tsx");
     expect(flow).toContain("IntroFirstGlimpse");
-    expect(flow).toContain("GLIMPSE_STEP");
-    expect(flow).toContain("INTRO_STEP_COUNT = INTRO_PAGE_COUNT + 1");
+    expect(flow).toContain("IntroPreAuthDob");
+    expect(flow).toContain("IntroPreAuthNumerologyPreview");
+    expect(flow).toContain("DOB_STEP");
+    expect(flow).toContain("PREVIEW_STEP");
   });
 
   it("renders RU/EN first glimpse copy", () => {
@@ -34,14 +36,14 @@ describe("Phase 18F — signed-out first glimpse", () => {
     expect(glimpse).not.toContain("buildPersonalDayResult");
   });
 
-  it("routes Create account to register mode", () => {
+  it("routes Create account to register mode from preview", () => {
     const flow = readSource("src/features/onboarding/components/intro-onboarding-flow.tsx");
     expect(flow).toContain('finishIntro("register")');
     expect(flow).toContain('"/login?mode=register"');
-    expect(en.auth.intro.glimpse.createAccount).toBe("Create account");
+    expect(en.auth.intro.preview.createAccount).toBe("Create account");
   });
 
-  it("routes Log in to login mode", () => {
+  it("routes Log in to login mode from preview", () => {
     const flow = readSource("src/features/onboarding/components/intro-onboarding-flow.tsx");
     expect(flow).toContain('finishIntro("login")');
     expect(flow).toMatch(/destination === "register" \? "\/login\?mode=register" : "\/login"/);
@@ -110,7 +112,7 @@ describe("Phase 18F — auth handoff", () => {
 
   it("routes login without DOB to onboarding via profile status", () => {
     const screen = readSource("src/features/auth/components/auth-screen.tsx");
-    expect(screen).toContain("fetchProfileComplete");
+    expect(screen).toContain("fetchProfileStatus");
     expect(screen).toContain('"/onboarding"');
   });
 

@@ -1,10 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useLocale } from "next-intl";
 
-import { Input } from "@/components/ui/input";
+import {
+  buildYearOptions,
+  combineIsoParts,
+  daysInMonth,
+  parseIsoParts,
+} from "@/features/onboarding/utils/dob-input-utils";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import type { SupportedLocale } from "@/config/app-config";
 
 type DobInputProps = {
   id: string;
@@ -17,53 +24,14 @@ type DobInputProps = {
   className?: string;
 };
 
-function parseIsoParts(value: string): {
-  day: string;
-  month: string;
-  year: string;
-} {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
-    return { day: "", month: "", year: "" };
-  }
+const selectClassName =
+  "min-h-12 w-full min-w-0 appearance-none rounded-[var(--radius-md)] border border-auth-border bg-auth-surface px-3 text-sm text-auth-text-primary outline-none transition-colors focus:border-auth-accent-gold/70";
 
-  const [year, month, day] = value.split("-");
-  return {
-    day: String(Number(day)),
-    month: String(Number(month)),
-    year,
-  };
-}
-
-function combineIsoParts(day: string, month: string, year: string): string {
-  const normalizedDay = day.trim();
-  const normalizedMonth = month.trim();
-  const normalizedYear = year.trim();
-
-  if (!normalizedDay || !normalizedMonth || !normalizedYear) {
-    return "";
-  }
-
-  if (normalizedYear.length !== 4) {
-    return "";
-  }
-
-  const dayNumber = Number(normalizedDay);
-  const monthNumber = Number(normalizedMonth);
-  const yearNumber = Number(normalizedYear);
-
-  if (
-    !Number.isInteger(dayNumber) ||
-    !Number.isInteger(monthNumber) ||
-    !Number.isInteger(yearNumber)
-  ) {
-    return "";
-  }
-
-  return `${String(yearNumber).padStart(4, "0")}-${String(monthNumber).padStart(2, "0")}-${String(dayNumber).padStart(2, "0")}`;
-}
-
-function sanitizeNumeric(value: string, maxLength: number): string {
-  return value.replace(/\D/g, "").slice(0, maxLength);
+function localizedMonthLabel(month: number, locale: SupportedLocale): string {
+  const date = new Date(2000, month - 1, 1);
+  return new Intl.DateTimeFormat(locale === "ru" ? "ru-RU" : "en-US", {
+    month: "long",
+  }).format(date);
 }
 
 export function DobInput({
@@ -76,83 +44,121 @@ export function DobInput({
   onChange,
   className,
 }: DobInputProps) {
+  const locale = useLocale() as SupportedLocale;
   const initial = parseIsoParts(value);
   const [day, setDay] = useState(initial.day);
   const [month, setMonth] = useState(initial.month);
   const [year, setYear] = useState(initial.year);
 
+  const yearOptions = useMemo(() => buildYearOptions(), []);
+  const monthOptions = useMemo(
+    () =>
+      Array.from({ length: 12 }, (_, index) => {
+        const monthNumber = index + 1;
+        return {
+          value: String(monthNumber),
+          label: localizedMonthLabel(monthNumber, locale),
+        };
+      }),
+    [locale],
+  );
+
+  const maxDay = daysInMonth(Number(month), Number(year));
+  const dayOptions = useMemo(() => {
+    const limit = maxDay > 0 ? maxDay : 31;
+    return Array.from({ length: limit }, (_, index) => String(index + 1));
+  }, [maxDay]);
+
   function emit(nextDay: string, nextMonth: string, nextYear: string) {
     onChange(combineIsoParts(nextDay, nextMonth, nextYear));
   }
 
-  function handleDayChange(raw: string) {
-    const nextDay = sanitizeNumeric(raw, 2);
+  function handleDayChange(nextDay: string) {
     setDay(nextDay);
     emit(nextDay, month, year);
   }
 
-  function handleMonthChange(raw: string) {
-    const nextMonth = sanitizeNumeric(raw, 2);
+  function handleMonthChange(nextMonth: string) {
+    let nextDay = day;
+    const limit = daysInMonth(Number(nextMonth), Number(year));
+    if (nextDay && Number(nextDay) > limit) {
+      nextDay = String(limit);
+      setDay(nextDay);
+    }
     setMonth(nextMonth);
-    emit(day, nextMonth, year);
+    emit(nextDay, nextMonth, year);
   }
 
-  function handleYearChange(raw: string) {
-    const nextYear = sanitizeNumeric(raw, 4);
+  function handleYearChange(nextYear: string) {
+    let nextDay = day;
+    const limit = daysInMonth(Number(month), Number(nextYear));
+    if (nextDay && Number(nextDay) > limit) {
+      nextDay = String(limit);
+      setDay(nextDay);
+    }
     setYear(nextYear);
-    emit(day, month, nextYear);
+    emit(nextDay, month, nextYear);
   }
 
   return (
     <div className={cn("space-y-4", className)}>
-      <div className="grid grid-cols-[1fr_1fr_1.35fr] gap-3">
+      <div className="dob-picker-grid grid grid-cols-1 gap-3 min-[381px]:grid-cols-3 [&>*]:min-w-0">
         <div className="space-y-2">
           <Label htmlFor={`${id}-day`} tone="auth">
             {dayLabel}
           </Label>
-          <Input
+          <select
             id={`${id}-day`}
-            type="text"
-            inputMode="numeric"
             autoComplete="bday-day"
-            tone="auth"
-            placeholder="DD"
             value={day}
             onChange={(event) => handleDayChange(event.target.value)}
-            className="min-h-12 text-center tabular-nums"
-          />
+            className={selectClassName}
+          >
+            <option value="">{dayLabel}</option>
+            {dayOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="space-y-2">
           <Label htmlFor={`${id}-month`} tone="auth">
             {monthLabel}
           </Label>
-          <Input
+          <select
             id={`${id}-month`}
-            type="text"
-            inputMode="numeric"
             autoComplete="bday-month"
-            tone="auth"
-            placeholder="MM"
             value={month}
             onChange={(event) => handleMonthChange(event.target.value)}
-            className="min-h-12 text-center tabular-nums"
-          />
+            className={selectClassName}
+          >
+            <option value="">{monthLabel}</option>
+            {monthOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="space-y-2">
           <Label htmlFor={`${id}-year`} tone="auth">
             {yearLabel}
           </Label>
-          <Input
+          <select
             id={`${id}-year`}
-            type="text"
-            inputMode="numeric"
             autoComplete="bday-year"
-            tone="auth"
-            placeholder="YYYY"
             value={year}
             onChange={(event) => handleYearChange(event.target.value)}
-            className="min-h-12 text-center tabular-nums"
-          />
+            className={selectClassName}
+          >
+            <option value="">{yearLabel}</option>
+            {yearOptions.map((option) => (
+              <option key={option} value={String(option)}>
+                {option}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
       {reassurance ? (

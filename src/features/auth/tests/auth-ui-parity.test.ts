@@ -162,7 +162,7 @@ describe("Auth UI parity — redirect behavior preserved", () => {
     const source = readSource("src/features/auth/components/auth-screen.tsx");
     expect(source).toContain('? "/today"');
     expect(source).toContain('"/onboarding"');
-    expect(source).toContain("fetchProfileComplete");
+    expect(source).toContain("fetchProfileStatus");
     expect(source).toContain("handleRegisterSuccess");
   });
 });

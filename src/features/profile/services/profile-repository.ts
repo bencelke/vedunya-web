@@ -49,9 +49,7 @@ export async function getProfileSnapshot(
   const publicData = publicDoc.data() ?? {};
   const privateData = privateDoc.data() ?? {};
 
-  const dob =
-    timestampToDate(privateData.dob) ??
-    timestampToDate(publicData.dob);
+  const privateDob = timestampToDate(privateData.dob);
 
   const authProviders = Array.isArray(publicData.authProviders)
     ? publicData.authProviders.filter(
@@ -67,7 +65,7 @@ export async function getProfileSnapshot(
   const language = readLanguage(publicData.language);
   const derivedProfileComplete = deriveProfileComplete({
     displayName,
-    dateOfBirth: dob,
+    dateOfBirth: privateDob,
     language,
   });
 
@@ -80,7 +78,7 @@ export async function getProfileSnapshot(
         : typeof publicData.email === "string"
           ? publicData.email
           : null,
-    dateOfBirth: dob,
+    dateOfBirth: privateDob,
     language,
     profileComplete: derivedProfileComplete,
     authProviders,
@@ -121,7 +119,7 @@ export async function getProfileSnapshot(
             typeof privateData.email === "string"
               ? privateData.email
               : undefined,
-          dob: dob ?? undefined,
+          dob: privateDob ?? undefined,
           profileComplete: privateData.profileComplete === true,
         }
       : null,

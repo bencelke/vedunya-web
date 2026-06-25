@@ -14,6 +14,7 @@ import type {
 } from "@/features/numerology/types/numerology";
 import { formatDateOfBirth } from "@/features/profile/schemas/onboarding-schema";
 import { getProfileSnapshot } from "@/features/profile/services/profile-repository";
+import { isProfileComplete } from "@/features/profile/utils/profile-complete";
 import { getCurrentUser } from "@/lib/auth/current-user";
 import { TIMEZONE_COOKIE } from "@/features/numerology/constants";
 import { getFirebaseAdminFirestore } from "@/lib/firebase-admin/firestore";
@@ -32,11 +33,7 @@ export async function loadCurrentPersonalDay(
   }
 
   const profile = await getProfileSnapshot(sessionUser.uid);
-  if (!profile?.profileComplete) {
-    return { status: "missing-profile-data" };
-  }
-
-  if (!profile.dateOfBirth) {
+  if (!isProfileComplete(profile) || !profile?.dateOfBirth) {
     return { status: "missing-profile-data" };
   }
 

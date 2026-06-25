@@ -7,6 +7,7 @@ import { resolveTimeZone } from "@/features/numerology/engine/date-only";
 import { TIMEZONE_COOKIE } from "@/features/numerology/constants";
 import { formatDateOfBirth } from "@/features/profile/schemas/onboarding-schema";
 import { getProfileSnapshot } from "@/features/profile/services/profile-repository";
+import { isProfileComplete } from "@/features/profile/utils/profile-complete";
 import { parseDateKey } from "@/features/runes/engine/date-key";
 import { resolveMoonDateKey } from "@/features/moon/engine/date-time";
 import { buildDailyRuneResult } from "@/features/runes/services/daily-rune-service";
@@ -33,7 +34,7 @@ export async function loadCurrentDailyRune(
   }
 
   const profile = await getProfileSnapshot(sessionUser.uid);
-  if (!profile?.profileComplete || !profile.dateOfBirth) {
+  if (!isProfileComplete(profile) || !profile?.dateOfBirth) {
     return { status: "missing-profile-data" };
   }
 

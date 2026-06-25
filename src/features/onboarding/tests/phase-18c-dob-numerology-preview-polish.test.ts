@@ -39,12 +39,13 @@ describe("Phase 18C — DOB screen polish", () => {
     expect(en.auth.onboarding.steps.dob.dayLabel).toBe("Day");
   });
 
-  it("uses three-field DOB input for mobile reliability", () => {
+  it("uses three native select DOB controls for mobile reliability", () => {
     const dob = readSource("src/features/onboarding/components/dob-input.tsx");
     expect(dob).toContain("dayLabel");
     expect(dob).toContain("monthLabel");
     expect(dob).toContain("yearLabel");
-    expect(dob).toContain("combineIsoParts");
+    expect(dob).toContain("<select");
+    expect(dob).toContain("dob-picker-grid");
   });
 
   it("maps DOB validation to friendly errors", () => {

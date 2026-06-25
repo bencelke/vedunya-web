@@ -19,6 +19,10 @@ import {
   writeOnboardingDraft,
   type OnboardingDraft,
 } from "@/features/onboarding/utils/onboarding-draft";
+import {
+  clearPreAuthOnboardingDraft,
+  readPreAuthOnboardingDraft,
+} from "@/features/onboarding/services/preauth-onboarding-draft";
 import { resolveOnboardingStep } from "@/features/onboarding/utils/resolve-onboarding-step";
 import {
   mapOnboardingZodIssue,
@@ -48,6 +52,9 @@ type OnboardingFlowProps = {
 
 export function OnboardingFlow({ locale, initialProfile }: OnboardingFlowProps) {
   const initialDraft = readOnboardingDraft();
+  const preAuthDraft = readPreAuthOnboardingDraft();
+  const prefilledFromPreAuth =
+    !initialProfile?.dateOfBirth && Boolean(preAuthDraft.dateOfBirth);
   const t = useTranslations("auth.onboarding");
   const tAuth = useTranslations("auth");
   const router = useRouter();
@@ -58,14 +65,18 @@ export function OnboardingFlow({ locale, initialProfile }: OnboardingFlowProps) 
   const [displayName, setDisplayName] = useState(
     initialDraft.displayName ?? initialProfile?.displayName ?? "",
   );
-  const [dateOfBirth, setDateOfBirth] = useState(
-    initialDraft.dateOfBirth ??
-      (initialProfile?.dateOfBirth
-        ? formatDateOfBirth(initialProfile.dateOfBirth)
-        : ""),
-  );
+  const [dateOfBirth, setDateOfBirth] = useState(() => {
+    if (initialProfile?.dateOfBirth) {
+      return formatDateOfBirth(initialProfile.dateOfBirth);
+    }
+
+    return initialDraft.dateOfBirth ?? preAuthDraft.dateOfBirth ?? "";
+  });
   const [language, setLanguage] = useState<SupportedLocale>(
-    initialDraft.language ?? initialProfile?.language ?? locale,
+    initialDraft.language ??
+      initialProfile?.language ??
+      preAuthDraft.locale ??
+      locale,
   );
   const [submitting, setSubmitting] = useState(false);
   const [errorKey, setErrorKey] = useState<OnboardingErrorKey | null>(null);
@@ -124,6 +135,7 @@ export function OnboardingFlow({ locale, initialProfile }: OnboardingFlowProps) 
     try {
       await completeUserProfile(user, parsed.data);
       clearOnboardingDraft();
+      clearPreAuthOnboardingDraft();
       router.replace("/today", { locale: parsed.data.language });
       router.refresh();
     } catch {
@@ -267,7 +279,11 @@ export function OnboardingFlow({ locale, initialProfile }: OnboardingFlowProps) 
             dayLabel={t("steps.dob.dayLabel")}
             monthLabel={t("steps.dob.monthLabel")}
             yearLabel={t("steps.dob.yearLabel")}
-            reassurance={t("steps.dob.reassurance")}
+            reassurance={
+              prefilledFromPreAuth
+                ? t("steps.dob.confirmNote")
+                : t("steps.dob.reassurance")
+            }
             value={dateOfBirth}
             onChange={(value) => {
               setDateOfBirth(value);

@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { ChevronLeft } from "lucide-react";
 
 import { MysticLogo } from "@/components/brand/mystic-logo";
@@ -11,15 +11,21 @@ import {
   IntroOnboardingHighlights,
   introHighlightIcons,
 } from "@/features/onboarding/components/intro-onboarding-highlights";
+import { IntroPreAuthDob } from "@/features/onboarding/components/intro-preauth-dob";
+import { IntroPreAuthNumerologyPreview } from "@/features/onboarding/components/intro-preauth-numerology-preview";
 import { OnboardingProgress } from "@/features/onboarding/components/onboarding-progress";
 import { OnboardingStepCard } from "@/features/onboarding/components/onboarding-step-card";
+import { readPreAuthOnboardingDraft } from "@/features/onboarding/services/preauth-onboarding-draft";
 import { markIntroOnboardingSeen } from "@/features/onboarding/utils/intro-onboarding-storage";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/i18n/navigation";
+import type { SupportedLocale } from "@/config/app-config";
 
 const INTRO_PAGE_COUNT = 4;
-const INTRO_STEP_COUNT = INTRO_PAGE_COUNT + 1;
 const GLIMPSE_STEP = INTRO_PAGE_COUNT;
+const DOB_STEP = INTRO_PAGE_COUNT + 1;
+const PREVIEW_STEP = INTRO_PAGE_COUNT + 2;
+const INTRO_STEP_COUNT = INTRO_PAGE_COUNT + 3;
 
 const PAGE_KEYS = ["guidance", "universe", "reminders", "courses"] as const;
 
@@ -51,8 +57,12 @@ const PAGE_HIGHLIGHTS: ReadonlyArray<
 export function IntroOnboardingFlow() {
   const t = useTranslations("auth.intro");
   const tAuth = useTranslations("auth");
+  const locale = useLocale() as SupportedLocale;
   const router = useRouter();
   const [step, setStep] = useState(0);
+  const [preAuthDateOfBirth, setPreAuthDateOfBirth] = useState(
+    () => readPreAuthOnboardingDraft().dateOfBirth ?? "",
+  );
 
   const steps = useMemo(
     () =>
@@ -80,7 +90,10 @@ export function IntroOnboardingFlow() {
   }
 
   const isGlimpseStep = step === GLIMPSE_STEP;
-  const currentStep = isGlimpseStep ? null : steps[step];
+  const isDobStep = step === DOB_STEP;
+  const isPreviewStep = step === PREVIEW_STEP;
+  const isCarouselStep = step < GLIMPSE_STEP;
+  const currentStep = isCarouselStep ? steps[step] : null;
   const currentHighlights = highlights[step] ?? [];
 
   return (
@@ -127,7 +140,19 @@ export function IntroOnboardingFlow() {
 
             <div className="mt-8 flex flex-1 flex-col sm:mt-10">
               {isGlimpseStep ? (
-                <IntroFirstGlimpse
+                <IntroFirstGlimpse onContinue={() => setStep(DOB_STEP)} />
+              ) : isDobStep ? (
+                <IntroPreAuthDob
+                  initialDateOfBirth={preAuthDateOfBirth}
+                  onContinue={(dateOfBirth) => {
+                    setPreAuthDateOfBirth(dateOfBirth);
+                    setStep(PREVIEW_STEP);
+                  }}
+                />
+              ) : isPreviewStep ? (
+                <IntroPreAuthNumerologyPreview
+                  dateOfBirth={preAuthDateOfBirth}
+                  locale={locale}
                   onLogin={() => finishIntro("login")}
                   onRegister={() => finishIntro("register")}
                 />
@@ -164,7 +189,7 @@ export function IntroOnboardingFlow() {
         </div>
 
         <footer className="mt-6 space-y-3 pb-6 text-center">
-          {!isGlimpseStep && step < INTRO_PAGE_COUNT - 1 ? (
+          {isCarouselStep && step < INTRO_PAGE_COUNT - 1 ? (
             <p className="text-sm">
               <button
                 type="button"

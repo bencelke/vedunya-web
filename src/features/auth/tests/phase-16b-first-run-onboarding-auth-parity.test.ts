@@ -149,7 +149,7 @@ describe("Phase 16B — signed-in redirects", () => {
     const screen = readSource("src/features/auth/components/auth-screen.tsx");
     expect(screen).toContain('? "/today"');
     expect(screen).toContain('"/onboarding"');
-    expect(screen).toContain("fetchProfileComplete");
+    expect(screen).toContain("fetchProfileStatus");
     expect(screen).toContain("handleRegisterSuccess");
   });
 });

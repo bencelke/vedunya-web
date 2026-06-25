@@ -11,6 +11,7 @@ import { LoginForm } from "@/features/auth/components/login-form";
 import { RegisterForm } from "@/features/auth/components/register-form";
 import { useAuth } from "@/features/auth/hooks/use-auth";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
+import type { ProfileStatusResponse } from "@/features/profile/utils/resolve-profile-status";
 import type { SupportedLocale } from "@/config/app-config";
 
 type AuthMode = "login" | "register";
@@ -20,14 +21,21 @@ type AuthScreenProps = {
   initialMode?: AuthMode;
 };
 
-async function fetchProfileComplete(): Promise<boolean> {
-  const response = await fetch("/api/auth/profile-status", { cache: "no-store" });
+async function fetchProfileStatus(): Promise<ProfileStatusResponse> {
+  const response = await fetch("/api/auth/profile-status", {
+    cache: "no-store",
+    credentials: "same-origin",
+  });
+
   if (!response.ok) {
-    return false;
+    return {
+      authenticated: false,
+      profileComplete: false,
+      missing: ["displayName", "language", "dob"],
+    };
   }
 
-  const payload = (await response.json()) as { profileComplete?: boolean };
-  return payload.profileComplete === true;
+  return (await response.json()) as ProfileStatusResponse;
 }
 
 export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
@@ -38,6 +46,7 @@ export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
   const [mode, setMode] = useState<AuthMode>(initialMode);
   const redirectStartedRef = useRef(false);
   const pendingRedirectRef = useRef<"login" | "register" | null>(null);
+  const hadUserOnMountRef = useRef<boolean | null>(null);
 
   const redirectAfterAuth = useCallback(
     async (forceOnboarding = false) => {
@@ -47,9 +56,10 @@ export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
 
       redirectStartedRef.current = true;
 
+      const status = await fetchProfileStatus();
       const destination = forceOnboarding
         ? "/onboarding"
-        : (await fetchProfileComplete())
+        : status.profileComplete
           ? "/today"
           : "/onboarding";
 
@@ -62,6 +72,12 @@ export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
   );
 
   useEffect(() => {
+    if (!loading && hadUserOnMountRef.current === null) {
+      hadUserOnMountRef.current = Boolean(user);
+    }
+  }, [loading, user]);
+
+  useEffect(() => {
     if (!loading && user && sessionReady) {
       if (pendingRedirectRef.current === "register") {
         pendingRedirectRef.current = null;
@@ -71,18 +87,20 @@ export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
 
       if (pendingRedirectRef.current === "login") {
         pendingRedirectRef.current = null;
-        void redirectAfterAuth();
+        void redirectAfterAuth(false);
         return;
       }
 
-      void redirectAfterAuth();
+      if (hadUserOnMountRef.current) {
+        void redirectAfterAuth(false);
+      }
     }
   }, [loading, redirectAfterAuth, sessionReady, user]);
 
   function handleAuthSuccess() {
     pendingRedirectRef.current = "login";
     if (sessionReady) {
-      void redirectAfterAuth();
+      void redirectAfterAuth(false);
     }
   }
 

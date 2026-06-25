@@ -43,10 +43,10 @@ describe("Phase 18A — intro layout and navigation", () => {
   const flow = () =>
     readSource("src/features/onboarding/components/intro-onboarding-flow.tsx");
 
-  it("renders progress dots for intro plus first glimpse", () => {
+  it("renders progress dots for intro, glimpse, DOB, and preview", () => {
     const source = flow();
     expect(source).toContain("OnboardingProgress");
-    expect(source).toContain("INTRO_STEP_COUNT = INTRO_PAGE_COUNT + 1");
+    expect(source).toContain("INTRO_STEP_COUNT = INTRO_PAGE_COUNT + 3");
     expect(source).toContain("totalSteps={INTRO_STEP_COUNT}");
   });
 
@@ -56,16 +56,16 @@ describe("Phase 18A — intro layout and navigation", () => {
     expect(source).toContain('aria-label={t("back")}');
   });
 
-  it("shows Log in and Create account on first glimpse step", () => {
+  it("shows Create account and Log in on pre-login preview step", () => {
     const source = flow();
-    expect(source).toContain("IntroFirstGlimpse");
+    expect(source).toContain("IntroPreAuthNumerologyPreview");
     expect(source).toContain('finishIntro("login")');
     expect(source).toContain('finishIntro("register")');
-    const glimpse = readSource(
-      "src/features/onboarding/components/intro-first-glimpse.tsx",
+    const preview = readSource(
+      "src/features/onboarding/components/intro-preauth-numerology-preview.tsx",
     );
-    expect(glimpse).toContain("{t(\"createAccount\")}");
-    expect(glimpse).toContain("{t(\"login\")}");
+    expect(preview).toContain("{t(\"createAccount\")}");
+    expect(preview).toContain("{t(\"login\")}");
   });
 
   it("routes Create account to register mode", () => {

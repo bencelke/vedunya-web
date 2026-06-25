@@ -8,11 +8,10 @@ import { Button } from "@/components/ui/button";
 import type { SupportedLocale } from "@/config/app-config";
 
 type IntroFirstGlimpseProps = {
-  onLogin: () => void;
-  onRegister: () => void;
+  onContinue: () => void;
 };
 
-export function IntroFirstGlimpse({ onLogin, onRegister }: IntroFirstGlimpseProps) {
+export function IntroFirstGlimpse({ onContinue }: IntroFirstGlimpseProps) {
   const t = useTranslations("auth.intro.glimpse");
   const locale = useLocale() as SupportedLocale;
 
@@ -40,11 +39,8 @@ export function IntroFirstGlimpse({ onLogin, onRegister }: IntroFirstGlimpseProp
       </div>
 
       <div className="mt-auto flex flex-col gap-3 pt-10">
-        <Button type="button" variant="authPrimary" className="w-full" onClick={onRegister}>
-          {t("createAccount")}
-        </Button>
-        <Button type="button" variant="authOutline" className="w-full" onClick={onLogin}>
-          {t("login")}
+        <Button type="button" variant="authPrimary" className="w-full" onClick={onContinue}>
+          {t("continue")}
         </Button>
       </div>
     </div>

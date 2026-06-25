@@ -84,12 +84,12 @@ describe("Phase 18B — auth handoff", () => {
     const source = readSource("src/features/auth/components/auth-screen.tsx");
     expect(source).toContain('? "/today"');
     expect(source).toContain('"/onboarding"');
-    expect(source).toContain("fetchProfileComplete");
+    expect(source).toContain("fetchProfileStatus");
   });
 
   it("routes login complete profile to Today", () => {
     const source = readSource("src/features/auth/components/auth-screen.tsx");
-    expect(source).toContain("fetchProfileComplete");
+    expect(source).toContain("fetchProfileStatus");
     expect(source).toContain('? "/today"');
     expect(source).toContain('"/onboarding"');
   });
@@ -190,7 +190,7 @@ describe("Phase 18B — profile DOB display", () => {
 describe("Phase 18B — profile-status API", () => {
   it("derives profileComplete from fields, not stale flags", () => {
     const source = readSource("src/app/api/auth/profile-status/route.ts");
-    expect(source).toContain("isProfileComplete");
+    expect(source).toContain("resolveProfileStatus");
   });
 });
 

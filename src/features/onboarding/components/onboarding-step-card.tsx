@@ -38,7 +38,7 @@ export function OnboardingStepCard({
             {title}
           </h1>
           {body ? (
-            <p className="text-sm leading-[1.72] text-auth-text-muted">{body}</p>
+            <p className="whitespace-pre-line text-sm leading-[1.72] text-auth-text-muted">{body}</p>
           ) : null}
         </header>
       ) : null}

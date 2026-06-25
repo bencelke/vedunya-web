@@ -94,7 +94,7 @@ describe("Phase 18B1 — auth handoff", () => {
 
   it("routes login without DOB to onboarding via profile status", () => {
     const screen = readSource("src/features/auth/components/auth-screen.tsx");
-    expect(screen).toContain("fetchProfileComplete");
+    expect(screen).toContain("fetchProfileStatus");
     expect(screen).toContain('"/onboarding"');
   });
 

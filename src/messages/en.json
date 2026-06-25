@@ -506,8 +506,26 @@
         "subtitle": "Before Mystic calculates your personal rhythm, here is a calm note for today.",
         "noteLabel": "Today's note",
         "disclaimer": "This is a general note for today — not your personal numerology.",
+        "continue": "Continue",
         "createAccount": "Create account",
         "login": "Log in"
+      },
+      "dob": {
+        "title": "Date of birth",
+        "body": "Mystic will calculate your personal numerology rhythm and show your first personal guide.\n\nFor now, this stays only on this device. After sign-in, you can continue your practice.",
+        "dayLabel": "Day",
+        "monthLabel": "Month",
+        "yearLabel": "Year",
+        "reassurance": "This date stays on this device until you create an account or log in.",
+        "submit": "Show my rhythm"
+      },
+      "preview": {
+        "rhythmHeadline": "Your rhythm today is {number}",
+        "numberA11y": "Personal day number {number}",
+        "saveNote": "This is your first personal glimpse. Create an account to save your birth date and receive daily guidance.",
+        "createAccount": "Create account",
+        "login": "Log in",
+        "loadError": "Could not load your rhythm preview. Try again."
       }
     },
     "onboarding": {
@@ -548,6 +566,7 @@
           "monthLabel": "Month",
           "yearLabel": "Year",
           "reassurance": "It is not public and is not shown to other users.",
+          "confirmNote": "Confirm your birth date below or edit it before saving to your account.",
           "helper": "Used for numerology rhythm and daily guidance only. You can update this later in Profile."
         },
         "language": {

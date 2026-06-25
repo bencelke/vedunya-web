@@ -96,12 +96,14 @@ describe("Onboarding DOB handling", () => {
     expect(parsed.getDate()).toBe(15);
   });
 
-  it("uses three-field DOB input for stable mobile entry", () => {
+  it("uses three native select DOB controls for stable mobile entry", () => {
     const source = readSource("src/features/onboarding/components/dob-input.tsx");
     expect(source).toContain("dayLabel");
     expect(source).toContain("monthLabel");
     expect(source).toContain("yearLabel");
-    expect(source).toContain("combineIsoParts");
+    expect(source).toContain("<select");
+    const utils = readSource("src/features/onboarding/utils/dob-input-utils.ts");
+    expect(utils).toContain("combineIsoParts");
   });
 
   it("persists draft in session storage for refresh resilience", () => {
