@@ -3,14 +3,14 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 
+import { AppleProviderIcon } from "@/features/auth/components/auth-provider-icons";
 import { AuthErrorMessage } from "@/features/auth/components/auth-error-message";
 import { loginWithApple } from "@/features/auth/services/auth-service";
-import { createServerSession } from "@/features/auth/services/session-service";
 import {
-  mapFirebaseAuthError,
-  type AuthErrorKey,
-} from "@/features/auth/utils/auth-error-map";
-import { bootstrapUserProfile } from "@/features/profile/services/profile-bootstrap-service";
+  completeSocialSignIn,
+  mapSocialSignInError,
+} from "@/features/auth/services/social-sign-in-flow";
+import type { AuthErrorKey } from "@/features/auth/utils/auth-error-map";
 import { Button } from "@/components/ui/button";
 import type { SupportedLocale } from "@/config/app-config";
 
@@ -34,16 +34,9 @@ export function AppleSignInButton({ locale, onSuccess }: AppleSignInButtonProps)
         return;
       }
 
-      await bootstrapUserProfile(credential.user, locale);
-      const token = await credential.user.getIdToken(true);
-      await createServerSession(token);
-      onSuccess();
+      await completeSocialSignIn(credential, locale, onSuccess);
     } catch (error) {
-      if (error instanceof Error && error.message === "configuration") {
-        setErrorKey("configuration");
-      } else {
-        setErrorKey(mapFirebaseAuthError(error));
-      }
+      setErrorKey(mapSocialSignInError(error));
     } finally {
       setSubmitting(false);
     }
@@ -55,10 +48,11 @@ export function AppleSignInButton({ locale, onSuccess }: AppleSignInButtonProps)
       <Button
         type="button"
         variant="authOutline"
-        className="w-full"
+        className="w-full gap-2.5"
         disabled={submitting}
         onClick={handleClick}
       >
+        <AppleProviderIcon className="h-[18px] w-[18px]" />
         {submitting ? t("submitting") : t("continue")}
       </Button>
     </div>

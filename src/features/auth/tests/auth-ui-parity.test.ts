@@ -48,6 +48,7 @@ describe("Auth UI parity — routes and shell", () => {
   it("uses flat page layout for auth shell by default", () => {
     const source = readSource("src/components/ui/auth-shell.tsx");
     expect(source).toContain('layout = "page"');
+    expect(source).toContain('layout === "login"');
     expect(source).toContain("mystic-auth-content");
   });
 });
@@ -58,7 +59,7 @@ describe("Auth UI parity — providers", () => {
       "src/features/auth/components/google-sign-in-button.tsx",
     );
     expect(source).toContain("loginWithGoogle");
-    expect(source).toContain("createServerSession");
+    expect(source).toContain("completeSocialSignIn");
     expect(source).toContain("mysticAssets.brand.googleIcon");
   });
 

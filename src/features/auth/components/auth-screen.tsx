@@ -68,8 +68,8 @@ export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
 
   if (loading) {
     return (
-      <AuthShell topBar={topBar}>
-        <div className="space-y-6 py-10 text-center">
+      <AuthShell topBar={topBar} layout="login">
+        <div className="space-y-6 py-8 text-center">
           <AuthBrandHeader
             headline={t("welcomeHeadline")}
             subtitle={t("loading")}
@@ -82,7 +82,7 @@ export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
 
   if (!configured || !adminConfigured) {
     return (
-      <AuthShell topBar={topBar}>
+      <AuthShell topBar={topBar} layout="login">
         <div className="space-y-6 py-4">
           <AuthBrandHeader
             headline={t("configuration.title")}
@@ -97,21 +97,25 @@ export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
   const isLogin = mode === "login";
 
   return (
-    <AuthShell topBar={topBar}>
-      <div className="space-y-8">
+    <AuthShell topBar={topBar} layout="login">
+      <div className="space-y-7">
         <AuthBrandHeader
           headline={isLogin ? t("loginTitle") : t("registerTitle")}
           subtitle={isLogin ? t("loginDescription") : t("registerDescription")}
         />
 
-        <AuthProviderButtons locale={locale} onSuccess={handleAuthSuccess} />
+        <AuthProviderButtons
+          locale={locale}
+          firebaseConfigured={configured}
+          onSuccess={handleAuthSuccess}
+        />
 
         <div className="flex items-center gap-3">
-          <div className="h-px flex-1 bg-auth-border" />
+          <div className="h-px flex-1 bg-auth-border/90" />
           <span className="text-xs font-medium uppercase tracking-[0.14em] text-auth-text-subtle">
             {t("divider")}
           </span>
-          <div className="h-px flex-1 bg-auth-border" />
+          <div className="h-px flex-1 bg-auth-border/90" />
         </div>
 
         {isLogin ? (

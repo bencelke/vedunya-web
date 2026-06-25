@@ -49,13 +49,23 @@ Web app uses `OAuthProvider("apple.com")` when `NEXT_PUBLIC_ENABLE_APPLE_LOGIN=t
 
 Web app uses `FacebookAuthProvider` when `NEXT_PUBLIC_ENABLE_FACEBOOK_LOGIN=true`.
 
+## Redirect vs popup (mobile / PWA)
+
+| Context | Behavior |
+|---------|----------|
+| Mobile viewport, iOS, or installed PWA | `signInWithRedirect` |
+| Desktop popup | `signInWithPopup` |
+| Popup blocked | Fallback to `signInWithRedirect` |
+
+After redirect return, `AuthProvider` calls `getRedirectResult`, bootstraps the user profile, and syncs the HttpOnly session cookie before routing.
+
 ## Vercel env flags
 
 Names only in `.env.example`:
 
 ```env
-NEXT_PUBLIC_ENABLE_APPLE_LOGIN=
-NEXT_PUBLIC_ENABLE_FACEBOOK_LOGIN=
+NEXT_PUBLIC_ENABLE_APPLE_LOGIN=false
+NEXT_PUBLIC_ENABLE_FACEBOOK_LOGIN=false
 ```
 
 Set to `"true"` only after the provider is enabled in Firebase and OAuth redirect/domain setup is complete.

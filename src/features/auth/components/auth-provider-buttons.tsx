@@ -11,15 +11,21 @@ import { GoogleSignInButton } from "@/features/auth/components/google-sign-in-bu
 
 type AuthProviderButtonsProps = {
   locale: SupportedLocale;
+  firebaseConfigured?: boolean;
   onSuccess: () => void;
 };
 
 export function AuthProviderButtons({
   locale,
+  firebaseConfigured = true,
   onSuccess,
 }: AuthProviderButtonsProps) {
   const appleEnabled = isAppleLoginEnabled();
   const facebookEnabled = isFacebookLoginEnabled();
+
+  if (!firebaseConfigured) {
+    return null;
+  }
 
   return (
     <div className="space-y-3">

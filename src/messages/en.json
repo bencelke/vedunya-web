@@ -387,7 +387,7 @@
     "loginDescription": "Sign in to continue your daily practice.",
     "registerDescription": "Create an account to keep your profile, language, and daily rhythm in sync across devices.",
     "divider": "or",
-    "switchToRegister": "Create your account",
+    "switchToRegister": "Create account",
     "switchToLogin": "Already have an account? Sign in",
     "forgotPasswordLink": "Reset your password",
     "backToLanding": "Back to home",
@@ -437,7 +437,7 @@
       "success": "If an account exists for this email, reset instructions have been sent."
     },
     "errors": {
-      "generic": "We couldn’t complete that action. Please try again.",
+      "generic": "Could not sign in. Check your details and try again.",
       "invalidEmail": "Enter a valid email address.",
       "invalidCredential": "We couldn’t sign you in. Check your details and try again.",
       "userDisabled": "This account is disabled. Contact support if you need help.",
@@ -445,11 +445,11 @@
       "weakPassword": "Choose a stronger password with at least 8 characters.",
       "tooManyRequests": "Too many attempts. Wait a moment and try again.",
       "popupBlocked": "The sign-in window was blocked. Allow pop-ups and try again.",
-      "popupClosed": "Sign-in was cancelled before it finished.",
+      "popupClosed": "Sign-in was cancelled.",
       "network": "Network error. Check your connection and try again.",
       "unauthorizedDomain": "This domain is not authorized for sign-in yet.",
       "operationNotAllowed": "This sign-in method is not enabled yet.",
-      "configuration": "Authentication is not configured on this environment.",
+      "configuration": "This sign-in method is not configured yet.",
       "passwordMismatch": "Passwords do not match.",
       "termsRequired": "Please accept the terms before creating an account."
     },

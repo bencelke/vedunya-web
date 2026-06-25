@@ -13,6 +13,7 @@ import {
   type User,
   type UserCredential,
   type AuthProvider,
+  type AuthError,
 } from "firebase/auth";
 
 import { getFirebaseAuth, ensureAuthPersistence } from "@/lib/firebase/auth";
@@ -88,7 +89,17 @@ async function signInWithOAuthProvider(
     return null;
   }
 
-  return signInWithPopup(auth, provider);
+  try {
+    return await signInWithPopup(auth, provider);
+  } catch (error) {
+    const code = (error as AuthError)?.code ?? "";
+    if (code === "auth/popup-blocked") {
+      await signInWithRedirect(auth, provider);
+      return null;
+    }
+
+    throw error;
+  }
 }
 
 export async function resolveOAuthRedirectResult(): Promise<UserCredential | null> {

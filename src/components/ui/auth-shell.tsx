@@ -51,8 +51,8 @@ type AuthShellProps = {
   children: ReactNode;
   topBar?: ReactNode;
   className?: string;
-  /** `page` matches Flutter auth screens (no card). `card` keeps elevated surface. */
-  layout?: "page" | "card";
+  /** `page` flat content. `card` elevated surface. `login` centered premium panel. */
+  layout?: "page" | "card" | "login";
 };
 
 export function AuthShell({
@@ -61,6 +61,25 @@ export function AuthShell({
   className,
   layout = "page",
 }: AuthShellProps) {
+  if (layout === "login") {
+    return (
+      <div className="mystic-auth-page mystic-login-page">
+        <div className="mystic-login-frame">
+          {topBar ? (
+            <header className="flex justify-end pt-[max(0.75rem,env(safe-area-inset-top))]">
+              {topBar}
+            </header>
+          ) : null}
+          <div className="mystic-login-stage">
+            <div className={cn("mystic-auth-card mystic-login-panel", className)}>
+              {children}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="mystic-auth-page">
       <div className="mystic-shell px-[var(--spacing-page)] pb-10 pt-[max(1rem,env(safe-area-inset-top))]">

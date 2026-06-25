@@ -7,12 +7,11 @@ import Image from "next/image";
 import { mysticAssets } from "@/config/mysticAssets";
 import { AuthErrorMessage } from "@/features/auth/components/auth-error-message";
 import { loginWithGoogle } from "@/features/auth/services/auth-service";
-import { createServerSession } from "@/features/auth/services/session-service";
 import {
-  mapFirebaseAuthError,
-  type AuthErrorKey,
-} from "@/features/auth/utils/auth-error-map";
-import { bootstrapUserProfile } from "@/features/profile/services/profile-bootstrap-service";
+  completeSocialSignIn,
+  mapSocialSignInError,
+} from "@/features/auth/services/social-sign-in-flow";
+import type { AuthErrorKey } from "@/features/auth/utils/auth-error-map";
 import { Button } from "@/components/ui/button";
 import type { SupportedLocale } from "@/config/app-config";
 
@@ -36,16 +35,9 @@ export function GoogleSignInButton({ locale, onSuccess }: GoogleSignInButtonProp
         return;
       }
 
-      await bootstrapUserProfile(credential.user, locale);
-      const token = await credential.user.getIdToken(true);
-      await createServerSession(token);
-      onSuccess();
+      await completeSocialSignIn(credential, locale, onSuccess);
     } catch (error) {
-      if (error instanceof Error && error.message === "configuration") {
-        setErrorKey("configuration");
-      } else {
-        setErrorKey(mapFirebaseAuthError(error));
-      }
+      setErrorKey(mapSocialSignInError(error));
     } finally {
       setSubmitting(false);
     }
@@ -57,7 +49,7 @@ export function GoogleSignInButton({ locale, onSuccess }: GoogleSignInButtonProp
       <Button
         type="button"
         variant="authOutline"
-        className="w-full"
+        className="w-full gap-2.5"
         disabled={submitting}
         onClick={handleClick}
       >
