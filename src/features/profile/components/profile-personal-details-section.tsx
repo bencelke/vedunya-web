@@ -69,7 +69,11 @@ export function ProfilePersonalDetailsSection({
             label={t("birthDate")}
             value={
               profile.dateOfBirth
-                ? formatDateOfBirth(profile.dateOfBirth)
+                ? profile.dateOfBirth.toLocaleDateString(undefined, {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })
                 : "—"
             }
           />

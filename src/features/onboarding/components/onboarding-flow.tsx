@@ -4,12 +4,11 @@ import { useCallback, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { ChevronLeft } from "lucide-react";
 
-import { MysticLogo } from "@/components/brand/mystic-logo";
 import { AuthLanguageBar } from "@/features/auth/components/auth-language-bar";
 import { DobInput } from "@/features/onboarding/components/dob-input";
 import { OnboardingErrorMessage } from "@/features/onboarding/components/onboarding-error-message";
+import { OnboardingNumerologyPreview } from "@/features/onboarding/components/onboarding-numerology-preview";
 import { OnboardingProgress } from "@/features/onboarding/components/onboarding-progress";
-import { OnboardingReview } from "@/features/onboarding/components/onboarding-review";
 import { OnboardingShell } from "@/features/onboarding/components/onboarding-shell";
 import { OnboardingStepCard } from "@/features/onboarding/components/onboarding-step-card";
 import {
@@ -38,7 +37,7 @@ import { Label } from "@/components/ui/label";
 import type { SupportedLocale } from "@/config/app-config";
 import type { ProfileSnapshot } from "@/features/profile/types/user-profile";
 
-const STEP_COUNT = 5;
+const STEP_COUNT = 4;
 
 type OnboardingFlowProps = {
   locale: SupportedLocale;
@@ -48,7 +47,6 @@ type OnboardingFlowProps = {
 export function OnboardingFlow({ locale, initialProfile }: OnboardingFlowProps) {
   const initialDraft = readOnboardingDraft();
   const t = useTranslations("auth.onboarding");
-  const tAuth = useTranslations("auth");
   const router = useRouter();
   const { user, sessionReady } = useAuth();
   const [step, setStep] = useState(initialDraft.step ?? 0);
@@ -69,11 +67,10 @@ export function OnboardingFlow({ locale, initialProfile }: OnboardingFlowProps) 
 
   const steps = useMemo(
     () => [
-      { title: t("steps.welcome.title"), body: t("steps.welcome.body") },
       { title: t("steps.name.title"), body: t("steps.name.body") },
       { title: t("steps.dob.title"), body: t("steps.dob.body") },
       { title: t("steps.language.title"), body: t("steps.language.body") },
-      { title: t("steps.ready.title"), body: t("steps.ready.body") },
+      { title: t("steps.preview.title"), body: t("steps.preview.body") },
     ],
     [t],
   );
@@ -124,7 +121,7 @@ export function OnboardingFlow({ locale, initialProfile }: OnboardingFlowProps) 
   }
 
   function validateCurrentStep(): boolean {
-    if (step === 1) {
+    if (step === 0) {
       const parsed = onboardingNameSchema.safeParse({ displayName });
       if (!parsed.success) {
         setErrorKey(mapOnboardingZodIssue(parsed.error.issues[0]));
@@ -132,7 +129,7 @@ export function OnboardingFlow({ locale, initialProfile }: OnboardingFlowProps) 
       }
     }
 
-    if (step === 2) {
+    if (step === 1) {
       const parsed = onboardingDobSchema.safeParse({ dateOfBirth });
       if (!parsed.success) {
         setErrorKey(mapOnboardingZodIssue(parsed.error.issues[0]));
@@ -187,23 +184,14 @@ export function OnboardingFlow({ locale, initialProfile }: OnboardingFlowProps) 
       }
     >
       <div className="flex flex-1 flex-col">
-        {step === 0 ? (
-          <div className="mb-8 flex flex-col items-center gap-4">
-            <p className="mystic-auth-wordmark text-center" aria-hidden="true">
-              {tAuth("brandWordmark")}
-            </p>
-            <MysticLogo showWordmark={false} size="lg" />
-          </div>
-        ) : null}
-
         <OnboardingStepCard
           title={currentStep?.title ?? ""}
           body={currentStep?.body ?? ""}
-          align={step === 0 ? "center" : "start"}
+          align="start"
         >
           <OnboardingErrorMessage errorKey={errorKey} />
 
-          {step === 1 ? (
+          {step === 0 ? (
             <div className="space-y-2">
               <Label htmlFor="onboarding-name" tone="auth">
                 {t("steps.name.fieldLabel")}
@@ -223,7 +211,7 @@ export function OnboardingFlow({ locale, initialProfile }: OnboardingFlowProps) 
             </div>
           ) : null}
 
-          {step === 2 ? (
+          {step === 1 ? (
             <DobInput
               id="onboarding-dob"
               label={t("steps.dob.fieldLabel")}
@@ -236,7 +224,7 @@ export function OnboardingFlow({ locale, initialProfile }: OnboardingFlowProps) 
             />
           ) : null}
 
-          {step === 3 ? (
+          {step === 2 ? (
             <div className="grid grid-cols-2 gap-3">
               {(["en", "ru"] as SupportedLocale[]).map((option) => (
                 <button
@@ -260,16 +248,10 @@ export function OnboardingFlow({ locale, initialProfile }: OnboardingFlowProps) 
             </div>
           ) : null}
 
-          {step === 4 ? (
-            <OnboardingReview
-              displayName={displayName.trim()}
+          {step === 3 ? (
+            <OnboardingNumerologyPreview
               dateOfBirth={dateOfBirth}
-              language={language}
-              nameLabel={t("steps.name.fieldLabel")}
-              dobLabel={t("steps.dob.fieldLabel")}
-              languageLabel={t("steps.language.title")}
-              englishLabel={t("steps.language.english")}
-              russianLabel={t("steps.language.russian")}
+              locale={language}
             />
           ) : null}
         </OnboardingStepCard>

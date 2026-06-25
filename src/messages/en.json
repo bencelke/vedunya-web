@@ -88,6 +88,7 @@
     "previewLabel": "Preview — guidance below is an example, not calculated for you.",
     "personalizeMessage": "Sign in and add your name and birth date to receive guidance shaped for your day.",
     "completeProfile": "Complete your profile to unlock personal daily guidance.",
+    "missingBirthDate": "Add your birth date to unlock your personal numerology rhythm.",
     "numerologyUnavailable": "Personal-day guidance is unavailable right now.",
     "moonUnavailable": "Moon rhythm is unavailable right now.",
     "runeUnavailable": "Today’s rune is unavailable right now.",
@@ -517,6 +518,14 @@
           "body": "You can change your language later in Profile.",
           "english": "English",
           "russian": "Russian"
+        },
+        "preview": {
+          "title": "Your day, in one calm read",
+          "body": "This is your personal rhythm for today, based on your birth date. You can update your details anytime in Profile.",
+          "numerologyLabel": "Numerology",
+          "focusLabel": "Practical focus",
+          "loadError": "We couldn’t load your preview right now. You can still continue — Today will calculate your rhythm after setup.",
+          "numberA11y": "Personal day number {number}"
         },
         "ready": {
           "title": "Your practice is ready",

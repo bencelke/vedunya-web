@@ -17,6 +17,7 @@ import { parseDateKey } from "@/features/runes/engine/date-key";
 import { buildDailyRuneResult } from "@/features/runes/services/daily-rune-service";
 import { formatDateOfBirth } from "@/features/profile/schemas/onboarding-schema";
 import { getProfileSnapshot } from "@/features/profile/services/profile-repository";
+import { isProfileComplete } from "@/features/profile/utils/profile-complete";
 import { resolvePremiumAccess } from "@/features/profile/utils/premium-access";
 import { loadUniverseRequestViewModel } from "@/features/universe-request/server/load-universe-request";
 import { getCachedRuneDeepContent } from "@/features/runes/repositories/rune-content-repository";
@@ -179,13 +180,29 @@ export async function loadDailyGuidance(
 
   const profile = await getProfileSnapshot(sessionUser.uid);
 
-  if (!profile?.profileComplete || !profile.dateOfBirth) {
+  if (!isProfileComplete(profile)) {
+    const setupMessage = profile?.dateOfBirth
+      ? t("completeProfile")
+      : t("missingBirthDate");
+
     return {
       kind: "incomplete",
       incomplete: {
         formattedDate: context.formattedDate,
         greetingName: profile?.displayName ?? null,
-        setupMessage: t("completeProfile"),
+        setupMessage,
+        setupHref: "/onboarding",
+      },
+    };
+  }
+
+  if (!profile?.dateOfBirth) {
+    return {
+      kind: "incomplete",
+      incomplete: {
+        formattedDate: context.formattedDate,
+        greetingName: profile?.displayName ?? null,
+        setupMessage: t("missingBirthDate"),
         setupHref: "/onboarding",
       },
     };

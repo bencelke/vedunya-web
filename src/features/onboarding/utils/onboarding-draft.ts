@@ -20,7 +20,11 @@ export function readOnboardingDraft(): Partial<OnboardingDraft> {
   }
 
   try {
-    return JSON.parse(raw) as OnboardingDraft;
+    const parsed = JSON.parse(raw) as Partial<OnboardingDraft>;
+    if (typeof parsed.step === "number") {
+      parsed.step = Math.min(Math.max(parsed.step, 0), 3);
+    }
+    return parsed;
   } catch {
     window.sessionStorage.removeItem(ONBOARDING_DRAFT_STORAGE_KEY);
     return {};

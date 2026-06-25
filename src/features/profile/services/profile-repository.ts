@@ -10,6 +10,7 @@ import {
   type SupportedProfileLocale,
 } from "@/features/profile/constants";
 import type { ProfileSnapshot } from "@/features/profile/types/user-profile";
+import { deriveProfileComplete } from "@/features/profile/utils/profile-complete";
 import { getFirebaseAdminFirestore } from "@/lib/firebase-admin/firestore";
 
 function timestampToDate(value: unknown): Date | null {
@@ -48,9 +49,6 @@ export async function getProfileSnapshot(
   const publicData = publicDoc.data() ?? {};
   const privateData = privateDoc.data() ?? {};
 
-  const profileComplete =
-    publicData.profileComplete === true || privateData.profileComplete === true;
-
   const dob =
     timestampToDate(privateData.dob) ??
     timestampToDate(publicData.dob);
@@ -71,6 +69,13 @@ export async function getProfileSnapshot(
       ? displayNameRaw.trim()
       : displayNameRaw?.trim() || null;
 
+  const language = readLanguage(publicData.language);
+  const derivedProfileComplete = deriveProfileComplete({
+    displayName,
+    dateOfBirth: dob,
+    language,
+  });
+
   return {
     uid,
     displayName,
@@ -81,8 +86,8 @@ export async function getProfileSnapshot(
           ? publicData.email
           : null,
     dateOfBirth: dob,
-    language: readLanguage(publicData.language),
-    profileComplete,
+    language,
+    profileComplete: derivedProfileComplete,
     authProviders,
     publicProfile: publicDoc.exists
       ? {

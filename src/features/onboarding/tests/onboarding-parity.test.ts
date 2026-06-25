@@ -29,8 +29,6 @@ describe("Onboarding UI parity — shell and navigation", () => {
       "src/features/onboarding/components/onboarding-shell.tsx",
     );
     expect(flow).toContain("OnboardingShell");
-    expect(flow).toContain("MysticLogo");
-    expect(flow).toContain('tAuth("brandWordmark")');
     expect(shell).toContain("mystic-auth-page");
   });
 
@@ -48,21 +46,21 @@ describe("Onboarding UI parity — shell and navigation", () => {
 });
 
 describe("Onboarding flow steps", () => {
-  it("implements five-step welcome → ready flow", () => {
+  it("implements four-step name → preview flow for signed-in users", () => {
     const source = readSource(
       "src/features/onboarding/components/onboarding-flow.tsx",
     );
-    expect(source).toContain("STEP_COUNT = 5");
-    expect(source).toContain("steps.welcome");
+    expect(source).toContain("STEP_COUNT = 4");
     expect(source).toContain("steps.name");
     expect(source).toContain("steps.dob");
     expect(source).toContain("steps.language");
-    expect(source).toContain("steps.ready");
-    expect(source).not.toContain("loadOnboardingPreview");
-    expect(source).not.toContain("DailyGuidance");
+    expect(source).toContain("steps.preview");
+    expect(source).toContain("OnboardingNumerologyPreview");
+    expect(source).not.toContain("steps.welcome");
+    expect(source).not.toContain("OnboardingReview");
   });
 
-  it("validates name on step 2", () => {
+  it("validates name on step 1", () => {
     expect(mapOnboardingZodIssue({ message: "nameRequired", code: "custom", path: [] })).toBe(
       "nameRequired",
     );
@@ -171,16 +169,16 @@ describe("Onboarding profile completion contract", () => {
 
 describe("Onboarding localization", () => {
   it("includes polished EN onboarding copy", () => {
-    expect(en.auth.onboarding.steps.welcome.title).toContain("daily practice");
+    expect(en.auth.onboarding.steps.name.title).toContain("call you");
     expect(en.auth.onboarding.steps.dob.body).toContain("daily rhythm");
-    expect(en.auth.onboarding.steps.ready.title).toContain("ready");
+    expect(en.auth.onboarding.steps.preview.title).toContain("calm read");
     expect(en.auth.onboarding.errors.nameRequired).toBeTruthy();
   });
 
   it("includes polished RU onboarding copy", () => {
-    expect(ru.auth.onboarding.steps.welcome.title).toContain("практику");
+    expect(ru.auth.onboarding.steps.name.title).toContain("обращаться");
     expect(ru.auth.onboarding.steps.dob.body).toContain("нумерологии");
-    expect(ru.auth.onboarding.steps.language.body).toContain("профиле");
+    expect(ru.auth.onboarding.steps.preview.title).toContain("спокойном");
     expect(ru.auth.onboarding.errors.dobFuture).toBeTruthy();
   });
 });

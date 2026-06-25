@@ -55,9 +55,9 @@ describe("Phase 9.4 — auth and onboarding branding", () => {
     expect(en.auth.welcomeHeadline).not.toMatch(/^MYSTIC$/);
   });
 
-  it("shows Vedunya Maria wordmark on onboarding welcome step", () => {
+  it("shows Vedunya Maria wordmark on intro onboarding", () => {
     const flow = readSource(
-      "src/features/onboarding/components/onboarding-flow.tsx",
+      "src/features/onboarding/components/intro-onboarding-flow.tsx",
     );
     expect(flow).toContain('useTranslations("auth")');
     expect(flow).toContain('tAuth("brandWordmark")');
@@ -87,16 +87,16 @@ describe("Phase 9.4 — PWA and product naming", () => {
 });
 
 describe("Phase 9.4 — logo asset pairing", () => {
-  it("pairs makosh emblem with Vedunya Maria copy in auth and onboarding", () => {
+  it("pairs makosh emblem with Vedunya Maria copy in auth and intro onboarding", () => {
     const authHeader = readSource(
       "src/features/auth/components/auth-brand-header.tsx",
     );
-    const onboarding = readSource(
-      "src/features/onboarding/components/onboarding-flow.tsx",
+    const introOnboarding = readSource(
+      "src/features/onboarding/components/intro-onboarding-flow.tsx",
     );
     const mysticLogo = readSource("src/components/brand/mystic-logo.tsx");
     expect(authHeader).toContain("MysticLogo");
-    expect(onboarding).toContain("MysticLogo");
+    expect(introOnboarding).toContain("MysticLogo");
     expect(mysticLogo).toContain("makoshEmblem");
   });
 

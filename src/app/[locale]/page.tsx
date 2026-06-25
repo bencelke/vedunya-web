@@ -4,6 +4,7 @@ import { hasLocale } from "next-intl";
 
 import { SignedOutRootRedirect } from "@/features/auth/components/signed-out-root-redirect";
 import { getProfileSnapshot } from "@/features/profile/services/profile-repository";
+import { isProfileComplete } from "@/features/profile/utils/profile-complete";
 import type { SupportedLocale } from "@/config/app-config";
 import { getCurrentUser } from "@/lib/auth/current-user";
 import {
@@ -29,7 +30,7 @@ export default async function RootPage({ params }: RootPageProps) {
   const user = await getCurrentUser();
   if (user) {
     const profile = await getProfileSnapshot(user.uid);
-    if (profile?.profileComplete === true) {
+    if (isProfileComplete(profile)) {
       redirect(getTodayRedirectPath(locale));
     }
     redirect(getOnboardingRedirectPath(locale));

@@ -6,6 +6,7 @@ import type { SupportedLocale } from "@/config/app-config";
 import { getCurrentUser, requireUser } from "@/lib/auth/current-user";
 import { getOnboardingRedirectPath, getTodayRedirectPath } from "@/lib/auth/paths";
 import { getProfileSnapshot } from "@/features/profile/services/profile-repository";
+import { isProfileComplete } from "@/features/profile/utils/profile-complete";
 import type { SessionUser } from "@/types/auth";
 
 export async function requireCompleteProfile(
@@ -13,7 +14,7 @@ export async function requireCompleteProfile(
 ): Promise<{ user: SessionUser; profileComplete: boolean }> {
   const user = await requireUser(locale);
   const snapshot = await getProfileSnapshot(user.uid);
-  const profileComplete = snapshot?.profileComplete === true;
+  const profileComplete = isProfileComplete(snapshot);
 
   if (!profileComplete) {
     redirect(getOnboardingRedirectPath(locale));
@@ -28,7 +29,7 @@ export async function requireIncompleteProfile(
   const user = await requireUser(locale);
   const snapshot = await getProfileSnapshot(user.uid);
 
-  if (snapshot?.profileComplete === true) {
+  if (isProfileComplete(snapshot)) {
     redirect(getTodayRedirectPath(locale));
   }
 
@@ -44,7 +45,7 @@ export async function redirectAuthenticatedFromLogin(
   }
 
   const snapshot = await getProfileSnapshot(user.uid);
-  if (snapshot?.profileComplete === true) {
+  if (isProfileComplete(snapshot)) {
     redirect(getTodayRedirectPath(locale));
   }
 
