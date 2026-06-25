@@ -6,6 +6,7 @@ import { ChevronLeft } from "lucide-react";
 
 import { MysticLogo } from "@/components/brand/mystic-logo";
 import { AuthLanguageBar } from "@/features/auth/components/auth-language-bar";
+import { IntroFirstGlimpse } from "@/features/onboarding/components/intro-first-glimpse";
 import {
   IntroOnboardingHighlights,
   introHighlightIcons,
@@ -16,7 +17,9 @@ import { markIntroOnboardingSeen } from "@/features/onboarding/utils/intro-onboa
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/i18n/navigation";
 
-const INTRO_STEP_COUNT = 4;
+const INTRO_PAGE_COUNT = 4;
+const INTRO_STEP_COUNT = INTRO_PAGE_COUNT + 1;
+const GLIMPSE_STEP = INTRO_PAGE_COUNT;
 
 const PAGE_KEYS = ["guidance", "universe", "reminders", "courses"] as const;
 
@@ -76,7 +79,8 @@ export function IntroOnboardingFlow() {
     router.replace(destination === "register" ? "/login?mode=register" : "/login");
   }
 
-  const currentStep = steps[step];
+  const isGlimpseStep = step === GLIMPSE_STEP;
+  const currentStep = isGlimpseStep ? null : steps[step];
   const currentHighlights = highlights[step] ?? [];
 
   return (
@@ -122,57 +126,45 @@ export function IntroOnboardingFlow() {
             </div>
 
             <div className="mt-8 flex flex-1 flex-col sm:mt-10">
-              <OnboardingStepCard
-                title={currentStep?.title ?? ""}
-                body={currentStep?.body ?? ""}
-                align="center"
-                className="flex-1"
-              />
+              {isGlimpseStep ? (
+                <IntroFirstGlimpse
+                  onLogin={() => finishIntro("login")}
+                  onRegister={() => finishIntro("register")}
+                />
+              ) : (
+                <>
+                  <OnboardingStepCard
+                    title={currentStep?.title ?? ""}
+                    body={currentStep?.body ?? ""}
+                    align="center"
+                    className="flex-1"
+                  />
 
-              <IntroOnboardingHighlights
-                items={currentHighlights}
-                className="mt-8"
-              />
+                  <IntroOnboardingHighlights
+                    items={currentHighlights}
+                    className="mt-8"
+                  />
 
-              <div className="mt-auto flex flex-col gap-3 pt-10">
-                {step < INTRO_STEP_COUNT - 1 ? (
-                  <Button
-                    type="button"
-                    variant="authPrimary"
-                    className="w-full"
-                    onClick={() =>
-                      setStep((value) => Math.min(value + 1, INTRO_STEP_COUNT - 1))
-                    }
-                  >
-                    {step === 0 ? t("start") : t("continue")}
-                  </Button>
-                ) : (
-                  <>
+                  <div className="mt-auto flex flex-col gap-3 pt-10">
                     <Button
                       type="button"
                       variant="authPrimary"
                       className="w-full"
-                      onClick={() => finishIntro("login")}
+                      onClick={() =>
+                        setStep((value) => Math.min(value + 1, INTRO_STEP_COUNT - 1))
+                      }
                     >
-                      {t("login")}
+                      {step === 0 ? t("start") : t("continue")}
                     </Button>
-                    <Button
-                      type="button"
-                      variant="authOutline"
-                      className="w-full"
-                      onClick={() => finishIntro("register")}
-                    >
-                      {t("createAccount")}
-                    </Button>
-                  </>
-                )}
-              </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
 
         <footer className="mt-6 space-y-3 pb-6 text-center">
-          {step < INTRO_STEP_COUNT - 1 ? (
+          {!isGlimpseStep && step < INTRO_PAGE_COUNT - 1 ? (
             <p className="text-sm">
               <button
                 type="button"

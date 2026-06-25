@@ -500,6 +500,14 @@
             "pace": "Your pace"
           }
         }
+      },
+      "glimpse": {
+        "title": "A first glimpse of today",
+        "subtitle": "Before Mystic calculates your personal rhythm, here is a calm note for today.",
+        "noteLabel": "Today's note",
+        "disclaimer": "This is a general note for today — not your personal numerology.",
+        "createAccount": "Create account",
+        "login": "Log in"
       }
     },
     "onboarding": {
