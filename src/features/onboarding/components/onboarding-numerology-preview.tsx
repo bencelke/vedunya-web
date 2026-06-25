@@ -41,17 +41,23 @@ export function OnboardingNumerologyPreview({
     );
   }
 
+  const personalDayNumber = preview.calculation.personalDayNumber;
+
   return (
-    <div className="space-y-6">
-      <div>
-        <p className="text-lg font-medium text-auth-text-primary">
-          {t("rhythmHeadline", {
-            number: preview.calculation.personalDayNumber,
-          })}
+    <div className="space-y-7">
+      <div className="flex flex-col items-center text-center">
+        <div
+          className="flex h-[5.5rem] w-[5.5rem] items-center justify-center rounded-full border border-auth-accent-gold/35 bg-auth-accent-gold/10"
+          aria-label={t("numberA11y", { number: personalDayNumber })}
+        >
+          <span className="text-[2.75rem] font-extralight tabular-nums leading-none text-auth-text-primary">
+            {personalDayNumber}
+          </span>
+        </div>
+        <p className="mt-6 text-[clamp(1.125rem,3.8vw,1.375rem)] font-medium leading-snug text-auth-text-primary">
+          {t("rhythmHeadline", { number: personalDayNumber })}
         </p>
-        <p className="mt-3 text-lg text-auth-text-primary">
-          {preview.content.title}
-        </p>
+        <p className="mt-2 text-lg text-auth-text-primary">{preview.content.title}</p>
       </div>
 
       <p className="text-sm leading-[1.72] text-auth-text-muted">

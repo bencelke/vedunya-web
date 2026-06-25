@@ -507,17 +507,19 @@
       "eyebrow": "Profile setup",
       "continue": "Continue",
       "back": "Back",
-      "finish": "Go to Today",
+      "finish": "Go to today's guidance",
       "saving": "Saving…",
+      "privacyNote": "Your details stay private and are used only to personalize your practice.",
       "errors": {
         "nameRequired": "Please add your name to continue.",
         "nameTooLong": "Please use a shorter name.",
-        "dobRequired": "Please choose your birth date.",
-        "dobFormat": "Use a valid date format.",
-        "dobInvalid": "That date doesn’t look valid. Check the day and month.",
+        "dobRequired": "Please enter your birth date.",
+        "dobFormat": "Enter a valid birth date.",
+        "dobInvalid": "Enter a valid birth date.",
         "dobFuture": "Birth date cannot be in the future.",
         "dobTooOld": "Please choose a birth year after 1900.",
-        "generic": "We couldn’t save your profile. Please try again."
+        "generic": "Could not save your details. Check your connection and try again.",
+        "saveFailed": "Could not save your details. Check your connection and try again."
       },
       "steps": {
         "welcome": {
@@ -526,28 +528,32 @@
         },
         "name": {
           "title": "What should we call you?",
-          "body": "Use the name you would like to see in the app.",
+          "body": "Enter the name Mystic will use in your daily practice.",
           "fieldLabel": "Name",
-          "placeholder": "First name"
+          "placeholder": "Your name"
         },
         "dob": {
           "title": "Date of birth",
-          "body": "We use your birth date only for your personal numerology rhythm and daily guidance.",
+          "body": "Your birth date is used only for your personal numerology rhythm and daily guidance.",
           "fieldLabel": "Date of birth",
+          "dayLabel": "Day",
+          "monthLabel": "Month",
+          "yearLabel": "Year",
+          "reassurance": "It is not public and is not shown to other users.",
           "helper": "Used for numerology rhythm and daily guidance only. You can update this later in Profile."
         },
         "language": {
-          "title": "Choose your language",
-          "body": "You can change your language later in Profile.",
+          "title": "Practice language",
+          "body": "Choose the language Mystic will use for your guidance and reminders.",
           "english": "English",
-          "russian": "Russian"
+          "russian": "Русский"
         },
         "preview": {
           "title": "Your rhythm today",
-          "body": "This is your personal rhythm for today, based on your birth date. You can update your details anytime in Profile.",
+          "body": "",
           "rhythmHeadline": "Your rhythm today is {number}",
           "numerologyLabel": "Numerology",
-          "focusLabel": "Practical focus",
+          "focusLabel": "Today's focus:",
           "loadError": "We couldn’t load your preview right now. You can still continue — Today will calculate your rhythm after setup.",
           "numberA11y": "Personal day number {number}"
         },

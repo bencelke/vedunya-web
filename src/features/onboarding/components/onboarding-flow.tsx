@@ -4,9 +4,11 @@ import { useCallback, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { ChevronLeft } from "lucide-react";
 
+import { MysticLogo } from "@/components/brand/mystic-logo";
 import { AuthLanguageBar } from "@/features/auth/components/auth-language-bar";
 import { DobInput } from "@/features/onboarding/components/dob-input";
 import { OnboardingErrorMessage } from "@/features/onboarding/components/onboarding-error-message";
+import { OnboardingLanguagePicker } from "@/features/onboarding/components/onboarding-language-picker";
 import { OnboardingNumerologyPreview } from "@/features/onboarding/components/onboarding-numerology-preview";
 import { OnboardingProgress } from "@/features/onboarding/components/onboarding-progress";
 import { OnboardingShell } from "@/features/onboarding/components/onboarding-shell";
@@ -46,6 +48,7 @@ type OnboardingFlowProps = {
 export function OnboardingFlow({ locale, initialProfile }: OnboardingFlowProps) {
   const initialDraft = readOnboardingDraft();
   const t = useTranslations("auth.onboarding");
+  const tAuth = useTranslations("auth");
   const router = useRouter();
   const { user, sessionReady } = useAuth();
   const [step, setStep] = useState(initialDraft.step ?? 0);
@@ -74,6 +77,14 @@ export function OnboardingFlow({ locale, initialProfile }: OnboardingFlowProps) 
     [t],
   );
 
+  const languageOptions = useMemo(
+    () => [
+      { locale: "ru" as const, label: t("steps.language.russian") },
+      { locale: "en" as const, label: t("steps.language.english") },
+    ],
+    [t],
+  );
+
   const persistDraft = useCallback(
     (next: Partial<OnboardingDraft>) => {
       writeOnboardingDraft({
@@ -94,7 +105,7 @@ export function OnboardingFlow({ locale, initialProfile }: OnboardingFlowProps) 
     }
 
     const parsed = onboardingCompleteSchema.safeParse({
-      displayName,
+      displayName: displayName.trim(),
       dateOfBirth,
       language,
     });
@@ -113,7 +124,7 @@ export function OnboardingFlow({ locale, initialProfile }: OnboardingFlowProps) 
       router.replace("/today", { locale: parsed.data.language });
       router.refresh();
     } catch {
-      setErrorKey("generic");
+      setErrorKey("saveFailed");
     } finally {
       setSubmitting(false);
     }
@@ -121,7 +132,9 @@ export function OnboardingFlow({ locale, initialProfile }: OnboardingFlowProps) 
 
   function validateCurrentStep(): boolean {
     if (step === 0) {
-      const parsed = onboardingNameSchema.safeParse({ displayName });
+      const parsed = onboardingNameSchema.safeParse({
+        displayName: displayName.trim(),
+      });
       if (!parsed.success) {
         setErrorKey(mapOnboardingZodIssue(parsed.error.issues[0]));
         return false;
@@ -144,6 +157,11 @@ export function OnboardingFlow({ locale, initialProfile }: OnboardingFlowProps) 
       return;
     }
 
+    if (step === 0) {
+      setDisplayName(displayName.trim());
+      persistDraft({ displayName: displayName.trim() });
+    }
+
     setErrorKey(null);
     const nextStep = Math.min(step + 1, STEP_COUNT - 1);
     setStep(nextStep);
@@ -158,9 +176,11 @@ export function OnboardingFlow({ locale, initialProfile }: OnboardingFlowProps) 
   }
 
   const currentStep = steps[step];
+  const isPreviewStep = step === STEP_COUNT - 1;
 
   return (
     <OnboardingShell
+      variant="profile"
       topBar={
         <div className="flex items-center justify-between gap-3">
           {step > 0 ? (
@@ -181,102 +201,118 @@ export function OnboardingFlow({ locale, initialProfile }: OnboardingFlowProps) 
       progress={
         <OnboardingProgress currentStep={step} totalSteps={STEP_COUNT} />
       }
+      brand={
+        <div className="flex flex-col items-center text-center">
+          <p
+            className="text-[0.6875rem] font-medium uppercase tracking-[0.28em] text-auth-accent-gold"
+            aria-hidden="true"
+          >
+            {tAuth("brandWordmark")}
+          </p>
+          <div className="mt-3">
+            <MysticLogo showWordmark={false} size="md" />
+          </div>
+        </div>
+      }
+      footer={
+        step === 1 ? (
+          <p className="text-[0.6875rem] leading-relaxed tracking-[0.04em] text-auth-text-subtle">
+            {t("privacyNote")}
+          </p>
+        ) : null
+      }
     >
-      <div className="flex flex-1 flex-col">
-        <OnboardingStepCard
-          title={currentStep?.title ?? ""}
-          body={currentStep?.body ?? ""}
-          align="start"
-        >
-          <OnboardingErrorMessage errorKey={errorKey} />
+      <OnboardingStepCard
+        title={currentStep?.title ?? ""}
+        body={currentStep?.body ?? ""}
+        align={isPreviewStep ? "center" : "start"}
+        hideHeader={isPreviewStep}
+      >
+        <OnboardingErrorMessage errorKey={errorKey} />
 
-          {step === 0 ? (
-            <div className="space-y-2">
-              <Label htmlFor="onboarding-name" tone="auth">
-                {t("steps.name.fieldLabel")}
-              </Label>
-              <Input
-                id="onboarding-name"
-                tone="auth"
-                variant="underline"
-                autoComplete="given-name"
-                placeholder={t("steps.name.placeholder")}
-                value={displayName}
-                onChange={(event) => {
-                  setDisplayName(event.target.value);
-                  persistDraft({ displayName: event.target.value });
-                }}
-              />
-            </div>
-          ) : null}
-
-          {step === 1 ? (
-            <DobInput
-              id="onboarding-dob"
-              label={t("steps.dob.fieldLabel")}
-              helper={t("steps.dob.helper")}
-              value={dateOfBirth}
-              onChange={(value) => {
-                setDateOfBirth(value);
-                persistDraft({ dateOfBirth: value });
+        {step === 0 ? (
+          <div className="space-y-2">
+            <Label htmlFor="onboarding-name" tone="auth" className="sr-only">
+              {t("steps.name.fieldLabel")}
+            </Label>
+            <Input
+              id="onboarding-name"
+              tone="auth"
+              variant="underline"
+              autoComplete="given-name"
+              placeholder={t("steps.name.placeholder")}
+              value={displayName}
+              onChange={(event) => {
+                setDisplayName(event.target.value);
+                persistDraft({ displayName: event.target.value });
+              }}
+              onBlur={() => {
+                const trimmed = displayName.trim();
+                if (trimmed !== displayName) {
+                  setDisplayName(trimmed);
+                  persistDraft({ displayName: trimmed });
+                }
               }}
             />
-          ) : null}
+          </div>
+        ) : null}
 
-          {step === 2 ? (
-            <div className="grid grid-cols-2 gap-3">
-              {(["en", "ru"] as SupportedLocale[]).map((option) => (
-                <button
-                  key={option}
-                  type="button"
-                  onClick={() => {
-                    setLanguage(option);
-                    persistDraft({ language: option });
-                  }}
-                  className={`min-h-12 rounded-[var(--radius-pill)] border px-4 text-sm font-medium transition-colors ${
-                    language === option
-                      ? "border-auth-accent-gold bg-auth-accent-gold text-auth-bg"
-                      : "border-auth-border bg-auth-surface-muted text-auth-text-muted hover:text-auth-text-primary"
-                  }`}
-                >
-                  {option === "en"
-                    ? t("steps.language.english")
-                    : t("steps.language.russian")}
-                </button>
-              ))}
-            </div>
-          ) : null}
+        {step === 1 ? (
+          <DobInput
+            key={dateOfBirth || "empty-dob"}
+            id="onboarding-dob"
+            dayLabel={t("steps.dob.dayLabel")}
+            monthLabel={t("steps.dob.monthLabel")}
+            yearLabel={t("steps.dob.yearLabel")}
+            reassurance={t("steps.dob.reassurance")}
+            value={dateOfBirth}
+            onChange={(value) => {
+              setDateOfBirth(value);
+              persistDraft({ dateOfBirth: value });
+            }}
+          />
+        ) : null}
 
-          {step === 3 ? (
-            <OnboardingNumerologyPreview
-              dateOfBirth={dateOfBirth}
-              locale={language}
-            />
-          ) : null}
-        </OnboardingStepCard>
+        {step === 2 ? (
+          <OnboardingLanguagePicker
+            value={language}
+            options={languageOptions}
+            onChange={(option) => {
+              setLanguage(option);
+              persistDraft({ language: option });
+            }}
+          />
+        ) : null}
 
-        <div className="mt-auto flex flex-col gap-3 pt-10">
-          {step < STEP_COUNT - 1 ? (
-            <Button
-              type="button"
-              variant="authPrimary"
-              className="w-full"
-              onClick={goNext}
-            >
-              {t("continue")}
-            </Button>
-          ) : (
-            <Button
-              type="button"
-              variant="authPrimary"
-              className="w-full"
-              disabled={submitting || !sessionReady}
-              onClick={finishOnboarding}
-            >
-              {submitting ? t("saving") : t("finish")}
-            </Button>
-          )}
-        </div>
+        {step === 3 ? (
+          <OnboardingNumerologyPreview
+            dateOfBirth={dateOfBirth}
+            locale={language}
+          />
+        ) : null}
+      </OnboardingStepCard>
+
+      <div className="mt-auto flex flex-col gap-3 pt-10">
+        {step < STEP_COUNT - 1 ? (
+          <Button
+            type="button"
+            variant="authPrimary"
+            className="w-full"
+            onClick={goNext}
+          >
+            {t("continue")}
+          </Button>
+        ) : (
+          <Button
+            type="button"
+            variant="authPrimary"
+            className="w-full"
+            disabled={submitting || !sessionReady}
+            onClick={finishOnboarding}
+          >
+            {submitting ? t("saving") : t("finish")}
+          </Button>
+        )}
       </div>
     </OnboardingShell>
   );

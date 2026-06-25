@@ -170,7 +170,7 @@ describe("Phase 18B — signed-in onboarding steps", () => {
       "src/features/onboarding/components/onboarding-flow.tsx",
     );
     expect(flow).toContain("await completeUserProfile");
-    expect(flow).toMatch(/catch \{[\s\S]*setErrorKey\("generic"\)/);
+    expect(flow).toMatch(/catch \{[\s\S]*setErrorKey\("saveFailed"\)/);
     expect(flow).toMatch(
       /await completeUserProfile[\s\S]*router\.replace\("\/today"/,
     );

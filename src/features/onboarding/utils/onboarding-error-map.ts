@@ -8,6 +8,7 @@ export type OnboardingErrorKey =
   | "dobInvalid"
   | "dobFuture"
   | "dobTooOld"
+  | "saveFailed"
   | "generic";
 
 export function mapOnboardingZodIssue(issue: ZodIssue | undefined): OnboardingErrorKey {

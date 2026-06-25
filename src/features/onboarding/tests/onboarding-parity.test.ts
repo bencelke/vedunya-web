@@ -96,11 +96,12 @@ describe("Onboarding DOB handling", () => {
     expect(parsed.getDate()).toBe(15);
   });
 
-  it("uses date-only parts in DobInput constraints", () => {
+  it("uses three-field DOB input for stable mobile entry", () => {
     const source = readSource("src/features/onboarding/components/dob-input.tsx");
-    expect(source).toContain('type="date"');
-    expect(source).toContain('min="1900-01-01"');
-    expect(source).toContain("max={maxDate}");
+    expect(source).toContain("dayLabel");
+    expect(source).toContain("monthLabel");
+    expect(source).toContain("yearLabel");
+    expect(source).toContain("combineIsoParts");
   });
 
   it("persists draft in session storage for refresh resilience", () => {
@@ -170,16 +171,20 @@ describe("Onboarding profile completion contract", () => {
 describe("Onboarding localization", () => {
   it("includes polished EN onboarding copy", () => {
     expect(en.auth.onboarding.steps.name.title).toContain("call you");
+    expect(en.auth.onboarding.steps.name.body).toContain("daily practice");
     expect(en.auth.onboarding.steps.dob.title).toBe("Date of birth");
-    expect(en.auth.onboarding.steps.dob.body).toContain("numerology rhythm");
+    expect(en.auth.onboarding.steps.dob.reassurance).toBeTruthy();
+    expect(en.auth.onboarding.steps.language.title).toBe("Practice language");
     expect(en.auth.onboarding.steps.preview.rhythmHeadline).toContain("{number}");
     expect(en.auth.onboarding.errors.nameRequired).toBeTruthy();
   });
 
   it("includes polished RU onboarding copy", () => {
     expect(ru.auth.onboarding.steps.name.title).toContain("обращаться");
+    expect(ru.auth.onboarding.steps.name.body).toContain("ежедневной практике");
     expect(ru.auth.onboarding.steps.dob.title).toBe("Дата рождения");
-    expect(ru.auth.onboarding.steps.dob.body).toContain("нумерологического ритма");
+    expect(ru.auth.onboarding.steps.dob.reassurance).toBeTruthy();
+    expect(ru.auth.onboarding.steps.language.title).toBe("Язык практики");
     expect(ru.auth.onboarding.steps.preview.rhythmHeadline).toContain("{number}");
     expect(ru.auth.onboarding.errors.dobFuture).toBeTruthy();
   });
