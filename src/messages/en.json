@@ -308,6 +308,8 @@
       "description": "Your date of birth is used for your personal day rhythm.",
       "name": "Name",
       "birthDate": "Birth date",
+      "missingBirthDate": "Add your birth date to unlock your personal numerology rhythm.",
+      "addBirthDate": "Add birth date",
       "edit": "Edit details",
       "save": "Save changes",
       "saving": "Saving…",
@@ -529,10 +531,10 @@
           "placeholder": "First name"
         },
         "dob": {
-          "title": "When were you born?",
-          "body": "Your birth date helps Mystic calculate your daily rhythm. We use it only for numerology and personalization — calmly and respectfully.",
+          "title": "Date of birth",
+          "body": "We use your birth date only for your personal numerology rhythm and daily guidance.",
           "fieldLabel": "Date of birth",
-          "helper": "Used for numerology rhythm and personalization only. You can update this later in Profile."
+          "helper": "Used for numerology rhythm and daily guidance only. You can update this later in Profile."
         },
         "language": {
           "title": "Choose your language",
@@ -541,8 +543,9 @@
           "russian": "Russian"
         },
         "preview": {
-          "title": "Your day, in one calm read",
+          "title": "Your rhythm today",
           "body": "This is your personal rhythm for today, based on your birth date. You can update your details anytime in Profile.",
+          "rhythmHeadline": "Your rhythm today is {number}",
           "numerologyLabel": "Numerology",
           "focusLabel": "Practical focus",
           "loadError": "We couldn’t load your preview right now. You can still continue — Today will calculate your rhythm after setup.",

@@ -95,7 +95,9 @@ describe("Phase 18D — OAuth providers and redirect", () => {
 describe("Phase 18D — post-login routing", () => {
   it("routes complete profile to Today and incomplete to onboarding", () => {
     const source = readSource("src/features/auth/components/auth-screen.tsx");
-    expect(source).toContain('complete ? "/today" : "/onboarding"');
+    expect(source).toContain('? "/today"');
+    expect(source).toContain('"/onboarding"');
+    expect(source).toContain("fetchProfileComplete");
     expect(source).toContain("redirectStartedRef");
   });
 

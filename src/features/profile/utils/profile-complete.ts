@@ -1,6 +1,7 @@
 import type { SupportedProfileLocale } from "@/features/profile/constants";
 import { formatDateOfBirth } from "@/features/profile/schemas/onboarding-schema";
 import type { ProfileSnapshot } from "@/features/profile/types/user-profile";
+import { isShellDisplayName } from "@/features/profile/utils/profile-merge";
 
 export type ProfileCompletionFields = {
   displayName: string | null | undefined;
@@ -16,7 +17,7 @@ export function deriveProfileComplete(
   fields: ProfileCompletionFields,
 ): boolean {
   const name = fields.displayName?.trim() ?? "";
-  if (!name) {
+  if (!name || isShellDisplayName(name)) {
     return false;
   }
 

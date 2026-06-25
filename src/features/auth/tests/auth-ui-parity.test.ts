@@ -160,7 +160,9 @@ describe("Auth UI parity — navigation scope", () => {
 describe("Auth UI parity — redirect behavior preserved", () => {
   it("redirects completed profiles to Today and incomplete to onboarding", () => {
     const source = readSource("src/features/auth/components/auth-screen.tsx");
-    expect(source).toContain('complete ? "/today" : "/onboarding"');
-    expect(source).toContain("/api/auth/profile-status");
+    expect(source).toContain('? "/today"');
+    expect(source).toContain('"/onboarding"');
+    expect(source).toContain("fetchProfileComplete");
+    expect(source).toContain("handleRegisterSuccess");
   });
 });

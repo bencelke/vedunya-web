@@ -170,15 +170,17 @@ describe("Onboarding profile completion contract", () => {
 describe("Onboarding localization", () => {
   it("includes polished EN onboarding copy", () => {
     expect(en.auth.onboarding.steps.name.title).toContain("call you");
-    expect(en.auth.onboarding.steps.dob.body).toContain("daily rhythm");
-    expect(en.auth.onboarding.steps.preview.title).toContain("calm read");
+    expect(en.auth.onboarding.steps.dob.title).toBe("Date of birth");
+    expect(en.auth.onboarding.steps.dob.body).toContain("numerology rhythm");
+    expect(en.auth.onboarding.steps.preview.rhythmHeadline).toContain("{number}");
     expect(en.auth.onboarding.errors.nameRequired).toBeTruthy();
   });
 
   it("includes polished RU onboarding copy", () => {
     expect(ru.auth.onboarding.steps.name.title).toContain("обращаться");
-    expect(ru.auth.onboarding.steps.dob.body).toContain("нумерологии");
-    expect(ru.auth.onboarding.steps.preview.title).toContain("спокойном");
+    expect(ru.auth.onboarding.steps.dob.title).toBe("Дата рождения");
+    expect(ru.auth.onboarding.steps.dob.body).toContain("нумерологического ритма");
+    expect(ru.auth.onboarding.steps.preview.rhythmHeadline).toContain("{number}");
     expect(ru.auth.onboarding.errors.dobFuture).toBeTruthy();
   });
 });

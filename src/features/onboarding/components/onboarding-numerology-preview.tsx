@@ -44,18 +44,12 @@ export function OnboardingNumerologyPreview({
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-xs font-medium uppercase tracking-[0.14em] text-auth-text-subtle">
-          {t("numerologyLabel")}
-        </p>
-        <p
-          className="mt-3 text-6xl font-extralight tabular-nums text-auth-text-primary"
-          aria-label={t("numberA11y", {
+        <p className="text-lg font-medium text-auth-text-primary">
+          {t("rhythmHeadline", {
             number: preview.calculation.personalDayNumber,
           })}
-        >
-          {preview.calculation.personalDayNumber}
         </p>
-        <p className="mt-2 text-lg text-auth-text-primary">
+        <p className="mt-3 text-lg text-auth-text-primary">
           {preview.content.title}
         </p>
       </div>

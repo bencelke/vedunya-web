@@ -148,7 +148,10 @@ describe("Phase 16B — signed-in redirects", () => {
 
   it("preserves auth redirect after login", () => {
     const screen = readSource("src/features/auth/components/auth-screen.tsx");
-    expect(screen).toContain('complete ? "/today" : "/onboarding"');
+    expect(screen).toContain('? "/today"');
+    expect(screen).toContain('"/onboarding"');
+    expect(screen).toContain("fetchProfileComplete");
+    expect(screen).toContain("handleRegisterSuccess");
   });
 });
 

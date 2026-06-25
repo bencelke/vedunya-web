@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Link } from "@/i18n/navigation";
 import { ProfileSectionCard } from "@/features/profile/components/profile-section-card";
 import {
   formatDateOfBirth,
@@ -77,6 +78,19 @@ export function ProfilePersonalDetailsSection({
                 : "—"
             }
           />
+          {!profile.dateOfBirth ? (
+            <div className="rounded-[var(--radius-card)] border border-border-subtle bg-surface-primary/60 px-4 py-3">
+              <p className="text-sm leading-relaxed text-text-muted">
+                {t("missingBirthDate")}
+              </p>
+              <Link
+                href="/onboarding"
+                className="mt-3 inline-flex min-h-12 w-full items-center justify-center rounded-[var(--radius-pill)] border border-border-subtle bg-surface-elevated px-5 text-sm font-medium text-text-primary transition-colors hover:bg-accent-violet-soft"
+              >
+                {t("addBirthDate")}
+              </Link>
+            </div>
+          ) : null}
           <Button
             variant="secondary"
             className="w-full"

@@ -13,7 +13,6 @@ import { OnboardingShell } from "@/features/onboarding/components/onboarding-she
 import { OnboardingStepCard } from "@/features/onboarding/components/onboarding-step-card";
 import {
   clearOnboardingDraft,
-  defaultDateOfBirthString,
   readOnboardingDraft,
   writeOnboardingDraft,
   type OnboardingDraft,
@@ -57,7 +56,7 @@ export function OnboardingFlow({ locale, initialProfile }: OnboardingFlowProps) 
     initialDraft.dateOfBirth ??
       (initialProfile?.dateOfBirth
         ? formatDateOfBirth(initialProfile.dateOfBirth)
-        : defaultDateOfBirthString()),
+        : ""),
   );
   const [language, setLanguage] = useState<SupportedLocale>(
     initialDraft.language ?? initialProfile?.language ?? locale,

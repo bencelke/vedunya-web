@@ -1,4 +1,5 @@
 import { getProfileSnapshot } from "@/features/profile/services/profile-repository";
+import { isProfileComplete } from "@/features/profile/utils/profile-complete";
 import { verifySessionCookie } from "@/lib/auth/session";
 
 export async function GET(): Promise<Response> {
@@ -17,6 +18,6 @@ export async function GET(): Promise<Response> {
 
   return Response.json({
     authenticated: true,
-    profileComplete: profile.profileComplete === true,
+    profileComplete: isProfileComplete(profile),
   });
 }

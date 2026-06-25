@@ -4,13 +4,13 @@ import { Timestamp } from "firebase-admin/firestore";
 
 import {
   DEFAULT_DISPLAY_NAME,
-  SHELL_DISPLAY_NAME,
   USER_PRIVATE_COLLECTION,
   USERS_COLLECTION,
   type SupportedProfileLocale,
 } from "@/features/profile/constants";
 import type { ProfileSnapshot } from "@/features/profile/types/user-profile";
 import { deriveProfileComplete } from "@/features/profile/utils/profile-complete";
+import { isShellDisplayName } from "@/features/profile/utils/profile-merge";
 import { getFirebaseAdminFirestore } from "@/lib/firebase-admin/firestore";
 
 function timestampToDate(value: unknown): Date | null {
@@ -61,13 +61,8 @@ export async function getProfileSnapshot(
 
   const displayNameRaw =
     typeof publicData.displayName === "string" ? publicData.displayName : null;
-
-  const displayName =
-    displayNameRaw &&
-    displayNameRaw.trim().length > 0 &&
-    displayNameRaw !== SHELL_DISPLAY_NAME
-      ? displayNameRaw.trim()
-      : displayNameRaw?.trim() || null;
+  const trimmedName = displayNameRaw?.trim() || null;
+  const displayName = isShellDisplayName(trimmedName) ? null : trimmedName;
 
   const language = readLanguage(publicData.language);
   const derivedProfileComplete = deriveProfileComplete({

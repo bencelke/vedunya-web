@@ -38,21 +38,27 @@ export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
   const [mode, setMode] = useState<AuthMode>(initialMode);
   const redirectStartedRef = useRef(false);
 
-  const redirectAfterAuth = useCallback(async () => {
-    if (redirectStartedRef.current) {
-      return;
-    }
+  const redirectAfterAuth = useCallback(
+    async (forceOnboarding = false) => {
+      if (redirectStartedRef.current) {
+        return;
+      }
 
-    redirectStartedRef.current = true;
+      redirectStartedRef.current = true;
 
-    const complete = await fetchProfileComplete();
-    const destination = complete ? "/today" : "/onboarding";
+      const destination = forceOnboarding
+        ? "/onboarding"
+        : (await fetchProfileComplete())
+          ? "/today"
+          : "/onboarding";
 
-    if (pathname !== destination) {
-      router.replace(destination);
-      router.refresh();
-    }
-  }, [pathname, router]);
+      if (pathname !== destination) {
+        router.replace(destination);
+        router.refresh();
+      }
+    },
+    [pathname, router],
+  );
 
   useEffect(() => {
     if (!loading && user && sessionReady) {
@@ -62,6 +68,10 @@ export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
 
   function handleAuthSuccess() {
     void redirectAfterAuth();
+  }
+
+  function handleRegisterSuccess() {
+    void redirectAfterAuth(true);
   }
 
   const topBar = <AuthLanguageBar tone="auth" />;
@@ -121,7 +131,7 @@ export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
         {isLogin ? (
           <LoginForm locale={locale} onSuccess={handleAuthSuccess} />
         ) : (
-          <RegisterForm locale={locale} onSuccess={handleAuthSuccess} />
+          <RegisterForm locale={locale} onSuccess={handleRegisterSuccess} />
         )}
 
         <div className="space-y-4 border-t border-auth-border/80 pt-6 text-center text-sm">
