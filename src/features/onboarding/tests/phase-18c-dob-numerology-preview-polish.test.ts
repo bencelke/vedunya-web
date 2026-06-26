@@ -39,13 +39,11 @@ describe("Phase 18C — DOB screen polish", () => {
     expect(en.auth.onboarding.steps.dob.dayLabel).toBe("Day");
   });
 
-  it("uses three native select DOB controls for mobile reliability", () => {
+  it("uses tap-to-open picker DOB controls for mobile reliability", () => {
     const dob = readSource("src/features/onboarding/components/dob-input.tsx");
-    expect(dob).toContain("dayLabel");
-    expect(dob).toContain("monthLabel");
-    expect(dob).toContain("yearLabel");
-    expect(dob).toContain("<select");
-    expect(dob).toContain("dob-picker-grid");
+    expect(dob).toContain("DobDateField");
+    expect(dob).toContain("DobPickerSheet");
+    expect(dob).toContain("fieldPlaceholder");
   });
 
   it("maps DOB validation to friendly errors", () => {
@@ -123,15 +121,15 @@ describe("Phase 18C — shell and routing", () => {
     expect(shell).toContain('variant === "profile"');
     expect(flow).toContain('variant="profile"');
     expect(shell).toContain("mystic-profile-onboarding-panel");
-    expect(flow).toContain("MysticLogo");
+    expect(flow).toContain("MysticBrandHeader");
     expect(flow).toContain("brandWordmark");
   });
 
   it("routes to Today after successful save", () => {
     const flow = readSource("src/features/onboarding/components/onboarding-flow.tsx");
     expect(flow).toContain('router.replace("/today"');
-    expect(en.auth.onboarding.finish).toContain("guidance");
-    expect(ru.auth.onboarding.finish).toContain("подсказке");
+    expect(en.auth.onboarding.compact.finish).toContain("Today");
+    expect(ru.auth.onboarding.compact.finish).toContain("Сегодня");
   });
 
   it("avoids redirect loops on onboarding and today", () => {

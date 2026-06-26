@@ -1,29 +1,25 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { ChevronLeft } from "lucide-react";
 
-import { MysticLogo } from "@/components/brand/mystic-logo";
+import { MysticBrandHeader } from "@/components/brand/mystic-brand-header";
 import { AuthLanguageBar } from "@/features/auth/components/auth-language-bar";
 import { DobInput } from "@/features/onboarding/components/dob-input";
 import { OnboardingErrorMessage } from "@/features/onboarding/components/onboarding-error-message";
 import { OnboardingLanguagePicker } from "@/features/onboarding/components/onboarding-language-picker";
-import { OnboardingNumerologyPreview } from "@/features/onboarding/components/onboarding-numerology-preview";
-import { OnboardingProgress } from "@/features/onboarding/components/onboarding-progress";
 import { OnboardingShell } from "@/features/onboarding/components/onboarding-shell";
 import { OnboardingStepCard } from "@/features/onboarding/components/onboarding-step-card";
 import {
   clearOnboardingDraft,
   readOnboardingDraft,
   writeOnboardingDraft,
-  type OnboardingDraft,
 } from "@/features/onboarding/utils/onboarding-draft";
 import {
   clearPreAuthOnboardingDraft,
   readPreAuthOnboardingDraft,
 } from "@/features/onboarding/services/preauth-onboarding-draft";
-import { resolveOnboardingStep } from "@/features/onboarding/utils/resolve-onboarding-step";
+import { resolveProfileCompletionState } from "@/features/onboarding/utils/resolve-profile-completion";
 import {
   mapOnboardingZodIssue,
   type OnboardingErrorKey,
@@ -31,19 +27,11 @@ import {
 import { useRouter } from "@/i18n/navigation";
 import { useAuth } from "@/features/auth/hooks/use-auth";
 import { completeUserProfile } from "@/features/profile/services/profile-bootstrap-service";
-import {
-  formatDateOfBirth,
-  onboardingCompleteSchema,
-  onboardingDobSchema,
-  onboardingNameSchema,
-} from "@/features/profile/schemas/onboarding-schema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { SupportedLocale } from "@/config/app-config";
 import type { ProfileSnapshot } from "@/features/profile/types/user-profile";
-
-const STEP_COUNT = 4;
 
 type OnboardingFlowProps = {
   locale: SupportedLocale;
@@ -53,42 +41,64 @@ type OnboardingFlowProps = {
 export function OnboardingFlow({ locale, initialProfile }: OnboardingFlowProps) {
   const initialDraft = readOnboardingDraft();
   const preAuthDraft = readPreAuthOnboardingDraft();
-  const prefilledFromPreAuth =
-    !initialProfile?.dateOfBirth && Boolean(preAuthDraft.dateOfBirth);
   const t = useTranslations("auth.onboarding");
   const tAuth = useTranslations("auth");
   const router = useRouter();
   const { user, sessionReady } = useAuth();
-  const [step, setStep] = useState(() =>
-    resolveOnboardingStep(initialDraft, initialProfile),
-  );
-  const [displayName, setDisplayName] = useState(
-    initialDraft.displayName ?? initialProfile?.displayName ?? "",
-  );
-  const [dateOfBirth, setDateOfBirth] = useState(() => {
-    if (initialProfile?.dateOfBirth) {
-      return formatDateOfBirth(initialProfile.dateOfBirth);
-    }
+  const autoCompleteAttemptedRef = useRef(false);
 
-    return initialDraft.dateOfBirth ?? preAuthDraft.dateOfBirth ?? "";
-  });
-  const [language, setLanguage] = useState<SupportedLocale>(
-    initialDraft.language ??
-      initialProfile?.language ??
-      preAuthDraft.locale ??
+  const initialCompletion = useMemo(
+    () =>
+      resolveProfileCompletionState({
+        profile: initialProfile,
+        draftDisplayName: initialDraft.displayName,
+        draftDateOfBirth: initialDraft.dateOfBirth,
+        draftLanguage: initialDraft.language,
+        preAuthDateOfBirth: preAuthDraft.dateOfBirth,
+        preAuthLocale: preAuthDraft.locale,
+        firebaseDisplayName: user?.displayName,
+        routeLocale: locale,
+      }),
+    [
+      initialDraft.dateOfBirth,
+      initialDraft.displayName,
+      initialDraft.language,
+      initialProfile,
       locale,
+      preAuthDraft.dateOfBirth,
+      preAuthDraft.locale,
+      user?.displayName,
+    ],
   );
+
+  const [displayName, setDisplayName] = useState(initialCompletion.displayName);
+  const [dateOfBirth, setDateOfBirth] = useState(initialCompletion.dateOfBirth);
+  const [language, setLanguage] = useState<SupportedLocale>(initialCompletion.language);
   const [submitting, setSubmitting] = useState(false);
   const [errorKey, setErrorKey] = useState<OnboardingErrorKey | null>(null);
 
-  const steps = useMemo(
-    () => [
-      { title: t("steps.name.title"), body: t("steps.name.body") },
-      { title: t("steps.dob.title"), body: t("steps.dob.body") },
-      { title: t("steps.language.title"), body: t("steps.language.body") },
-      { title: t("steps.preview.title"), body: t("steps.preview.body") },
+  const missing = useMemo(
+    () =>
+      resolveProfileCompletionState({
+        profile: initialProfile,
+        draftDisplayName: displayName,
+        draftDateOfBirth: dateOfBirth,
+        draftLanguage: language,
+        preAuthDateOfBirth: preAuthDraft.dateOfBirth,
+        preAuthLocale: preAuthDraft.locale,
+        firebaseDisplayName: user?.displayName,
+        routeLocale: locale,
+      }).missing,
+    [
+      dateOfBirth,
+      displayName,
+      initialProfile,
+      language,
+      locale,
+      preAuthDraft.dateOfBirth,
+      preAuthDraft.locale,
+      user?.displayName,
     ],
-    [t],
   );
 
   const languageOptions = useMemo(
@@ -99,155 +109,145 @@ export function OnboardingFlow({ locale, initialProfile }: OnboardingFlowProps) 
     [t],
   );
 
-  const persistDraft = useCallback(
-    (next: Partial<OnboardingDraft>) => {
-      writeOnboardingDraft({
-        step,
-        displayName,
-        dateOfBirth,
-        language,
-        ...next,
-      });
+  const finishOnboarding = useCallback(
+    async (input = resolveProfileCompletionState({
+      profile: initialProfile,
+      draftDisplayName: displayName,
+      draftDateOfBirth: dateOfBirth,
+      draftLanguage: language,
+      preAuthDateOfBirth: preAuthDraft.dateOfBirth,
+      preAuthLocale: preAuthDraft.locale,
+      firebaseDisplayName: user?.displayName,
+      routeLocale: locale,
+    }).parsed) => {
+      if (!user || !input) {
+        setErrorKey("generic");
+        return;
+      }
+
+      setSubmitting(true);
+      setErrorKey(null);
+
+      try {
+        await completeUserProfile(user, input);
+        clearOnboardingDraft();
+        clearPreAuthOnboardingDraft();
+        router.replace("/today", { locale: input.language });
+        router.refresh();
+      } catch {
+        setErrorKey("saveFailed");
+      } finally {
+        setSubmitting(false);
+      }
     },
-    [dateOfBirth, displayName, language, step],
+    [
+      dateOfBirth,
+      displayName,
+      initialProfile,
+      language,
+      locale,
+      preAuthDraft.dateOfBirth,
+      preAuthDraft.locale,
+      router,
+      user,
+    ],
   );
 
-  async function finishOnboarding() {
-    if (!user) {
-      setErrorKey("generic");
+  useEffect(() => {
+    if (!user || !sessionReady || autoCompleteAttemptedRef.current || submitting) {
       return;
     }
 
-    const parsed = onboardingCompleteSchema.safeParse({
-      displayName: displayName.trim(),
-      dateOfBirth,
-      language,
+    const state = resolveProfileCompletionState({
+      profile: initialProfile,
+      draftDisplayName: displayName,
+      draftDateOfBirth: dateOfBirth,
+      draftLanguage: language,
+      preAuthDateOfBirth: preAuthDraft.dateOfBirth,
+      preAuthLocale: preAuthDraft.locale,
+      firebaseDisplayName: user.displayName,
+      routeLocale: locale,
     });
 
-    if (!parsed.success) {
-      setErrorKey(mapOnboardingZodIssue(parsed.error.issues[0]));
+    if (!state.canAutoComplete || !state.parsed) {
       return;
     }
 
-    setSubmitting(true);
-    setErrorKey(null);
+    autoCompleteAttemptedRef.current = true;
+    queueMicrotask(() => {
+      void finishOnboarding(state.parsed);
+    });
+  }, [
+    dateOfBirth,
+    displayName,
+    finishOnboarding,
+    initialProfile,
+    language,
+    locale,
+    preAuthDraft.dateOfBirth,
+    preAuthDraft.locale,
+    sessionReady,
+    submitting,
+    user,
+  ]);
 
-    try {
-      await completeUserProfile(user, parsed.data);
-      clearOnboardingDraft();
-      clearPreAuthOnboardingDraft();
-      router.replace("/today", { locale: parsed.data.language });
-      router.refresh();
-    } catch {
-      setErrorKey("saveFailed");
-    } finally {
-      setSubmitting(false);
-    }
-  }
+  function handleSubmit() {
+    const state = resolveProfileCompletionState({
+      profile: initialProfile,
+      draftDisplayName: displayName,
+      draftDateOfBirth: dateOfBirth,
+      draftLanguage: language,
+      preAuthDateOfBirth: preAuthDraft.dateOfBirth,
+      preAuthLocale: preAuthDraft.locale,
+      firebaseDisplayName: user?.displayName,
+      routeLocale: locale,
+    });
 
-  function validateCurrentStep(): boolean {
-    if (step === 0) {
-      const parsed = onboardingNameSchema.safeParse({
-        displayName: displayName.trim(),
-      });
-      if (!parsed.success) {
-        setErrorKey(mapOnboardingZodIssue(parsed.error.issues[0]));
-        return false;
-      }
-    }
-
-    if (step === 1) {
-      const parsed = onboardingDobSchema.safeParse({ dateOfBirth });
-      if (!parsed.success) {
-        setErrorKey(mapOnboardingZodIssue(parsed.error.issues[0]));
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  function goNext() {
-    if (!validateCurrentStep()) {
+    if (!state.parsed) {
+      const issue =
+        !displayName.trim() ? "nameRequired" :
+        !dateOfBirth ? "dobRequired" :
+        "generic";
+      setErrorKey(mapOnboardingZodIssue({ message: issue, code: "custom", path: [] }));
       return;
     }
 
-    if (step === 0) {
-      setDisplayName(displayName.trim());
-      persistDraft({ displayName: displayName.trim() });
-    }
-
-    setErrorKey(null);
-    const nextStep = Math.min(step + 1, STEP_COUNT - 1);
-    setStep(nextStep);
-    persistDraft({ step: nextStep });
+    void finishOnboarding(state.parsed);
   }
 
-  function goBack() {
-    setErrorKey(null);
-    const nextStep = Math.max(step - 1, 0);
-    setStep(nextStep);
-    persistDraft({ step: nextStep });
-  }
-
-  const currentStep = steps[step];
-  const isPreviewStep = step === STEP_COUNT - 1;
+  const showName = missing.includes("displayName");
+  const showDob = missing.includes("dateOfBirth");
+  const showLanguage = missing.includes("language");
+  const prefilledFromPreAuth =
+    showDob && !initialProfile?.dateOfBirth && Boolean(preAuthDraft.dateOfBirth);
 
   return (
     <OnboardingShell
       variant="profile"
       topBar={
-        <div className="flex items-center justify-between gap-3">
-          {step > 0 ? (
-            <button
-              type="button"
-              onClick={goBack}
-              className="inline-flex min-h-10 min-w-10 items-center justify-center text-auth-text-primary"
-              aria-label={t("back")}
-            >
-              <ChevronLeft className="h-5 w-5" strokeWidth={1.75} aria-hidden="true" />
-            </button>
-          ) : (
-            <span className="min-w-10" aria-hidden="true" />
-          )}
+        <div className="flex items-center justify-end gap-3">
           <AuthLanguageBar tone="auth" />
         </div>
       }
-      progress={
-        <OnboardingProgress currentStep={step} totalSteps={STEP_COUNT} />
-      }
       brand={
-        <div className="flex flex-col items-center text-center">
-          <p
-            className="text-[0.6875rem] font-medium uppercase tracking-[0.28em] text-auth-accent-gold"
-            aria-hidden="true"
-          >
-            {tAuth("brandWordmark")}
-          </p>
-          <div className="mt-3">
-            <MysticLogo showWordmark={false} size="md" />
-          </div>
-        </div>
+        <MysticBrandHeader wordmark={tAuth("brandWordmark")} size="md" />
       }
       footer={
-        step === 1 ? (
-          <p className="text-[0.6875rem] leading-relaxed tracking-[0.04em] text-auth-text-subtle">
-            {t("privacyNote")}
-          </p>
-        ) : null
+        <p className="text-[0.6875rem] leading-relaxed tracking-[0.04em] text-auth-text-subtle">
+          {t("privacyNote")}
+        </p>
       }
     >
       <OnboardingStepCard
-        title={currentStep?.title ?? ""}
-        body={currentStep?.body ?? ""}
-        align={isPreviewStep ? "center" : "start"}
-        hideHeader={isPreviewStep}
+        title={t("compact.title")}
+        body={t("compact.body")}
+        align="start"
       >
         <OnboardingErrorMessage errorKey={errorKey} />
 
-        {step === 0 ? (
+        {showName ? (
           <div className="space-y-2">
-            <Label htmlFor="onboarding-name" tone="auth" className="sr-only">
+            <Label htmlFor="onboarding-name" tone="auth">
               {t("steps.name.fieldLabel")}
             </Label>
             <Input
@@ -259,79 +259,79 @@ export function OnboardingFlow({ locale, initialProfile }: OnboardingFlowProps) 
               value={displayName}
               onChange={(event) => {
                 setDisplayName(event.target.value);
-                persistDraft({ displayName: event.target.value });
-              }}
-              onBlur={() => {
-                const trimmed = displayName.trim();
-                if (trimmed !== displayName) {
-                  setDisplayName(trimmed);
-                  persistDraft({ displayName: trimmed });
-                }
+                writeOnboardingDraft({
+                  step: 0,
+                  displayName: event.target.value,
+                  dateOfBirth,
+                  language,
+                });
               }}
             />
           </div>
         ) : null}
 
-        {step === 1 ? (
-          <DobInput
-            key={dateOfBirth || "empty-dob"}
-            id="onboarding-dob"
-            dayLabel={t("steps.dob.dayLabel")}
-            monthLabel={t("steps.dob.monthLabel")}
-            yearLabel={t("steps.dob.yearLabel")}
-            reassurance={
-              prefilledFromPreAuth
-                ? t("steps.dob.confirmNote")
-                : t("steps.dob.reassurance")
-            }
-            value={dateOfBirth}
-            onChange={(value) => {
-              setDateOfBirth(value);
-              persistDraft({ dateOfBirth: value });
-            }}
-          />
+        {showDob ? (
+          <div className={showName ? "mt-6" : undefined}>
+            <DobInput
+              key={dateOfBirth || "empty-dob"}
+              id="onboarding-dob"
+              fieldLabel={t("steps.dob.fieldLabel")}
+              fieldPlaceholder={t("steps.dob.fieldPlaceholder")}
+              dayLabel={t("steps.dob.dayLabel")}
+              monthLabel={t("steps.dob.monthLabel")}
+              yearLabel={t("steps.dob.yearLabel")}
+              sheetTitle={t("steps.dob.fieldLabel")}
+              sheetCancelLabel={t("steps.dob.sheetCancel")}
+              sheetDoneLabel={t("continue")}
+              reassurance={
+                prefilledFromPreAuth
+                  ? t("steps.dob.confirmNote")
+                  : t("steps.dob.reassurance")
+              }
+              value={dateOfBirth}
+              onChange={(value) => {
+                setDateOfBirth(value);
+                writeOnboardingDraft({
+                  step: 0,
+                  displayName,
+                  dateOfBirth: value,
+                  language,
+                });
+              }}
+              variant="premium"
+            />
+          </div>
         ) : null}
 
-        {step === 2 ? (
-          <OnboardingLanguagePicker
-            value={language}
-            options={languageOptions}
-            onChange={(option) => {
-              setLanguage(option);
-              persistDraft({ language: option });
-            }}
-          />
-        ) : null}
-
-        {step === 3 ? (
-          <OnboardingNumerologyPreview
-            dateOfBirth={dateOfBirth}
-            locale={language}
-          />
+        {showLanguage ? (
+          <div className={showName || showDob ? "mt-6" : undefined}>
+            <OnboardingLanguagePicker
+              value={language}
+              options={languageOptions}
+              onChange={(option) => {
+                setLanguage(option);
+                writeOnboardingDraft({
+                  step: 0,
+                  displayName,
+                  dateOfBirth,
+                  language: option,
+                });
+              }}
+            />
+          </div>
         ) : null}
       </OnboardingStepCard>
 
       <div className="mt-auto flex flex-col gap-3 pt-10">
-        {step < STEP_COUNT - 1 ? (
-          <Button
-            type="button"
-            variant="authPrimary"
-            className="w-full"
-            onClick={goNext}
-          >
-            {t("continue")}
-          </Button>
-        ) : (
-          <Button
-            type="button"
-            variant="authPrimary"
-            className="w-full"
-            disabled={submitting || !sessionReady}
-            onClick={finishOnboarding}
-          >
-            {submitting ? t("saving") : t("finish")}
-          </Button>
-        )}
+        <Button
+          type="button"
+          variant="authPrimary"
+          className="w-full"
+          disabled={submitting || !sessionReady}
+          onClick={handleSubmit}
+        >
+          {submitting ? t("saving") : t("compact.finish")}
+        </Button>
       </div>
     </OnboardingShell>
   );

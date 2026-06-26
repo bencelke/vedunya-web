@@ -56,9 +56,13 @@ export function IntroPreAuthDob({
         <DobInput
           key={initialDateOfBirth || "empty-preauth-dob"}
           id="intro-preauth-dob"
+          fieldPlaceholder={t("fieldPlaceholder")}
           dayLabel={t("dayLabel")}
           monthLabel={t("monthLabel")}
           yearLabel={t("yearLabel")}
+          sheetTitle={t("title")}
+          sheetCancelLabel={t("sheetCancel")}
+          sheetDoneLabel={t("sheetDone")}
           reassurance={t("reassurance")}
           value={dateOfBirth}
           onChange={setDateOfBirth}

@@ -45,8 +45,8 @@ describe("Phase 9.4 — auth and onboarding branding", () => {
     expect(source).toContain('t("brandWordmark")');
     expect(source).toContain("showWordmark={false}");
     expect(source).not.toContain(">Mystic<");
-    expect(en.auth.brandWordmark).toBe("Vedunya Maria");
-    expect(ru.auth.brandWordmark).toBe("Vedunya Maria");
+    expect(en.auth.brandWordmark).toBe("MYSTIC by Vedunya Maria");
+    expect(ru.auth.brandWordmark).toBe("MYSTIC by Vedunya Maria");
   });
 
   it("keeps Mystic by Vedunya Maria in auth headlines, not standalone MYSTIC", () => {
@@ -55,14 +55,17 @@ describe("Phase 9.4 — auth and onboarding branding", () => {
     expect(en.auth.welcomeHeadline).not.toMatch(/^MYSTIC$/);
   });
 
-  it("shows Vedunya Maria wordmark on intro onboarding", () => {
+  it("shows MYSTIC by Vedunya Maria wordmark on intro onboarding", () => {
     const flow = readSource(
       "src/features/onboarding/components/intro-onboarding-flow.tsx",
     );
     expect(flow).toContain('useTranslations("auth")');
     expect(flow).toContain('tAuth("brandWordmark")');
-    expect(flow).toContain("mystic-auth-wordmark");
-    expect(flow).toContain("showWordmark={false}");
+    expect(flow).toContain("IntroBrandHeader");
+    const brandHeader = readSource(
+      "src/features/onboarding/components/intro-brand-header.tsx",
+    );
+    expect(brandHeader).toContain("MysticBrandHeader");
     expect(flow).not.toContain(">MYSTIC<");
   });
 });
@@ -87,7 +90,7 @@ describe("Phase 9.4 — PWA and product naming", () => {
 });
 
 describe("Phase 9.4 — logo asset pairing", () => {
-  it("pairs makosh emblem with Vedunya Maria copy in auth and intro onboarding", () => {
+  it("pairs makosh emblem with MYSTIC by Vedunya Maria copy in auth and intro onboarding", () => {
     const authHeader = readSource(
       "src/features/auth/components/auth-brand-header.tsx",
     );
@@ -95,8 +98,8 @@ describe("Phase 9.4 — logo asset pairing", () => {
       "src/features/onboarding/components/intro-onboarding-flow.tsx",
     );
     const mysticLogo = readSource("src/components/brand/mystic-logo.tsx");
-    expect(authHeader).toContain("MysticLogo");
-    expect(introOnboarding).toContain("MysticLogo");
+    expect(authHeader).toContain("MysticBrandHeader");
+    expect(introOnboarding).toContain("IntroBrandHeader");
     expect(mysticLogo).toContain("makoshEmblem");
   });
 

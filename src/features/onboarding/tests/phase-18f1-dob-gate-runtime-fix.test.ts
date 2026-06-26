@@ -126,19 +126,16 @@ describe("Phase 18F1 — route protection and onboarding", () => {
     expect(repo).not.toContain("timestampToDate(publicData.dob)");
   });
 
-  it("includes DOB step after Name", () => {
+  it("includes DOB in compact profile completion when missing", () => {
     const flow = readSource("src/features/onboarding/components/onboarding-flow.tsx");
-    expect(flow).toMatch(/step === 0[\s\S]*onboarding-name/);
-    expect(flow).toMatch(/step === 1[\s\S]*DobInput/);
+    expect(flow).toContain("DobInput");
+    expect(flow).toContain('missing.includes("dateOfBirth")');
   });
 
-  it("requires DOB before numerology preview", () => {
-    const flow = readSource("src/features/onboarding/components/onboarding-flow.tsx");
-    expect(flow).toMatch(/step === 3[\s\S]*OnboardingNumerologyPreview/);
-    const resolveStep = readSource(
-      "src/features/onboarding/utils/resolve-onboarding-step.ts",
-    );
-    expect(resolveStep).toContain("onboardingDobSchema");
+  it("requires DOB before numerology preview in rhythm screen", () => {
+    const rhythm = readSource("src/features/onboarding/components/intro-rhythm-screen.tsx");
+    expect(rhythm).toContain("onboardingDobSchema");
+    expect(rhythm).toContain("OnboardingNumerologyPreview");
   });
 });
 

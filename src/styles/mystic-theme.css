@@ -276,11 +276,275 @@
   }
 
   .mystic-auth-wordmark {
-    font-size: 1.5rem;
-    font-weight: 400;
-    letter-spacing: 0.32em;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
+    color: var(--auth-accent-gold);
+  }
+
+  .mystic-brand-wordmark {
+    max-width: 18rem;
+    margin-inline: auto;
+    line-height: 1.35;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  .mystic-brand-header {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .auth-screen--register .auth-mode-title {
+    color: color-mix(in srgb, var(--auth-gold) 72%, var(--auth-text-primary));
+  }
+
+  .auth-screen--register .mystic-login-panel {
+    border-color: color-mix(in srgb, var(--auth-gold) 24%, var(--auth-border));
+  }
+
+  .social-auth-button {
+    min-height: 3rem;
+    border-color: color-mix(in srgb, var(--auth-border) 92%, transparent);
+    background: color-mix(in srgb, var(--auth-surface-muted) 68%, var(--auth-surface));
+    font-weight: 500;
+  }
+
+  .social-auth-button:hover:not(:disabled) {
+    border-color: color-mix(in srgb, var(--auth-gold) 36%, var(--auth-border));
+    background: color-mix(in srgb, var(--auth-surface-muted) 82%, var(--auth-surface));
+  }
+
+  .dob-wheel-picker {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .dob-date-field {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .dob-picker-sheet-root {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 0;
+  }
+
+  @media (min-width: 768px) {
+    .dob-picker-sheet-root {
+      align-items: center;
+      padding: 1.5rem;
+    }
+  }
+
+  .dob-picker-sheet-backdrop {
+    position: absolute;
+    inset: 0;
+    border: none;
+    background: rgb(0 0 0 / 0.45);
+  }
+
+  .dob-picker-sheet-panel {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 28rem);
+    max-height: min(88vh, 34rem);
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--auth-border) 90%, transparent);
+    border-radius: 1.25rem 1.25rem 0 0;
+    background: var(--auth-surface);
+    box-shadow: 0 -18px 48px rgb(0 0 0 / 0.28);
+  }
+
+  @media (min-width: 768px) {
+    .dob-picker-sheet-panel {
+      border-radius: 1.25rem;
+      box-shadow: 0 24px 64px rgb(0 0 0 / 0.28);
+    }
+  }
+
+  .dob-picker-sheet-handle {
+    width: 2.5rem;
+    height: 0.25rem;
+    margin: 0.75rem auto 0;
+    border-radius: 999px;
+    background: var(--auth-border);
+  }
+
+  .dob-picker-sheet-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem 0.75rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--auth-border) 80%, transparent);
+  }
+
+  .dob-picker-sheet-title {
+    grid-column: 2;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--auth-text-primary);
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .dob-picker-sheet-action {
+    border: none;
+    background: transparent;
+    padding: 0.25rem 0;
+    font-size: 0.875rem;
+    color: var(--auth-text-muted);
+  }
+
+  .dob-picker-sheet-action--primary {
+    justify-self: end;
+    font-weight: 600;
     color: var(--auth-gold);
+  }
+
+  .dob-picker-sheet-header .dob-picker-sheet-action:first-child {
+    justify-self: start;
+  }
+
+  .dob-picker-sheet-body {
+    padding: 1rem 1rem 1.25rem;
+    padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
+  }
+
+  .dob-wheel-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+    width: 100%;
+    min-width: 0;
+  }
+
+  @media (min-width: 380px) {
+    .dob-wheel-grid {
+      gap: 0.75rem;
+    }
+  }
+
+  .dob-wheel-column {
+    min-width: 0;
+  }
+
+  .dob-wheel-viewport {
+    position: relative;
+    height: calc(44px * 5);
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    border: 1px solid color-mix(in srgb, var(--auth-border) 88%, transparent);
+    background: color-mix(in srgb, var(--auth-surface-muted) 55%, var(--auth-surface));
+  }
+
+  .dob-wheel-highlight {
+    position: absolute;
+    inset-inline: 0.35rem;
+    top: 50%;
+    z-index: 1;
+    height: 44px;
+    transform: translateY(-50%);
+    border-radius: calc(var(--radius-md) - 2px);
+    border: 1px solid color-mix(in srgb, var(--auth-gold) 42%, transparent);
+    background: color-mix(in srgb, var(--auth-gold) 10%, transparent);
+    pointer-events: none;
+  }
+
+  .dob-wheel-fade {
+    position: absolute;
+    inset-inline: 0;
+    z-index: 2;
+    height: calc(44px * 2);
+    pointer-events: none;
+  }
+
+  .dob-wheel-fade-top {
+    top: 0;
+    background: linear-gradient(
+      to bottom,
+      var(--auth-surface) 8%,
+      color-mix(in srgb, var(--auth-surface) 72%, transparent) 55%,
+      transparent
+    );
+  }
+
+  .dob-wheel-fade-bottom {
+    bottom: 0;
+    background: linear-gradient(
+      to top,
+      var(--auth-surface) 8%,
+      color-mix(in srgb, var(--auth-surface) 72%, transparent) 55%,
+      transparent
+    );
+  }
+
+  .dob-wheel-column-scroll {
+    position: relative;
+    z-index: 0;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-snap-type: y mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    overscroll-behavior: contain;
+  }
+
+  .dob-wheel-column-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .dob-wheel-item {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    scroll-snap-align: center;
+    border: none;
+    background: transparent;
+    padding-inline: 0.25rem;
+    font-size: 1rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--auth-text-primary);
+    transition:
+      color 160ms ease,
+      opacity 160ms ease,
+      transform 160ms ease;
+  }
+
+  .dob-wheel-item--selected {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--auth-gold);
+    transform: scale(1.02);
+  }
+
+  .dob-wheel-item--near {
+    opacity: 0.62;
+    font-size: 0.9375rem;
+    font-weight: 500;
+  }
+
+  .dob-wheel-item--far {
+    opacity: 0.34;
+    font-size: 0.875rem;
+    font-weight: 400;
+  }
+
+  .auth-screen[data-auth-mode="register"] .auth-provider-buttons {
+    margin-top: 0.125rem;
   }
 
   .mystic-auth-divider {

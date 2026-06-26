@@ -52,16 +52,14 @@ describe("Phase 18D — login screen providers", () => {
 
   it("shows Google when Firebase is configured", () => {
     const source = buttons();
-    expect(source).toContain("GoogleSignInButton");
-    expect(source).toContain("firebaseConfigured");
+    expect(source).toContain("SocialAuthButton");
+    expect(source).toContain("getSocialAuthProviderAvailability");
   });
 
   it("gates Apple and Facebook behind env flags", () => {
     const source = buttons();
-    expect(source).toContain("isAppleLoginEnabled");
-    expect(source).toContain("isFacebookLoginEnabled");
-    expect(source).toContain("appleEnabled ?");
-    expect(source).toContain("facebookEnabled ?");
+    expect(source).toContain("getSocialAuthProviderAvailability");
+    expect(source).toContain("SOCIAL_AUTH_PROVIDER_ORDER");
   });
 });
 
@@ -117,12 +115,10 @@ describe("Phase 18D — login UI polish", () => {
   });
 
   it("includes provider icons", () => {
-    const apple = readSource("src/features/auth/components/apple-sign-in-button.tsx");
-    const facebook = readSource(
-      "src/features/auth/components/facebook-sign-in-button.tsx",
-    );
-    expect(apple).toContain("AppleProviderIcon");
-    expect(facebook).toContain("FacebookProviderIcon");
+    const social = readSource("src/features/auth/components/social-auth-button.tsx");
+    expect(social).toContain("AppleProviderIcon");
+    expect(social).toContain("FacebookProviderIcon");
+    expect(social).toContain("mysticAssets.brand.googleIcon");
   });
 });
 
@@ -143,16 +139,23 @@ describe("Phase 18D — friendly errors", () => {
 describe("Phase 18D — RU/EN button labels", () => {
   it("renders EN social labels", () => {
     expect(en.auth.google.continue).toBe("Continue with Google");
+    expect(en.auth.google.registerContinue).toBe("Create account with Google");
     expect(en.auth.apple.continue).toBe("Continue with Apple");
+    expect(en.auth.apple.registerContinue).toBe("Create account with Apple");
     expect(en.auth.facebook.continue).toBe("Continue with Facebook");
+    expect(en.auth.facebook.registerContinue).toBe("Create account with Facebook");
     expect(en.auth.loginTitle).toBe("Sign in");
+    expect(en.auth.registerTitle).toBe("Create account");
     expect(en.auth.errors.popupClosed).toBe("Sign-in was cancelled.");
   });
 
   it("renders RU social labels", () => {
     expect(ru.auth.google.continue).toBe("Продолжить с Google");
+    expect(ru.auth.google.registerContinue).toBe("Создать аккаунт через Google");
     expect(ru.auth.apple.continue).toBe("Продолжить с Apple");
+    expect(ru.auth.apple.registerContinue).toBe("Создать аккаунт через Apple");
     expect(ru.auth.facebook.continue).toBe("Продолжить с Facebook");
+    expect(ru.auth.facebook.registerContinue).toBe("Создать аккаунт через Facebook");
     expect(ru.auth.loginTitle).toBe("Войти");
     expect(ru.auth.errors.popupClosed).toBe("Вход отменён.");
   });

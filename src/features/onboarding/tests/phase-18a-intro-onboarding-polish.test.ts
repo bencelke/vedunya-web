@@ -12,30 +12,18 @@ function readSource(relativePath: string): string {
 }
 
 describe("Phase 18A — RU intro copy", () => {
-  it("uses improved page copy", () => {
-    expect(ru.auth.intro.pages.guidance.body).toContain("Каждое утро");
-    expect(ru.auth.intro.pages.guidance.body).toContain("число дня");
-    expect(ru.auth.intro.pages.universe.body).toContain("без спешки");
-    expect(ru.auth.intro.pages.reminders.body).toContain("Мягкие сообщения");
-    expect(ru.auth.intro.pages.courses.body).toContain("глубже");
-  });
-
-  it("uses Начать on page 1", () => {
-    expect(ru.auth.intro.start).toBe("Начать");
+  it("uses improved three-screen copy", () => {
+    expect(ru.auth.intro.screens.guidance.body).toContain("лунный ритм");
+    expect(ru.auth.intro.screens.practice.body).toContain("намерением");
+    expect(ru.auth.intro.rhythm.title).toBe("Дата рождения");
   });
 });
 
 describe("Phase 18A — EN intro copy", () => {
-  it("uses improved page copy", () => {
-    expect(en.auth.intro.pages.guidance.body).toContain("morning anchor");
-    expect(en.auth.intro.pages.guidance.body).toContain("number of the day");
-    expect(en.auth.intro.pages.universe.body).toContain("without pressure");
-    expect(en.auth.intro.pages.reminders.body).toContain("Gentle messages");
-    expect(en.auth.intro.pages.courses.body).toContain("go deeper");
-  });
-
-  it("uses Start on page 1", () => {
-    expect(en.auth.intro.start).toBe("Start");
+  it("uses improved three-screen copy", () => {
+    expect(en.auth.intro.screens.guidance.body).toContain("moon rhythm");
+    expect(en.auth.intro.screens.practice.body).toContain("intention");
+    expect(en.auth.intro.rhythm.title).toBe("Birth date");
   });
 });
 
@@ -43,10 +31,10 @@ describe("Phase 18A — intro layout and navigation", () => {
   const flow = () =>
     readSource("src/features/onboarding/components/intro-onboarding-flow.tsx");
 
-  it("renders progress dots for intro, glimpse, DOB, and preview", () => {
+  it("renders progress dots for three premium intro screens", () => {
     const source = flow();
     expect(source).toContain("OnboardingProgress");
-    expect(source).toContain("INTRO_STEP_COUNT = INTRO_PAGE_COUNT + 3");
+    expect(source).toContain("INTRO_STEP_COUNT = 3");
     expect(source).toContain("totalSteps={INTRO_STEP_COUNT}");
   });
 
@@ -56,16 +44,14 @@ describe("Phase 18A — intro layout and navigation", () => {
     expect(source).toContain('aria-label={t("back")}');
   });
 
-  it("shows Create account and Log in on pre-login preview step", () => {
+  it("shows Create account and Log in on rhythm screen", () => {
     const source = flow();
-    expect(source).toContain("IntroPreAuthNumerologyPreview");
-    expect(source).toContain('finishIntro("login")');
-    expect(source).toContain('finishIntro("register")');
-    const preview = readSource(
-      "src/features/onboarding/components/intro-preauth-numerology-preview.tsx",
+    expect(source).toContain("IntroRhythmScreen");
+    const rhythm = readSource(
+      "src/features/onboarding/components/intro-rhythm-screen.tsx",
     );
-    expect(preview).toContain("{t(\"createAccount\")}");
-    expect(preview).toContain("{t(\"login\")}");
+    expect(rhythm).toContain("{t(\"createAccount\")}");
+    expect(rhythm).toContain("{t(\"login\")}");
   });
 
   it("routes Create account to register mode", () => {

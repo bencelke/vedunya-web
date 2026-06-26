@@ -91,9 +91,9 @@ describe("Phase 17 — signed-in onboarding flow", () => {
       "utf8",
     );
 
-    expect(flow).toContain("STEP_COUNT = 4");
-    expect(flow).toContain("OnboardingNumerologyPreview");
-    expect(flow).toContain("steps.preview");
+    expect(flow).toContain("compact.title");
+    expect(flow).toContain("DobInput");
+    expect(flow).toContain("resolveProfileCompletionState");
     expect(flow).not.toContain("steps.welcome");
     expect(flow).not.toContain("OnboardingReview");
   });

@@ -15,10 +15,14 @@ type LoginPageProps = {
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: LoginPageProps): Promise<Metadata> {
   const { locale } = await params;
+  const { mode } = await searchParams;
   const t = await getTranslations({ locale, namespace: "auth" });
-  return { title: t("loginMetaTitle") };
+  return {
+    title: mode === "register" ? t("registerMetaTitle") : t("loginMetaTitle"),
+  };
 }
 
 export default async function LoginPage({

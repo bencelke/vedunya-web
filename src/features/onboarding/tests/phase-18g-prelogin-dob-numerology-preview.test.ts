@@ -17,14 +17,11 @@ function readSource(relativePath: string): string {
 }
 
 describe("Phase 18G — signed-out DOB before login", () => {
-  it("shows DOB page after first glimpse", () => {
+  it("shows DOB on rhythm screen before auth", () => {
     const flow = readSource("src/features/onboarding/components/intro-onboarding-flow.tsx");
-    expect(flow).toContain("IntroFirstGlimpse");
-    expect(flow).toContain("IntroPreAuthDob");
-    expect(flow).toContain("IntroPreAuthNumerologyPreview");
-    expect(flow).toContain("DOB_STEP");
-    expect(flow).toContain("PREVIEW_STEP");
-    expect(flow).toContain("INTRO_STEP_COUNT = INTRO_PAGE_COUNT + 3");
+    expect(flow).toContain("INTRO_STEP_COUNT = 3");
+    expect(flow).toContain("IntroRhythmScreen");
+    expect(flow).not.toContain("IntroPreAuthDob");
   });
 
   it("stores pre-auth DOB draft in sessionStorage", () => {
@@ -57,12 +54,13 @@ describe("Phase 18G — DOB picker", () => {
     });
   });
 
-  it("uses native select controls with overflow-safe layout", () => {
+  it("uses tap-to-open picker with overflow-safe layout", () => {
     const dob = readSource("src/features/onboarding/components/dob-input.tsx");
-    expect(dob).toContain("<select");
-    expect(dob).toContain("dob-picker-grid");
-    expect(dob).toContain("min-w-0");
-    expect(dob).toContain("grid-cols-3");
+    expect(dob).toContain("DobPickerSheet");
+    expect(dob).toContain("DobDateField");
+    const theme = readSource("src/styles/mystic-theme.css");
+    expect(theme).toContain("min-width: 0");
+    expect(theme).toContain(".dob-picker-sheet-panel");
   });
 
   it("blocks invalid dates", () => {
@@ -107,11 +105,10 @@ describe("Phase 18G — pre-login numerology preview", () => {
     expect(en.auth.intro.preview.login).toBe("Log in");
   });
 
-  it("keeps first glimpse non-personalized with Continue CTA", () => {
-    const glimpse = readSource("src/features/onboarding/components/intro-first-glimpse.tsx");
-    expect(glimpse).toContain("getFirstGlimpseNote");
-    expect(glimpse).toContain("onContinue");
-    expect(glimpse).not.toContain("onRegister");
+  it("shows personal preview on rhythm screen after valid DOB", () => {
+    const rhythm = readSource("src/features/onboarding/components/intro-rhythm-screen.tsx");
+    expect(rhythm).toContain("OnboardingNumerologyPreview");
+    expect(rhythm).toContain("isValidDob");
   });
 });
 
@@ -125,9 +122,11 @@ describe("Phase 18G — post-login profile handoff", () => {
   });
 
   it("does not overwrite existing profile DOB with draft", () => {
-    const flow = readSource("src/features/onboarding/components/onboarding-flow.tsx");
-    expect(flow).toMatch(
-      /if \(initialProfile\?\.dateOfBirth\)[\s\S]*formatDateOfBirth\(initialProfile\.dateOfBirth\)/,
+    const resolver = readSource(
+      "src/features/onboarding/utils/resolve-profile-completion.ts",
+    );
+    expect(resolver).toMatch(
+      /input\.profile\?\.dateOfBirth[\s\S]*formatDateOfBirth\(input\.profile\.dateOfBirth\)/,
     );
   });
 });

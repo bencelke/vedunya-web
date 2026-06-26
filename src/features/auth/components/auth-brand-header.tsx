@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 
+import { MysticBrandHeader } from "@/components/brand/mystic-brand-header";
 import { MysticLogo } from "@/components/brand/mystic-logo";
 import { cn } from "@/lib/utils";
 
@@ -21,18 +22,16 @@ export function AuthBrandHeader({
   const t = useTranslations("auth");
 
   return (
-    <header className={cn("space-y-6 text-center", className)}>
+    <header className={cn("auth-brand-header space-y-5 text-center", className)}>
       {showWordmark ? (
-        <p className="mystic-auth-wordmark" aria-hidden="true">
-          {t("brandWordmark")}
-        </p>
-      ) : null}
-      <MysticLogo className="mx-auto" showWordmark={false} size="lg" />
-      <div className="mx-auto max-w-[22rem] space-y-4">
-        <h1 className="text-[clamp(1.625rem,5vw,1.875rem)] font-normal leading-[1.1] tracking-[-0.02em] text-auth-text-primary">
+        <MysticBrandHeader wordmark={t("brandWordmark")} size="md" />
+      ) : (
+        <MysticLogo className="mx-auto" showWordmark={false} size="md" />
+      )}
+      <div className="mx-auto max-w-[22rem] space-y-3">
+        <h1 className="auth-mode-title text-[1.375rem] font-medium leading-[1.2] tracking-[-0.01em] text-auth-text-primary sm:text-2xl">
           {headline}
         </h1>
-        <div className="mystic-auth-divider" aria-hidden="true" />
         <p className="text-sm leading-[1.66] text-auth-text-muted">{subtitle}</p>
       </div>
     </header>

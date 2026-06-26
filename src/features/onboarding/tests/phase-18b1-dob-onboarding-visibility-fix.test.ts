@@ -76,12 +76,12 @@ describe("Phase 18B1 — DOB step cannot be skipped", () => {
     ).toBe(3);
   });
 
-  it("renders DOB step after Name in onboarding flow", () => {
+  it("renders DOB in compact profile completion when missing", () => {
     const flow = readSource("src/features/onboarding/components/onboarding-flow.tsx");
-    expect(flow).toContain("resolveOnboardingStep");
+    expect(flow).toContain("resolveProfileCompletionState");
     expect(flow).toContain("steps.dob");
     expect(flow).toContain("DobInput");
-    expect(flow).toMatch(/step === 1[\s\S]*DobInput/);
+    expect(flow).toContain('missing.includes("dateOfBirth")');
   });
 });
 

@@ -382,12 +382,13 @@
   },
   "auth": {
     "loginMetaTitle": "Sign in",
-    "brandWordmark": "Vedunya Maria",
+    "registerMetaTitle": "Create account",
+    "brandWordmark": "MYSTIC by Vedunya Maria",
     "welcomeHeadline": "Welcome to Mystic by Vedunya Maria",
     "loginTitle": "Sign in",
-    "registerTitle": "Create your account",
+    "registerTitle": "Create account",
     "loginDescription": "Sign in to continue your daily practice.",
-    "registerDescription": "Create an account to keep your profile, language, and daily rhythm in sync across devices.",
+    "registerDescription": "Save your birth date and continue your personal rhythm.",
     "divider": "or",
     "switchToRegister": "Create account",
     "switchToLogin": "Already have an account? Sign in",
@@ -396,10 +397,12 @@
     "legalNotice": "By continuing you agree to the Mystic terms and privacy policy for Vedunya Maria.",
     "apple": {
       "continue": "Continue with Apple",
+      "registerContinue": "Create account with Apple",
       "submitting": "Opening Apple…"
     },
     "facebook": {
       "continue": "Continue with Facebook",
+      "registerContinue": "Create account with Facebook",
       "submitting": "Opening Facebook…"
     },
     "loading": "Checking your session…",
@@ -423,6 +426,7 @@
     },
     "google": {
       "continue": "Continue with Google",
+      "registerContinue": "Create account with Google",
       "submitting": "Opening Google…"
     },
     "forgotPassword": {
@@ -461,8 +465,53 @@
       "start": "Start",
       "login": "Log in",
       "createAccount": "Create account",
-      "skipToLogin": "Already explored Mystic? Log in",
-      "brandNote": "Mystic by Vedunya Maria — calm daily practice.",
+      "alreadyHaveAccount": "Already have an account? Log in",
+      "skipToLogin": "Already have an account? Log in",
+      "brandNote": "MYSTIC by Vedunya Maria — calm daily practice.",
+      "screens": {
+        "guidance": {
+          "title": "Daily guidance for your rhythm",
+          "body": "A calm morning anchor with moon rhythm, a daily rune, your personal number, and one clear step.",
+          "chips": {
+            "moon": "Moon rhythm",
+            "rune": "Daily rune",
+            "number": "Personal number"
+          }
+        },
+        "practice": {
+          "title": "A calm practice that stays with you",
+          "body": "Mystic brings your daily rhythm together with intention, gentle reminders, and deeper learning when you are ready.",
+          "features": {
+            "universe": {
+              "title": "Request to the Universe",
+              "body": "Return to one intention daily without pressure or noise."
+            },
+            "reminders": {
+              "title": "Gentle reminders",
+              "body": "Stay connected to your practice with calm nudges."
+            },
+            "courses": {
+              "title": "Courses and deeper practice",
+              "body": "Go deeper with runes and spiritual practice at your own pace."
+            }
+          }
+        }
+      },
+      "rhythm": {
+        "title": "Birth date",
+        "body": "Choose your birth date to reveal today's personal rhythm.",
+        "fieldPlaceholder": "Select your birth date",
+        "dayLabel": "Day",
+        "monthLabel": "Month",
+        "yearLabel": "Year",
+        "reassurance": "Stored only on this device until you create an account or log in.",
+        "pickerHint": "Choose your birth date to reveal today's personal rhythm.",
+        "sheetTitle": "Birth date",
+        "sheetCancel": "Cancel",
+        "sheetDone": "Done",
+        "createAccount": "Create account",
+        "login": "Log in"
+      },
       "pages": {
         "guidance": {
           "title": "Daily guidance",
@@ -513,9 +562,12 @@
       "dob": {
         "title": "Date of birth",
         "body": "Mystic will calculate your personal numerology rhythm and show your first personal guide.\n\nFor now, this stays only on this device. After sign-in, you can continue your practice.",
+        "fieldPlaceholder": "Select your birth date",
         "dayLabel": "Day",
         "monthLabel": "Month",
         "yearLabel": "Year",
+        "sheetCancel": "Cancel",
+        "sheetDone": "Done",
         "reassurance": "This date stays on this device until you create an account or log in.",
         "submit": "Show my rhythm"
       },
@@ -536,6 +588,11 @@
       "finish": "Go to today's guidance",
       "saving": "Saving…",
       "privacyNote": "Your details stay private and are used only to personalize your practice.",
+      "compact": {
+        "title": "Almost ready",
+        "body": "Confirm the last details for your daily practice.",
+        "finish": "Continue to Today"
+      },
       "errors": {
         "nameRequired": "Please add your name to continue.",
         "nameTooLong": "Please use a shorter name.",
@@ -562,9 +619,11 @@
           "title": "Date of birth",
           "body": "Your birth date is used only for your personal numerology rhythm and daily guidance.",
           "fieldLabel": "Date of birth",
+          "fieldPlaceholder": "Select your birth date",
           "dayLabel": "Day",
           "monthLabel": "Month",
           "yearLabel": "Year",
+          "sheetCancel": "Cancel",
           "reassurance": "It is not public and is not shown to other users.",
           "confirmNote": "Confirm your birth date below or edit it before saving to your account.",
           "helper": "Used for numerology rhythm and daily guidance only. You can update this later in Profile."

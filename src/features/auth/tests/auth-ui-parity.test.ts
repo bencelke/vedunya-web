@@ -54,22 +54,21 @@ describe("Auth UI parity — routes and shell", () => {
 });
 
 describe("Auth UI parity — providers", () => {
-  it("wires Google button to existing loginWithGoogle handler", () => {
+  it("wires Google button to social auth handler", () => {
     const source = readSource(
-      "src/features/auth/components/google-sign-in-button.tsx",
+      "src/features/auth/components/social-auth-button.tsx",
     );
     expect(source).toContain("loginWithGoogle");
     expect(source).toContain("completeSocialSignIn");
-    expect(source).toContain("mysticAssets.brand.googleIcon");
   });
 
   it("groups provider buttons with flag-gated Apple and Facebook", () => {
     const source = readSource(
       "src/features/auth/components/auth-provider-buttons.tsx",
     );
-    expect(source).toContain("GoogleSignInButton");
-    expect(source).toContain("isAppleLoginEnabled");
-    expect(source).toContain("isFacebookLoginEnabled");
+    expect(source).toContain("SocialAuthButton");
+    expect(source).toContain("getSocialAuthProviderAvailability");
+    expect(source).toContain("SOCIAL_AUTH_PROVIDER_ORDER");
   });
 });
 
@@ -78,10 +77,8 @@ describe("Auth UI parity — branding and inputs", () => {
     const source = readSource(
       "src/features/auth/components/auth-brand-header.tsx",
     );
-    expect(source).toContain("MysticLogo");
+    expect(source).toContain("MysticBrandHeader");
     expect(source).toContain('t("brandWordmark")');
-    expect(source).toContain("mystic-auth-wordmark");
-    expect(source).toContain("mystic-auth-divider");
     expect(source).not.toContain(">Mystic<");
   });
 
@@ -132,17 +129,20 @@ describe("Auth UI parity — error mapping", () => {
 
 describe("Auth UI parity — localization", () => {
   it("includes polished EN auth copy", () => {
-    expect(en.auth.brandWordmark).toBe("Vedunya Maria");
+    expect(en.auth.brandWordmark).toBe("MYSTIC by Vedunya Maria");
     expect(en.auth.welcomeHeadline).toContain("Mystic by Vedunya Maria");
     expect(en.auth.loginDescription).toContain("daily practice");
+    expect(en.auth.registerDescription).toContain("birth date");
     expect(en.auth.google.continue).toBe("Continue with Google");
+    expect(en.auth.google.registerContinue).toBe("Create account with Google");
     expect(en.auth.apple.continue).toBe("Continue with Apple");
   });
 
   it("includes polished RU auth copy", () => {
-    expect(ru.auth.brandWordmark).toBe("Vedunya Maria");
+    expect(ru.auth.brandWordmark).toBe("MYSTIC by Vedunya Maria");
     expect(ru.auth.welcomeHeadline).toContain("Mystic by Vedunya Maria");
     expect(ru.auth.loginDescription).toContain("ежедневную практику");
+    expect(ru.auth.registerDescription).toContain("дату рождения");
     expect(ru.auth.google.continue).toBe("Продолжить с Google");
     expect(ru.auth.apple.continue).toBe("Продолжить с Apple");
   });

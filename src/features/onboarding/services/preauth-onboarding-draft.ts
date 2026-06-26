@@ -7,6 +7,7 @@ export type PreAuthOnboardingDraft = {
   dateOfBirth?: string;
   locale?: SupportedLocale;
   createdAt?: string;
+  introCompleted?: boolean;
 };
 
 function isSupportedLocale(value: unknown): value is SupportedLocale {
@@ -40,6 +41,10 @@ export function readPreAuthOnboardingDraft(): PreAuthOnboardingDraft {
 
     if (typeof parsed.createdAt === "string") {
       draft.createdAt = parsed.createdAt;
+    }
+
+    if (parsed.introCompleted === true) {
+      draft.introCompleted = true;
     }
 
     return draft;

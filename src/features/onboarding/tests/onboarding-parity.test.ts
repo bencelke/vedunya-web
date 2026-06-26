@@ -46,18 +46,16 @@ describe("Onboarding UI parity — shell and navigation", () => {
 });
 
 describe("Onboarding flow steps", () => {
-  it("implements four-step name → preview flow for signed-in users", () => {
+  it("implements compact signed-in profile completion", () => {
     const source = readSource(
       "src/features/onboarding/components/onboarding-flow.tsx",
     );
-    expect(source).toContain("STEP_COUNT = 4");
+    expect(source).toContain("compact.title");
     expect(source).toContain("steps.name");
     expect(source).toContain("steps.dob");
     expect(source).toContain("steps.language");
-    expect(source).toContain("steps.preview");
-    expect(source).toContain("OnboardingNumerologyPreview");
-    expect(source).not.toContain("steps.welcome");
-    expect(source).not.toContain("OnboardingReview");
+    expect(source).not.toContain("steps.preview");
+    expect(source).not.toContain("STEP_COUNT = 4");
   });
 
   it("validates name on step 1", () => {
@@ -96,12 +94,10 @@ describe("Onboarding DOB handling", () => {
     expect(parsed.getDate()).toBe(15);
   });
 
-  it("uses three native select DOB controls for stable mobile entry", () => {
+  it("uses wheel picker DOB controls for stable mobile entry", () => {
     const source = readSource("src/features/onboarding/components/dob-input.tsx");
-    expect(source).toContain("dayLabel");
-    expect(source).toContain("monthLabel");
-    expect(source).toContain("yearLabel");
-    expect(source).toContain("<select");
+    expect(source).toContain("DobDateField");
+    expect(source).toContain("DobPickerSheet");
     const utils = readSource("src/features/onboarding/utils/dob-input-utils.ts");
     expect(utils).toContain("combineIsoParts");
   });

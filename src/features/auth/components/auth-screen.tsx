@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 
 import { AuthBrandHeader } from "@/features/auth/components/auth-brand-header";
@@ -11,6 +11,7 @@ import { LoginForm } from "@/features/auth/components/login-form";
 import { RegisterForm } from "@/features/auth/components/register-form";
 import { useAuth } from "@/features/auth/hooks/use-auth";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
+import { useSearchParams } from "next/navigation";
 import type { ProfileStatusResponse } from "@/features/profile/utils/resolve-profile-status";
 import type { SupportedLocale } from "@/config/app-config";
 
@@ -42,11 +43,26 @@ export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
   const t = useTranslations("auth");
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { configured, adminConfigured, loading, user, sessionReady } = useAuth();
-  const [mode, setMode] = useState<AuthMode>(initialMode);
+  const mode: AuthMode =
+    searchParams.get("mode") === "register" ? "register" : initialMode;
   const redirectStartedRef = useRef(false);
   const pendingRedirectRef = useRef<"login" | "register" | null>(null);
   const hadUserOnMountRef = useRef<boolean | null>(null);
+
+  const setAuthMode = useCallback(
+    (nextMode: AuthMode) => {
+      router.replace(nextMode === "register" ? "/login?mode=register" : "/login");
+    },
+    [router],
+  );
+
+  useEffect(() => {
+    if (!loading && hadUserOnMountRef.current === null) {
+      hadUserOnMountRef.current = Boolean(user);
+    }
+  }, [loading, user]);
 
   const redirectAfterAuth = useCallback(
     async (forceOnboarding = false) => {
@@ -70,12 +86,6 @@ export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
     },
     [pathname, router],
   );
-
-  useEffect(() => {
-    if (!loading && hadUserOnMountRef.current === null) {
-      hadUserOnMountRef.current = Boolean(user);
-    }
-  }, [loading, user]);
 
   useEffect(() => {
     if (!loading && user && sessionReady) {
@@ -145,7 +155,10 @@ export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
 
   return (
     <AuthShell topBar={topBar} layout="login">
-      <div className="space-y-7">
+      <div
+        className={isLogin ? "auth-screen auth-screen--login space-y-7" : "auth-screen auth-screen--register space-y-7"}
+        data-auth-mode={mode}
+      >
         <AuthBrandHeader
           headline={isLogin ? t("loginTitle") : t("registerTitle")}
           subtitle={isLogin ? t("loginDescription") : t("registerDescription")}
@@ -153,8 +166,9 @@ export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
 
         <AuthProviderButtons
           locale={locale}
+          mode={mode}
           firebaseConfigured={configured}
-          onSuccess={handleAuthSuccess}
+          onSuccess={isLogin ? handleAuthSuccess : handleRegisterSuccess}
         />
 
         <div className="flex items-center gap-3">
@@ -174,7 +188,7 @@ export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
         <div className="space-y-4 border-t border-auth-border/80 pt-6 text-center text-sm">
           <button
             type="button"
-            onClick={() => setMode(isLogin ? "register" : "login")}
+            onClick={() => setAuthMode(isLogin ? "register" : "login")}
             className="font-medium tracking-[0.01em] text-auth-text-muted transition-colors hover:text-auth-text-primary"
           >
             {isLogin ? t("switchToRegister") : t("switchToLogin")}

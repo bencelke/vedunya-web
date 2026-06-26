@@ -96,7 +96,7 @@ describe("Phase 16B — white auth screen", () => {
     const providers = readSource(
       "src/features/auth/components/auth-provider-buttons.tsx",
     );
-    expect(providers).toContain("GoogleSignInButton");
+    expect(providers).toContain("SocialAuthButton");
   });
 
   it("hides Apple and Facebook unless env flags are true", () => {
@@ -107,8 +107,8 @@ describe("Phase 16B — white auth screen", () => {
     const providers = readSource(
       "src/features/auth/components/auth-provider-buttons.tsx",
     );
-    expect(providers).toContain("isAppleLoginEnabled");
-    expect(providers).toContain("isFacebookLoginEnabled");
+    expect(providers).toContain("getSocialAuthProviderAvailability");
+    expect(providers).toContain("social-auth-providers");
     expect(providers).not.toContain("AppleSignInPlaceholder");
   });
 
@@ -116,8 +116,8 @@ describe("Phase 16B — white auth screen", () => {
     const providers = readSource(
       "src/features/auth/components/auth-provider-buttons.tsx",
     );
-    expect(providers).toContain("{appleEnabled ?");
-    expect(providers).toContain("{facebookEnabled ?");
+    expect(providers).toContain("enabledProviders.map");
+    expect(providers).toContain("data-enabled-providers");
   });
 });
 

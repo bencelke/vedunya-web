@@ -83,7 +83,7 @@ describe("Phase 12A — EN message polish", () => {
   it("keeps polished EN auth and onboarding copy", () => {
     expect(en.auth.loginDescription).toContain("daily practice");
     expect(en.auth.onboarding.steps.welcome.title).toContain("daily practice");
-    expect(en.auth.brandWordmark).toBe("Vedunya Maria");
+    expect(en.auth.brandWordmark).toBe("MYSTIC by Vedunya Maria");
   });
 });
 
@@ -107,8 +107,8 @@ describe("Phase 12A — brand wording", () => {
   it("uses Vedunya Maria for main wordmarks", () => {
     expect(en.dailyGuidance.brandWordmark).toBe("Vedunya Maria");
     expect(ru.dailyGuidance.brandWordmark).toBe("Vedunya Maria");
-    expect(en.auth.brandWordmark).toBe("Vedunya Maria");
-    expect(ru.auth.brandWordmark).toBe("Vedunya Maria");
+    expect(en.auth.brandWordmark).toBe("MYSTIC by Vedunya Maria");
+    expect(ru.auth.brandWordmark).toBe("MYSTIC by Vedunya Maria");
   });
 
   it("uses Mystic by Vedunya Maria in welcome headlines", () => {

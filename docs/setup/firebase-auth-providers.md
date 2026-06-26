@@ -74,6 +74,21 @@ Default (unset or not `true`): Apple and Facebook buttons are **hidden** — not
 
 Google remains available when Firebase Web client is configured (no extra flag).
 
+## Local preview (`.env.local` — do not commit)
+
+Apple and Facebook buttons are **hidden by default** because both flags default to `false` in `.env.example`. Only Google appears when Firebase client config is present.
+
+To preview Apple/Facebook buttons locally after Firebase providers are configured:
+
+```env
+NEXT_PUBLIC_ENABLE_APPLE_LOGIN=true
+NEXT_PUBLIC_ENABLE_FACEBOOK_LOGIN=true
+```
+
+Restart `npm run dev` after changing flags. Buttons remain non-functional until the provider is enabled in Firebase Console with correct OAuth redirect/domain setup.
+
+**Why buttons may be missing in local QA:** If `.env.local` does not set both flags to `true`, Apple and Facebook are intentionally not rendered. This is not a UI bug.
+
 ## Testing checklist
 
 - [ ] Google sign-in on production HTTPS domain
