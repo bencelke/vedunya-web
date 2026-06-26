@@ -1,14 +1,13 @@
 import { getTranslations } from "next-intl/server";
 
-import { MoonRhythmSummary } from "@/features/daily-guidance/components/moon-rhythm-summary";
-import { PersonalDayIndicator } from "@/features/daily-guidance/components/personal-day-indicator";
-import { PrimaryGuidanceCard } from "@/features/daily-guidance/components/primary-guidance-card";
 import type { DailyGuidanceViewModel } from "@/features/daily-guidance/types/daily-guidance-view-model";
 import { isGuidanceReady } from "@/features/daily-guidance/types/daily-guidance-view-model";
 import { UniverseRequestSection } from "@/features/universe-request/components/universe-request-section";
-import { MysticPlusLockCard } from "@/features/premium/components/mystic-plus-lock-card";
 import { TodayActionCard } from "@/features/today/components/today-action-card";
-import { TodayRuneAnchor } from "@/features/today/components/today-rune-anchor";
+import { TodayMoonSection } from "@/features/today/components/today-moon-section";
+import { TodayMysticPlusPanel } from "@/features/today/components/today-mystic-plus-panel";
+import { TodayNumerologySection } from "@/features/today/components/today-numerology-section";
+import { TodayRuneSection } from "@/features/today/components/today-rune-section";
 
 type DailyGuidanceAuthenticatedProps = {
   guidance: DailyGuidanceViewModel;
@@ -19,11 +18,7 @@ export async function DailyGuidanceAuthenticated({
 }: DailyGuidanceAuthenticatedProps) {
   const t = await getTranslations("dailyGuidance");
   const tPremium = await getTranslations("premium");
-  const tMoon = await getTranslations("moon");
   const tRunes = await getTranslations("runes");
-
-  const moonPhaseTitle =
-    guidance.moon.status === "ready" ? guidance.moon.data.phaseTitle : "";
 
   const runeReady = isGuidanceReady(guidance.rune) ? guidance.rune.data : null;
   const moonReady = isGuidanceReady(guidance.moon) ? guidance.moon.data : null;
@@ -34,44 +29,14 @@ export async function DailyGuidanceAuthenticated({
     );
 
   return (
-    <div className="space-y-8">
+    <div className="mystic-today-content space-y-8">
       <UniverseRequestSection model={guidance.universeRequest} />
 
-      <PrimaryGuidanceCard
-        primary={guidance.primary}
-        actionLabel={t("actionLabel")}
-      />
+      <TodayRuneSection rune={guidance.rune} />
 
-      <TodayRuneAnchor
-        rune={guidance.rune}
-        label={t("runeOfDayLabel")}
-        viewDetailsLabel={t("viewRuneDetails")}
-        symbolAlt={
-          runeReady
-            ? tRunes("symbolA11y", { rune: runeReady.title })
-            : ""
-        }
-      />
+      <TodayMoonSection moon={guidance.moon} />
 
-      <div className="space-y-5">
-        <MoonRhythmSummary
-          moon={guidance.moon}
-          label={t("moonRhythmLabel")}
-          lunarDayLabel={
-            moonReady
-              ? tMoon("lunarDayLabel", { day: moonReady.lunarDay })
-              : ""
-          }
-          viewDetailsLabel={t("viewMoonDetails")}
-          phaseVisualAlt={tMoon("phaseVisualA11y", { phase: moonPhaseTitle })}
-          deepLabel={t("deepMeaningLabel")}
-          actionLabel={t("actionLabel")}
-        />
-        <PersonalDayIndicator
-          numerology={guidance.numerology}
-          label={t("dailyRhythmLabel")}
-        />
-      </div>
+      <TodayNumerologySection numerology={guidance.numerology} />
 
       {guidance.premiumActive && runeReady?.deep ? (
         <TodayActionCard
@@ -88,21 +53,17 @@ export async function DailyGuidanceAuthenticated({
       ) : null}
 
       {guidance.reflection ? (
-        <section className="mystic-cosmic-card p-5">
-          <p className="mystic-eyebrow">{t("reflectionLabel")}</p>
-          <p className="mt-3 text-sm leading-[1.72] text-text-muted">
+        <section className="mystic-today-section space-y-3">
+          <div className="mystic-today-divider mystic-today-divider--section" aria-hidden="true" />
+          <p className="mystic-today-overline">{t("reflectionLabel")}</p>
+          <p className="text-[0.9375rem] leading-[1.72] text-text-muted">
             {guidance.reflection}
           </p>
         </section>
       ) : null}
 
       {showPremiumLock ? (
-        <div className="space-y-3">
-          <p className="text-center text-xs leading-relaxed text-text-subtle">
-            {tPremium("todayDepthNote")}
-          </p>
-          <MysticPlusLockCard />
-        </div>
+        <TodayMysticPlusPanel sectionNote={tPremium("todayDepthNote")} />
       ) : null}
     </div>
   );

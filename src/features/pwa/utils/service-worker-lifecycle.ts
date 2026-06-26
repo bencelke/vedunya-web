@@ -2,6 +2,7 @@ import { isPwaEnabled } from "@/config/pwa";
 
 export const PENDING_SW_UPDATE_RELOAD_KEY = "mystic:pwa-pending-update-reload";
 export const DEV_SW_CLEANUP_KEY = "mystic:dev-sw-cleaned";
+export const DEV_SW_RELOAD_KEY = "mystic:dev-sw-reload-done";
 
 const MYSTIC_CACHE_PREFIX = "mystic-";
 

@@ -91,23 +91,20 @@ describe("Phase 12G — root redirect behavior", () => {
 });
 
 describe("Phase 12G — Today hierarchy", () => {
-  it("places Request the Universe before rune, moon, and personal day", () => {
+  it("places request before rune, moon, and numerology", () => {
     const source = readSource(
       "src/features/daily-guidance/components/daily-guidance-authenticated.tsx",
     );
     const jsx = source.slice(source.indexOf("return ("));
 
     expect(jsx.indexOf("UniverseRequestSection")).toBeLessThan(
-      jsx.indexOf("PrimaryGuidanceCard"),
+      jsx.indexOf("TodayRuneSection"),
     );
-    expect(jsx.indexOf("PrimaryGuidanceCard")).toBeLessThan(
-      jsx.indexOf("<TodayRuneAnchor"),
+    expect(jsx.indexOf("TodayRuneSection")).toBeLessThan(
+      jsx.indexOf("TodayMoonSection"),
     );
-    expect(jsx.indexOf("<TodayRuneAnchor")).toBeLessThan(
-      jsx.indexOf("<MoonRhythmSummary"),
-    );
-    expect(jsx.indexOf("<MoonRhythmSummary")).toBeLessThan(
-      jsx.indexOf("<PersonalDayIndicator"),
+    expect(jsx.indexOf("TodayMoonSection")).toBeLessThan(
+      jsx.indexOf("TodayNumerologySection"),
     );
   });
 });
@@ -135,12 +132,14 @@ describe("Phase 12G — privacy and honesty", () => {
     expect(copy).not.toMatch(/gdpr certified/);
   });
 
-  it("defers Mystic Plus subscription checkout on Profile", () => {
+  it("defers Mystic Plus subscription checkout on paywall plans", () => {
     expect(WEB_MYSTIC_PLUS_PAYMENT_WIRED).toBe(false);
-    const lockCard = readSource("src/features/premium/components/mystic-plus-lock-card.tsx");
-    expect(lockCard).toContain("paymentComingLater");
-    expect(lockCard).toContain("disabled");
-    expect(lockCard).not.toContain("checkout");
+    const paywall = readSource(
+      "src/features/premium/components/mystic-plus-paywall-plans.tsx",
+    );
+    expect(paywall).toContain("paymentComingLater");
+    expect(paywall).toContain("disabled");
+    expect(paywall).not.toContain("checkout");
   });
 
   it("uses honest scheduler note for notifications", () => {

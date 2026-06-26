@@ -24,6 +24,8 @@ import { getProfileSnapshot } from "@/features/profile/services/profile-reposito
 import { resolvePremiumAccess } from "@/features/profile/utils/premium-access";
 import { TIMEZONE_COOKIE } from "@/features/numerology/constants";
 import { getCurrentUser } from "@/lib/auth/current-user";
+import type { SupportedLocale } from "@/config/app-config";
+import { resolveSpiritualContentLocale } from "@/i18n/resolve-spiritual-content-locale";
 import type {
   MoonGuidanceLoadResult,
   MoonGuidanceResult,
@@ -104,8 +106,10 @@ async function loadMoonGuidanceInternal(input: {
 }
 
 export const loadCurrentMoonGuidance = cache(
-  async (locale: SupportedMoonLocale): Promise<MoonGuidanceLoadResult> =>
-    loadMoonGuidanceInternal({ locale }),
+  async (locale: SupportedLocale): Promise<MoonGuidanceLoadResult> =>
+    loadMoonGuidanceInternal({
+      locale: resolveSpiritualContentLocale(locale),
+    }),
 );
 
 export async function loadMoonGuidanceForInstant(input: {

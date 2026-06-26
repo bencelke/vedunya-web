@@ -66,13 +66,13 @@ describe("Phase 12E — entitlement display", () => {
 });
 
 describe("Phase 12E — Profile Mystic Plus section", () => {
-  it("renders subscription section with deferred Mystic Plus copy", () => {
+  it("renders subscription section linked to Mystic Plus paywall", () => {
     const source = readSource(
       "src/features/profile/components/profile-subscription-section.tsx",
     );
-    expect(source).toContain("resolvePremiumDisplayStatus");
-    expect(source).toContain('useTranslations("premium")');
-    expect(source).toContain("webComingSoon");
+    expect(source).toContain("MysticPlusPaywallLink");
+    expect(source).toContain('useTranslations("premium.paywall")');
+    expect(source).toContain('t("openPlus")');
     expect(source).not.toContain("PayPal");
   });
 
@@ -90,7 +90,7 @@ describe("Phase 12E — premium lock cards", () => {
       "MysticPlusLockCard",
     );
     expect(readSource("src/features/daily-guidance/components/daily-guidance-authenticated.tsx")).toContain(
-      "MysticPlusLockCard",
+      "TodayMysticPlusPanel",
     );
     expect(readSource("src/features/moon/components/moon-guidance-section.tsx")).toContain(
       "MysticPlusLockCard",
@@ -100,12 +100,19 @@ describe("Phase 12E — premium lock cards", () => {
     );
   });
 
-  it("uses disabled payment placeholder instead of fake checkout", () => {
+  it("uses disabled payment placeholder on paywall plans instead of fake checkout", () => {
+    const paywall = readSource(
+      "src/features/premium/components/mystic-plus-paywall-plans.tsx",
+    );
+    expect(paywall).toContain("disabled");
+    expect(paywall).toContain("paymentComingLater");
+    expect(paywall).not.toContain("Subscribe");
+    expect(paywall).not.toContain("Restore");
+  });
+
+  it("routes lock surfaces to paywall instead of inline disabled checkout", () => {
     const lockCard = readSource("src/features/premium/components/mystic-plus-lock-card.tsx");
-    expect(lockCard).toContain("disabled");
-    expect(lockCard).toContain("paymentComingLater");
-    expect(lockCard).not.toContain("Subscribe");
-    expect(lockCard).not.toContain("Restore");
+    expect(lockCard).toContain("MysticPlusPaywallLink");
   });
 
   it("includes consistent EN/RU lock copy", () => {

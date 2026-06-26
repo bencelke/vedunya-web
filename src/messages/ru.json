@@ -15,7 +15,8 @@
   "a11y": {
     "languageSwitcher": "Язык",
     "bottomNavigation": "Основная навигация",
-    "openMenu": "Открыть меню"
+    "openMenu": "Открыть меню",
+    "openProfile": "Открыть профиль"
   },
   "landing": {
     "hero": {
@@ -68,10 +69,11 @@
     "saveHint": "Войдите, чтобы сохранять важные дни."
   },
   "dailyGuidance": {
-    "brandWordmark": "Vedunya Maria",
+    "brandWordmark": "MYSTIC by Vedunya Maria",
     "greeting": "Доброе утро",
     "pageSubtitle": "Спокойный взгляд на то, что важно сегодня",
     "focusLabel": "Фокус дня",
+    "heroEyebrow": "Подсказка дня",
     "actionLabel": "Один точный шаг",
     "dailyRhythmLabel": "Ваш личный ритм",
     "personalDayLabel": "Личный день",
@@ -94,7 +96,27 @@
     "runeUnavailable": "Руна дня сейчас недоступна.",
     "loadError": "Не удалось загрузить подсказку на сегодня. Попробуйте позже.",
     "profileLink": "Профиль",
-    "loadingA11y": "Загрузка подсказки на сегодня"
+    "loadingA11y": "Загрузка подсказки на сегодня",
+    "rhythmStrip": {
+      "sectionLabel": "Ритм дня",
+      "runeLabel": "Руна",
+      "moonLabel": "Луна",
+      "unavailable": "—"
+    },
+    "numerologyCard": {
+      "label": "Нумерология дня",
+      "focusLabel": "Фокус",
+      "numberA11y": "Число личного дня {number}"
+    },
+    "oracleBrandA11y": "MYSTIC",
+    "todaySections": {
+      "runeTitle": "Руна дня",
+      "runeSubtitle": "Символическая поддержка на сегодня",
+      "moonTitle": "Лунный цикл",
+      "numerologyTitle": "Нумерология дня",
+      "viewRune": "Открыть значение руны",
+      "viewMoon": "Открыть лунный ритм"
+    }
   },
   "moon": {
     "metaTitle": "Луна",
@@ -168,7 +190,44 @@
     "profileActiveDevOverride": "Премиум-доступ для предпросмотра активен для этого аккаунта.",
     "coursePurchaseTitle": "Покупка курса",
     "coursePurchaseSoon": "Этот курс скоро будет доступен для покупки.",
-    "courseSeparateNote": "Платные курсы отдельны от Mystic Plus."
+    "courseSeparateNote": "Платные курсы отдельны от Mystic Plus.",
+    "paywall": {
+      "metaTitle": "Mystic Plus",
+      "overline": "Mystic Plus",
+      "title": "Mystic Plus",
+      "subtitle": "Более глубокая подсказка для ежедневной практики.",
+      "heroTitle": "Откройте полный разбор",
+      "heroBody": "Получите более полный разбор числа дня, руны, лунной фазы и личного фокуса.",
+      "benefitsHeading": "Включено",
+      "benefit1": "Полное ежедневное чтение",
+      "benefit2": "Более глубокая подсказка по фазе Луны",
+      "benefit3": "Действие и размышление по руне",
+      "benefit4": "Расширенный нумерологический ритм",
+      "benefit5": "Сохранённая практика и напоминания",
+      "planTitle": "Mystic Plus",
+      "plansHeading": "Выберите план",
+      "monthlyTitle": "Месячный",
+      "monthlyInterval": "в месяц",
+      "monthlyDescription": "Гибкий доступ к Mystic Plus.",
+      "yearlyTitle": "Годовой",
+      "yearlyInterval": "в год",
+      "yearlyDescription": "Лучший выбор — экономия {percent}%.",
+      "yearlyBadge": "Лучший выбор",
+      "statusNotActive": "Mystic Plus не активен",
+      "statusActive": "Mystic Plus активен",
+      "activeAccessNote": "У вас уже есть доступ к полному разбору.",
+      "notActiveNote": "Оформление подписки Mystic Plus в веб-версии пока недоступно.",
+      "activeNotePremium": "Доступ Mystic Plus активен для этого аккаунта.",
+      "activeNoteOwner": "Доступ Mystic Plus активен для этого аккаунта.",
+      "activeNotePreview": "Доступ Mystic Plus активен для этого аккаунта.",
+      "ctaActive": "Mystic Plus активен",
+      "paymentComingLater": "Оплата скоро будет доступна",
+      "paymentNotWiredNote": "Подписка Mystic Plus в веб-версии пока недоступна.",
+      "disclaimer": "Mystic — это духовная практика для размышления. Она не заменяет медицинские, юридические, финансовые или психологические рекомендации.",
+      "openInPlus": "Открыть в Mystic Plus",
+      "unlockFullReading": "Открыть полный разбор",
+      "courseSeparateNote": "Платные курсы отдельны от подписки Mystic Plus."
+    }
   },
   "courses": {
     "metaTitle": "Курсы",
@@ -339,12 +398,14 @@
     "subscription": {
       "label": "Mystic Plus",
       "title": "Mystic Plus",
-      "description": "Более глубокая поддержка, напоминания о просьбе и премиум-практики.",
+      "description": "Откройте более глубокую ежедневную подсказку",
       "statusFree": "Статус: бесплатно",
       "statusActive": "Статус: активен",
       "statusComingSoon": "Статус: скоро",
       "webNote": "Премиум-возможности скоро откроются в веб-версии.",
-      "activeNote": "Доступ Mystic Plus активен для этого аккаунта."
+      "activeNote": "Доступ Mystic Plus активен для этого аккаунта.",
+      "openPlus": "Открыть Mystic Plus",
+      "pricingFromMonthly": "От {price} в месяц"
     },
     "courses": {
       "label": "Обучение",
@@ -890,15 +951,21 @@
   },
   "universeRequest": {
     "title": "Просьба к Вселенной",
+    "collapsed": {
+      "heading": "Намерение на день",
+      "body": "Одной ясной просьбы достаточно. Пусть она будет простой, честной и спокойной.",
+      "cta": "Записать просьбу"
+    },
     "empty": {
-      "heading": "Создайте свою просьбу",
-      "body": "Запишите одну ясную просьбу, к которой хотите возвращаться каждый день. Пусть она будет простой, честной и точной."
+      "heading": "Одно намерение на день",
+      "body": "Запишите просьбу, к которой хотите возвращаться спокойно и осознанно. Сформулируйте её просто — без давления и лишних слов."
     },
     "form": {
       "textLabel": "Ваша просьба",
-      "textPlaceholder": "Одно ясное намерение, которое вы хотите держать сегодня…",
+      "textPlaceholder": "Например: я выбираю ясность и спокойствие сегодня…",
       "categoryLabel": "Категория (необязательно)",
       "charCount": "{count} / {max}",
+      "helper": "Одной просьбы достаточно. Её можно изменить в любой момент.",
       "reminderProfileHint": "Ежедневное напоминание о просьбе настраивается в Профиле.",
       "save": "Сохранить просьбу",
       "saving": "Сохраняем…",
@@ -915,7 +982,9 @@
       "other": "Другое"
     },
     "active": {
-      "edit": "Изменить",
+      "currentLabel": "Текущая просьба",
+      "edit": "Изменить просьбу",
+      "showMore": "Подробнее",
       "pause": "Приостановить",
       "pausing": "Приостанавливаем…",
       "reflectionLabel": "Размышление дня",

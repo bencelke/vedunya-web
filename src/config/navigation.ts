@@ -40,6 +40,10 @@ export function shouldShowBottomNav(pathname: string): boolean {
       ? pathname.slice(0, -1)
       : pathname;
 
+  if (normalized === "/plus" || normalized.endsWith("/plus")) {
+    return true;
+  }
+
   return bottomNavItems.some(
     (item) =>
       normalized === item.href || normalized.startsWith(`${item.href}/`),

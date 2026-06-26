@@ -82,7 +82,7 @@ describe("Phase 12B — localization", () => {
     );
   });
 
-  it("includes all category labels in EN and RU", () => {
+  it("keeps category labels in i18n for legacy data but hides picker in UI", () => {
     for (const key of [
       "love",
       "family",
@@ -96,6 +96,11 @@ describe("Phase 12B — localization", () => {
       expect(en.universeRequest.categories[key]).toBeTruthy();
       expect(ru.universeRequest.categories[key]).toBeTruthy();
     }
+
+    const form = readSource(
+      "src/features/universe-request/components/universe-request-form.tsx",
+    );
+    expect(form).not.toContain("UniverseRequestCategoryPicker");
   });
 });
 
@@ -106,15 +111,15 @@ describe("Phase 12B — Today integration wiring", () => {
     expect(source).toContain("universeRequest");
   });
 
-  it("renders universe request section above primary guidance", () => {
+  it("renders universe request section before rune on Today", () => {
     const source = readSource(
       "src/features/daily-guidance/components/daily-guidance-authenticated.tsx",
     );
     const jsx = source.slice(source.indexOf("return ("));
     const requestIndex = jsx.indexOf("UniverseRequestSection");
-    const primaryIndex = jsx.indexOf("PrimaryGuidanceCard");
+    const runeIndex = jsx.indexOf("TodayRuneSection");
     expect(requestIndex).toBeGreaterThan(-1);
-    expect(requestIndex).toBeLessThan(primaryIndex);
+    expect(requestIndex).toBeLessThan(runeIndex);
   });
 
   it("exposes universe request API route with auth", () => {

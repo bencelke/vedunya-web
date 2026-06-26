@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 
 import { buildPersonalDayResult } from "@/features/numerology/services/personal-day-service";
 import type { SupportedLocale } from "@/config/app-config";
+import { resolveSpiritualContentLocale } from "@/i18n/resolve-spiritual-content-locale";
 
 type OnboardingNumerologyPreviewProps = {
   dateOfBirth: string;
@@ -29,7 +30,7 @@ export function OnboardingNumerologyPreview({
     return buildPersonalDayResult({
       birthDate: dateOfBirth,
       calculationDate: todayIsoDate(),
-      locale,
+      locale: resolveSpiritualContentLocale(locale),
     });
   }, [dateOfBirth, locale]);
 

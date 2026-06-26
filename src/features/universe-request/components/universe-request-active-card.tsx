@@ -27,8 +27,8 @@ export function UniverseRequestActiveCard({
   onPaused,
 }: UniverseRequestActiveCardProps) {
   const t = useTranslations("universeRequest");
-  const tCategories = useTranslations("universeRequest.categories");
   const [editing, setEditing] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const [pausing, setPausing] = useState(false);
 
   async function handlePause() {
@@ -44,14 +44,11 @@ export function UniverseRequestActiveCard({
     }
   }
 
-  async function handleSave(input: {
-    text: string;
-    category: import("@/features/universe-request/types").UniverseRequestCategory | null;
-  }) {
+  async function handleSave(input: { text: string }) {
     const response = await fetch("/api/universe-request", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(input),
+      body: JSON.stringify({ text: input.text }),
     });
 
     if (!response.ok) {
@@ -62,44 +59,55 @@ export function UniverseRequestActiveCard({
     onUpdated();
   }
 
-  return (
-    <section className="guidance-primary-surface mystic-cosmic-card-elevated space-y-5 p-6 sm:p-7">
-      <div className="flex items-start justify-between gap-4">
-        <div className="space-y-2">
-          <p className="mystic-eyebrow">{t("title")}</p>
-          {request.category ? (
-            <p className="text-xs font-medium uppercase tracking-[0.14em] text-accent-gold">
-              {tCategories(request.category)}
-            </p>
-          ) : null}
-        </div>
-        {!editing ? (
-          <Button
-            type="button"
-            variant="secondary"
-            className="shrink-0"
-            onClick={() => setEditing(true)}
-          >
-            {t("active.edit")}
-          </Button>
-        ) : null}
-      </div>
-
-      {editing ? (
+  if (editing) {
+    return (
+      <section className="mystic-today-request-panel space-y-5 p-5">
+        <p className="mystic-eyebrow">{t("title")}</p>
         <UniverseRequestForm
           initialText={request.text}
-          initialCategory={request.category}
           submitLabel={t("form.save")}
           submittingLabel={t("form.saving")}
           onSubmit={handleSave}
           onCancel={() => setEditing(false)}
         />
-      ) : (
-        <>
-          <blockquote className="text-[1.0625rem] font-normal leading-[1.55] text-text-primary">
-            {request.text}
-          </blockquote>
+      </section>
+    );
+  }
 
+  return (
+    <section className="mystic-today-request-panel space-y-4 p-5">
+      <p className="mystic-eyebrow">{t("title")}</p>
+
+      <div className="space-y-3">
+        <p className="text-sm font-medium text-text-muted">{t("active.currentLabel")}</p>
+        <blockquote className="line-clamp-3 text-[1rem] font-normal leading-[1.55] text-text-primary">
+          {request.text}
+        </blockquote>
+        <div className="flex flex-wrap gap-2">
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            onClick={() => setEditing(true)}
+          >
+            {t("active.edit")}
+          </Button>
+          {!expanded ? (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="text-text-muted"
+              onClick={() => setExpanded(true)}
+            >
+              {t("active.showMore")}
+            </Button>
+          ) : null}
+        </div>
+      </div>
+
+      {expanded ? (
+        <>
           <div className="rounded-[var(--radius-card)] border border-border-subtle bg-surface-primary/60 p-4">
             <p className="mystic-eyebrow">{t("active.reflectionLabel")}</p>
             <p className="mt-2 text-sm leading-[1.72] text-text-muted">
@@ -116,6 +124,7 @@ export function UniverseRequestActiveCard({
             <Button
               type="button"
               variant="secondary"
+              size="sm"
               className="shrink-0"
               disabled={pausing}
               onClick={() => void handlePause()}
@@ -124,7 +133,7 @@ export function UniverseRequestActiveCard({
             </Button>
           </div>
         </>
-      )}
+      ) : null}
     </section>
   );
 }

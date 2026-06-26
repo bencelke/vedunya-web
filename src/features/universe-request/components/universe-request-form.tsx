@@ -5,24 +5,17 @@ import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { UniverseRequestCategoryPicker } from "@/features/universe-request/components/universe-request-category-picker";
-import type { UniverseRequestCategory } from "@/features/universe-request/types";
 
 type UniverseRequestFormProps = {
   initialText?: string;
-  initialCategory?: UniverseRequestCategory | null;
   submitLabel: string;
   submittingLabel: string;
-  onSubmit: (input: {
-    text: string;
-    category: UniverseRequestCategory | null;
-  }) => Promise<void>;
+  onSubmit: (input: { text: string }) => Promise<void>;
   onCancel?: () => void;
 };
 
 export function UniverseRequestForm({
   initialText = "",
-  initialCategory = null,
   submitLabel,
   submittingLabel,
   onSubmit,
@@ -30,9 +23,6 @@ export function UniverseRequestForm({
 }: UniverseRequestFormProps) {
   const t = useTranslations("universeRequest");
   const [text, setText] = useState(initialText);
-  const [category, setCategory] = useState<UniverseRequestCategory | null>(
-    initialCategory,
-  );
   const [submitting, setSubmitting] = useState(false);
   const [errorKey, setErrorKey] = useState<string | null>(null);
 
@@ -42,10 +32,7 @@ export function UniverseRequestForm({
     setSubmitting(true);
 
     try {
-      await onSubmit({
-        text,
-        category,
-      });
+      await onSubmit({ text });
     } catch {
       setErrorKey("saveFailed");
     } finally {
@@ -64,19 +51,15 @@ export function UniverseRequestForm({
           rows={4}
           onChange={(event) => setText(event.target.value)}
           placeholder={t("form.textPlaceholder")}
-          className="w-full resize-none rounded-[var(--radius-card)] border border-border-subtle bg-surface-primary/80 px-4 py-3 text-sm leading-relaxed text-text-primary outline-none transition-colors placeholder:text-text-subtle focus:border-accent-gold/40"
+          className="min-h-[7.5rem] w-full resize-none rounded-[var(--radius-card)] border border-border-subtle bg-surface-primary/80 px-4 py-3.5 text-[0.9375rem] leading-relaxed text-text-primary outline-none transition-colors placeholder:text-text-subtle focus:border-accent-gold/40"
         />
-        <p className="text-xs text-text-subtle">
-          {t("form.charCount", { count: text.trim().length, max: 240 })}
-        </p>
+        <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
+          <p className="text-xs leading-relaxed text-text-subtle">{t("form.helper")}</p>
+          <p className="shrink-0 text-xs tabular-nums text-text-subtle sm:text-right">
+            {t("form.charCount", { count: text.trim().length, max: 240 })}
+          </p>
+        </div>
       </div>
-
-      <div className="space-y-2">
-        <Label>{t("form.categoryLabel")}</Label>
-        <UniverseRequestCategoryPicker value={category} onChange={setCategory} />
-      </div>
-
-      <p className="text-xs leading-relaxed text-text-subtle">{t("form.reminderProfileHint")}</p>
 
       {errorKey ? (
         <p className="text-sm text-red-300/90">{t(`errors.${errorKey}`)}</p>

@@ -167,25 +167,31 @@ describe("composeAuthenticatedGuidance", () => {
     expect(guidance?.rune.status).toBe("unavailable");
   });
 
-  it("does not repeat primary message in personal-day explanation", () => {
+  it("does not duplicate numerology summary in a separate explanation string", () => {
     const guidance = composeAll();
     expect(guidance).not.toBeNull();
 
     if (guidance && isGuidanceReady(guidance.numerology)) {
-      expect(guidance.numerology.data.explanation).not.toBe(
-        guidance.primary.message,
+      expect(guidance.numerology.data.summary).toBe(
+        numerologyResult.content.summary,
       );
-      expect(guidance.numerology.data.explanation).toContain("2");
-      expect(guidance.numerology.data.explanation).toContain("Cooperation");
+      expect(guidance.numerology.data.title).toBe("Cooperation");
+      expect(guidance.numerology.data.focus).toBe(
+        numerologyResult.content.doAdvice,
+      );
     }
   });
 
-  it("renders primary message only once in composed output", () => {
+  it("stores Mystic summary in numerology section for Today card rendering", () => {
     const guidance = composeAll();
-    const serialized = JSON.stringify(guidance);
-    const message = numerologyResult.content.summary;
-    const occurrences = serialized.split(message).length - 1;
-    expect(occurrences).toBe(1);
+    expect(guidance).not.toBeNull();
+
+    if (guidance && isGuidanceReady(guidance.numerology)) {
+      expect(guidance.numerology.data.summary).toBe(
+        numerologyResult.content.summary,
+      );
+      expect(guidance.primary.message).toBe(numerologyResult.content.summary);
+    }
   });
 
   it("hides rune action when it matches primary action", () => {
@@ -262,20 +268,18 @@ describe("composeAuthenticatedGuidance", () => {
 });
 
 describe("composeNumerologySection", () => {
-  it("stores explanation separately from primary content", () => {
+  it("stores Mystic summary and focus from personal day content", () => {
     const numerology = composeNumerologySection(
       numerologyResult,
       labels.numerologyUnavailable,
-      numerologyResult.content.summary,
-      numerologyResult.content.doAdvice,
-      formatPersonalDayExplanation,
     );
 
     expect(numerology.status).toBe("ready");
     if (isGuidanceReady(numerology)) {
       expect(numerology.data.number).toBe(2);
       expect(numerology.data.title).toBe("Cooperation");
-      expect(numerology.data.explanation).toContain("Personal day 2");
+      expect(numerology.data.summary).toBe(numerologyResult.content.summary);
+      expect(numerology.data.focus).toBe(numerologyResult.content.doAdvice);
     }
   });
 });

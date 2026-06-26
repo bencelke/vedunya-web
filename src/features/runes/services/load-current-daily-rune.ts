@@ -19,6 +19,8 @@ import {
 import { resolveRuneContentAccess } from "@/features/runes/services/rune-entitlement";
 import { resolveRuneId } from "@/features/runes/constants/rune-aliases";
 import { getCurrentUser } from "@/lib/auth/current-user";
+import type { SupportedLocale } from "@/config/app-config";
+import { resolveSpiritualContentLocale } from "@/i18n/resolve-spiritual-content-locale";
 import type {
   DailyRuneLoadResult,
   RuneDetailLoadResult,
@@ -69,8 +71,9 @@ export async function loadCurrentDailyRune(
 
 export async function loadRuneDetail(
   rawRuneId: string,
-  locale: SupportedRuneLocale,
+  locale: SupportedLocale,
 ): Promise<RuneDetailLoadResult> {
+  const contentLocale = resolveSpiritualContentLocale(locale);
   const runeId = resolveRuneId(rawRuneId);
   if (!runeId) {
     return { status: "not-found" };
@@ -82,7 +85,7 @@ export async function loadRuneDetail(
     : null;
   const access = resolveRuneContentAccess(profile);
 
-  const loaded = await getCachedRuneDeepContent(runeId, locale);
+  const loaded = await getCachedRuneDeepContent(runeId, contentLocale);
   if (!loaded) {
     return { status: "not-found" };
   }

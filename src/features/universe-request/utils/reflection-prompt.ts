@@ -1,6 +1,6 @@
 import type { SupportedLocale } from "@/config/app-config";
 
-const REFLECTION_PROMPTS: Record<SupportedLocale, readonly string[]> = {
+const REFLECTION_PROMPTS: Record<"en" | "ru", readonly string[]> = {
   en: [
     "Return to this request for one quiet minute today.",
     "What is one small step that supports this request?",
@@ -33,7 +33,8 @@ export function pickReflectionPrompt(
   dateKey: string,
   locale: SupportedLocale,
 ): string {
-  const prompts = REFLECTION_PROMPTS[locale];
+  const resolvedLocale = locale === "ru" ? "ru" : "en";
+  const prompts = REFLECTION_PROMPTS[resolvedLocale];
   const index = hashDateKey(dateKey) % prompts.length;
   return prompts[index] ?? prompts[0];
 }

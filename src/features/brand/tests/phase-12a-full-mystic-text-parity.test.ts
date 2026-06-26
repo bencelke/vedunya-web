@@ -104,9 +104,9 @@ describe("Phase 12A — RU personal day content", () => {
 });
 
 describe("Phase 12A — brand wording", () => {
-  it("uses Vedunya Maria for main wordmarks", () => {
-    expect(en.dailyGuidance.brandWordmark).toBe("Vedunya Maria");
-    expect(ru.dailyGuidance.brandWordmark).toBe("Vedunya Maria");
+  it("uses MYSTIC by Vedunya Maria for main wordmarks", () => {
+    expect(en.dailyGuidance.brandWordmark).toBe("MYSTIC by Vedunya Maria");
+    expect(ru.dailyGuidance.brandWordmark).toBe("MYSTIC by Vedunya Maria");
     expect(en.auth.brandWordmark).toBe("MYSTIC by Vedunya Maria");
     expect(ru.auth.brandWordmark).toBe("MYSTIC by Vedunya Maria");
   });

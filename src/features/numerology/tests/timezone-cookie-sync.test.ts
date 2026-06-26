@@ -42,4 +42,26 @@ describe("timezone cookie sync", () => {
       formatTimezoneCookieAssignment(TIMEZONE_COOKIE, "Europe/Moscow", 3600),
     ).toContain("Europe%2FMoscow");
   });
+
+  it("treats empty timezone cookie values as missing", () => {
+    expect(shouldWriteTimezoneCookie("Europe/Moscow", "")).toBe(true);
+    expect(shouldWriteTimezoneCookie("Europe/Moscow", "   ")).toBe(true);
+    expect(shouldWriteTimezoneCookie("Europe/Moscow", null)).toBe(true);
+  });
+
+  it("reads timezone cookie when it is not the first cookie in document.cookie", () => {
+    const cookieHeader = `NEXT_LOCALE=ru;${TIMEZONE_COOKIE}=Europe%2FBerlin`;
+    const existing = getCookieValue(TIMEZONE_COOKIE, cookieHeader);
+
+    expect(existing).toBe("Europe%2FBerlin");
+    expect(shouldWriteTimezoneCookie("Europe/Berlin", existing)).toBe(false);
+  });
+
+  it("reads timezone cookie when cookies are separated by semicolon and space", () => {
+    const cookieHeader = `NEXT_LOCALE=ru; ${TIMEZONE_COOKIE}=Europe%2FBerlin`;
+    const existing = getCookieValue(TIMEZONE_COOKIE, cookieHeader);
+
+    expect(existing).toBe("Europe%2FBerlin");
+    expect(shouldWriteTimezoneCookie("Europe/Berlin", existing)).toBe(false);
+  });
 });

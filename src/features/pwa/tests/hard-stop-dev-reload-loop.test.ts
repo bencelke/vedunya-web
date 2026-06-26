@@ -77,6 +77,7 @@ describe("Phase 9.2 hard stop dev reload loop", () => {
     expect(script).toContain("beforeInteractive");
     expect(script).toContain("unregister");
     expect(script).toContain("DEV_SW_CLEANUP_KEY");
+    expect(script).toContain("DEV_SW_RELOAD_KEY");
     expect(script).toContain("sessionStorage.getItem");
   });
 

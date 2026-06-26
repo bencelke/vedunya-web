@@ -36,3 +36,17 @@ export function hasPremiumEntitlement(
 ): boolean {
   return resolvePremiumAccess(profile, mysticPlus);
 }
+
+export function resolvePremiumActiveNoteKey(
+  status: PremiumDisplayStatus,
+): "activeNotePremium" | "activeNoteOwner" | "activeNotePreview" {
+  if (status === "owner") {
+    return "activeNoteOwner";
+  }
+
+  if (status === "devOverride") {
+    return "activeNotePreview";
+  }
+
+  return "activeNotePremium";
+}

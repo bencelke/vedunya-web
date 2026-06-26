@@ -57,9 +57,9 @@ export default async function TodayPage({ params }: TodayPageProps) {
   return (
     <>
       <TimezoneCookieSync />
-      <AppHeader showLogin={!sessionUser} showProfile={Boolean(sessionUser)} />
+      {sessionUser ? null : <AppHeader showLogin />}
       <AppShell>
-        <MobilePage className="mystic-today-column py-6 pt-safe-top">
+        <MobilePage className="mystic-today-column py-4 pt-safe-top">
           <DailyGuidanceExperience model={model} />
         </MobilePage>
       </AppShell>

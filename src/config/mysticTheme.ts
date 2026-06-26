@@ -88,7 +88,7 @@ export const mysticFlutterRefs = {
     pill: "9999px",
   },
   layout: {
-    todayMaxWidth: "420px",
+    todayMaxWidth: "450px",
     shellMaxWidth: "512px",
     bottomNavHeight: "72px",
   },

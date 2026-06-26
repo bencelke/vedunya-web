@@ -32,6 +32,8 @@ import type {
 import { getMockDailyGuidance } from "@/lib/mock/daily-guidance";
 import { getCurrentUser } from "@/lib/auth/current-user";
 import type { SupportedLocale } from "@/config/app-config";
+import { resolveSpiritualContentLocale } from "@/i18n/resolve-spiritual-content-locale";
+import type { SpiritualContentLocale } from "@/i18n/resolve-spiritual-content-locale";
 import type { PersonalDayResult } from "@/features/numerology/types/numerology";
 import type { DailyRuneResult } from "@/features/runes/types/rune";
 import type { MoonGuidanceResult } from "@/features/moon/types/moon";
@@ -40,7 +42,7 @@ type SharedContext = {
   dateKey: string;
   formattedDate: string;
   timezone: string;
-  contentLocale: SupportedLocale;
+  contentLocale: SpiritualContentLocale;
 };
 
 async function resolveSharedContext(
@@ -58,7 +60,7 @@ async function resolveSharedContext(
       dateKey: fallbackKey,
       formattedDate: formatDisplayDate(fallbackKey, locale),
       timezone,
-      contentLocale: locale,
+      contentLocale: resolveSpiritualContentLocale(locale),
     };
   }
 
@@ -66,14 +68,14 @@ async function resolveSharedContext(
     dateKey,
     formattedDate: formatDisplayDate(dateKey, locale),
     timezone,
-    contentLocale: locale,
+    contentLocale: resolveSpiritualContentLocale(locale),
   };
 }
 
 function loadPersonalDayForProfile(input: {
   birthDate: string;
   dateKey: string;
-  locale: SupportedLocale;
+  locale: SpiritualContentLocale;
   userSeed: string;
 }): PersonalDayResult | null {
   return buildPersonalDayResult({
@@ -87,7 +89,7 @@ function loadPersonalDayForProfile(input: {
 function loadRuneForProfile(input: {
   birthDate: string;
   dateKey: string;
-  locale: SupportedLocale;
+  locale: SpiritualContentLocale;
 }): DailyRuneResult | null {
   try {
     const personalDay = calculatePersonalDay({
@@ -110,7 +112,8 @@ function loadRuneForProfile(input: {
 async function loadMoonSection(
   locale: SupportedLocale,
 ): Promise<MoonGuidanceResult | null> {
-  const loaded = await loadCurrentMoonGuidance(locale);
+  const contentLocale = resolveSpiritualContentLocale(locale);
+  const loaded = await loadCurrentMoonGuidance(contentLocale);
   return loaded.status === "ready" ? loaded.guidance : null;
 }
 
@@ -159,7 +162,7 @@ export async function loadDailyGuidance(
   const t = await getTranslations({ locale, namespace: "dailyGuidance" });
   const context = await resolveSharedContext(locale);
   const labels = {
-    primaryLabel: t("focusLabel"),
+    primaryLabel: t("heroEyebrow"),
     numerologyUnavailable: t("numerologyUnavailable"),
     moonUnavailable: t("moonUnavailable"),
     runeUnavailable: t("runeUnavailable"),
@@ -208,7 +211,7 @@ export async function loadDailyGuidance(
     };
   }
 
-  const contentLocale = locale;
+  const contentLocale = resolveSpiritualContentLocale(locale);
 
   const premiumActive = resolvePremiumAccess(profile);
   const birthDate = formatDateOfBirth(profile.dateOfBirth);

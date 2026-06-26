@@ -31,35 +31,38 @@ describe("Today UI parity — shell and layout", () => {
 });
 
 describe("Today visual hierarchy", () => {
-  it("renders Today sections in Mystic order", () => {
+  it("renders Today sections in Mystic order: request, rune, moon, numerology", () => {
     const source = readSource(
       "src/features/daily-guidance/components/daily-guidance-authenticated.tsx",
     );
     const jsx = source.slice(source.indexOf("return ("));
 
     const requestIndex = jsx.indexOf("UniverseRequestSection");
-    const primaryIndex = jsx.indexOf("PrimaryGuidanceCard");
-    const runeAnchorPos = jsx.indexOf("<TodayRuneAnchor");
-    const moonPos = jsx.indexOf("<MoonRhythmSummary");
-    const personalDayPos = jsx.indexOf("<PersonalDayIndicator");
+    const runeIndex = jsx.indexOf("TodayRuneSection");
+    const moonIndex = jsx.indexOf("TodayMoonSection");
+    const numerologyIndex = jsx.indexOf("TodayNumerologySection");
 
     expect(requestIndex).toBeGreaterThan(-1);
-    expect(requestIndex).toBeLessThan(primaryIndex);
-    expect(runeAnchorPos).toBeLessThan(moonPos);
-    expect(moonPos).toBeLessThan(personalDayPos);
+    expect(runeIndex).toBeGreaterThan(-1);
+    expect(moonIndex).toBeGreaterThan(-1);
+    expect(numerologyIndex).toBeGreaterThan(-1);
+    expect(requestIndex).toBeLessThan(runeIndex);
+    expect(runeIndex).toBeLessThan(moonIndex);
+    expect(moonIndex).toBeLessThan(numerologyIndex);
   });
 
-  it("uses large rune visual in TodayRuneAnchor", () => {
-    const source = readSource("src/features/today/components/today-rune-anchor.tsx");
-    expect(source).toContain("13.5rem");
+  it("uses large rune visual in TodayRuneSection", () => {
+    const source = readSource("src/features/today/components/today-rune-section.tsx");
+    expect(source).toContain("size={200}");
     expect(source).toContain("MysticRuneSigil");
   });
 
-  it("uses mystic cosmic cards for Today sections", () => {
-    const primary = readSource(
-      "src/features/daily-guidance/components/primary-guidance-card.tsx",
+  it("uses text-first editorial numerology section", () => {
+    const numerology = readSource(
+      "src/features/today/components/today-numerology-section.tsx",
     );
-    expect(primary).toContain("mystic-cosmic-card");
+    expect(numerology).not.toContain("mystic-cosmic-card");
+    expect(numerology).toContain("numerologyTitle");
   });
 });
 
@@ -139,7 +142,7 @@ describe("Today premium gating", () => {
     const source = readSource(
       "src/features/daily-guidance/components/daily-guidance-authenticated.tsx",
     );
-    expect(source).toContain("MysticPlusLockCard");
+    expect(source).toContain("TodayMysticPlusPanel");
     expect(source).toContain("showPremiumDeepLock");
   });
 

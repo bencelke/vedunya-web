@@ -1,4 +1,5 @@
 import type { DateOnlyParts } from "@/features/numerology/types/numerology";
+import { safeDecodeCookieValue } from "@/features/numerology/utils/timezone-cookie";
 
 const ISO_DATE_PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/;
 
@@ -96,9 +97,11 @@ export function resolveTimeZone(
     return fallback;
   }
 
+  const decoded = safeDecodeCookieValue(candidate);
+
   try {
-    Intl.DateTimeFormat(undefined, { timeZone: candidate });
-    return candidate;
+    Intl.DateTimeFormat(undefined, { timeZone: decoded });
+    return decoded;
   } catch {
     return fallback;
   }

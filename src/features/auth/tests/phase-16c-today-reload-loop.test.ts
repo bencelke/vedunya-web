@@ -53,9 +53,10 @@ describe("Phase 16C — Today reload loop guards", () => {
     const util = readSource("src/features/numerology/utils/timezone-cookie.ts");
 
     expect(source).toContain("shouldWriteTimezoneCookie");
-    expect(source).not.toContain("existing === encodedTimeZone");
+    expect(source).toContain("useRef");
+    expect(source).toContain("TIMEZONE_SYNC_STORAGE_KEY");
     expect(util).toContain("safeDecodeCookieValue");
-    expect(util).toContain("safeDecodeCookieValue(existingCookieValue) !== timeZone");
+    expect(util).toContain('cookieHeader.split(";")');
   });
 
   it("runs beforeInteractive dev service worker cleanup once per tab", () => {

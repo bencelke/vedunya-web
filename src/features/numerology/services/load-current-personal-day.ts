@@ -12,6 +12,7 @@ import type {
   PersonalDayLoadResult,
   SupportedNumerologyLocale,
 } from "@/features/numerology/types/numerology";
+import type { SupportedLocale } from "@/config/app-config";
 import { formatDateOfBirth } from "@/features/profile/schemas/onboarding-schema";
 import { getProfileSnapshot } from "@/features/profile/services/profile-repository";
 import { isProfileComplete } from "@/features/profile/utils/profile-complete";
@@ -69,14 +70,26 @@ export async function loadCurrentPersonalDay(
   };
 }
 
+function resolveDateFormatLocale(locale: SupportedLocale): string {
+  if (locale === "ru") {
+    return "ru-RU";
+  }
+
+  if (locale === "de") {
+    return "de-DE";
+  }
+
+  return "en-US";
+}
+
 export function formatDisplayDate(
   dateKey: string,
-  locale: SupportedNumerologyLocale,
+  locale: SupportedLocale,
 ): string {
   const parts = parseIsoDateOnly(dateKey);
   const date = new Date(parts.year, parts.month - 1, parts.day);
 
-  return new Intl.DateTimeFormat(locale === "ru" ? "ru-RU" : "en-US", {
+  return new Intl.DateTimeFormat(resolveDateFormatLocale(locale), {
     weekday: "long",
     month: "long",
     day: "numeric",

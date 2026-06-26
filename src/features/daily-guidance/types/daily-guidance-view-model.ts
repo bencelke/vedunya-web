@@ -17,7 +17,8 @@ export type DailyGuidancePrimary = {
 export type PersonalDayIndicatorData = {
   number: number;
   title: string;
-  explanation: string;
+  summary: string;
+  focus: string;
 };
 
 export type MoonRhythmSummaryData = {

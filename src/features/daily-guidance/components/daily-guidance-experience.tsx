@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 
 import { DailyGuidanceAuthenticated } from "@/features/daily-guidance/components/daily-guidance-authenticated";
 import { DailyGuidanceHeader } from "@/features/daily-guidance/components/daily-guidance-header";
+import { TodayOracleHeader } from "@/features/today/components/today-oracle-header";
 import { DailyGuidanceIncomplete } from "@/features/daily-guidance/components/daily-guidance-incomplete";
 import { DailyGuidancePreview } from "@/features/daily-guidance/components/daily-guidance-preview";
 import type { DailyGuidancePageModel } from "@/features/daily-guidance/types/daily-guidance-view-model";
@@ -46,9 +47,11 @@ export async function DailyGuidanceExperience({
 
   return (
     <>
+      <TodayOracleHeader />
       <DailyGuidanceHeader
         formattedDate={model.guidance.formattedDate}
         greetingName={model.guidance.greetingName}
+        variant="oracle"
       />
       <DailyGuidanceAuthenticated guidance={model.guidance} />
     </>

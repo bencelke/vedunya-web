@@ -12,17 +12,17 @@ export function PrimaryGuidanceCard({
   return (
     <section
       aria-labelledby="daily-guidance-primary-title"
-      className="guidance-primary-surface mystic-cosmic-card-elevated relative overflow-hidden p-6 sm:p-7"
+      className="guidance-primary-surface mystic-cosmic-card-elevated mystic-guidance-hero relative overflow-hidden p-6 sm:p-7"
     >
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-[var(--glow-gold)]"
       />
-      <div className="relative space-y-4 text-center sm:text-left">
+      <div className="relative space-y-5 text-center sm:text-left">
         <p className="mystic-eyebrow">{primary.label}</p>
         <h2
           id="daily-guidance-primary-title"
-          className="mx-auto max-w-[22rem] text-[clamp(1.375rem,4.5vw,1.75rem)] font-normal leading-[1.2] tracking-[-0.02em] text-text-primary sm:mx-0"
+          className="mx-auto max-w-[22rem] text-[clamp(1.5rem,5vw,1.875rem)] font-medium leading-[1.15] tracking-[-0.02em] text-text-primary sm:mx-0"
         >
           {primary.title}
         </h2>
@@ -32,7 +32,7 @@ export function PrimaryGuidanceCard({
           </p>
         ) : null}
         {primary.action ? (
-          <div className="mx-auto max-w-[24rem] rounded-[var(--radius-md)] border border-accent-gold/20 bg-page-bg/40 p-4 text-left sm:mx-0">
+          <div className="mystic-guidance-action mx-auto max-w-[24rem] rounded-[var(--radius-md)] border p-4 text-left sm:mx-0">
             <p className="text-xs font-medium uppercase tracking-[0.14em] text-accent-gold">
               {actionLabel}
             </p>

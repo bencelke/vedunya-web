@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { SupportedLocale } from "@/config/app-config";
+import { resolveProfileBootstrapLocale } from "@/i18n/resolve-profile-bootstrap-locale";
 
 type RegisterFormProps = {
   locale: SupportedLocale;
@@ -57,7 +58,10 @@ export function RegisterForm({ locale, onSuccess }: RegisterFormProps) {
         parsed.data.email,
         parsed.data.password,
       );
-      await bootstrapUserProfile(credential.user, locale);
+      await bootstrapUserProfile(
+        credential.user,
+        resolveProfileBootstrapLocale(locale),
+      );
       const token = await credential.user.getIdToken(true);
       const sessionOk = await createServerSession(token);
       if (!sessionOk) {

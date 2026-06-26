@@ -28,10 +28,9 @@ export function BottomNavigation() {
   return (
     <nav
       aria-label={tA11y("bottomNavigation")}
-      className="mystic-chrome-nav fixed inset-x-0 bottom-nav-offset z-50"
-      style={{ height: "var(--bottom-nav-height)" }}
+      className="mystic-chrome-nav mystic-chrome-nav--floating fixed inset-x-0 bottom-nav-offset z-50 px-3"
     >
-      <ul className="mystic-shell flex h-full items-stretch px-1">
+      <ul className="mystic-chrome-nav-inner flex h-[var(--bottom-nav-height)] items-stretch">
         {bottomNavItems.map((item) => {
           const Icon = iconMap[item.icon];
           const isActive =
@@ -39,11 +38,11 @@ export function BottomNavigation() {
           const label = t(item.key);
 
           return (
-            <li key={item.key} className="flex-1">
+            <li key={item.key} className="flex flex-1">
               <Link
                 href={item.href}
                 className={cn(
-                  "relative flex h-full flex-col items-center justify-center gap-1 px-2 text-[0.6875rem] font-medium tracking-[0.02em] transition-colors",
+                  "relative flex h-full w-full flex-col items-center justify-center gap-1 rounded-[0.75rem] px-1 text-[0.6875rem] font-medium tracking-[0.02em] transition-colors",
                   isActive
                     ? "mystic-nav-active-pill text-[var(--nav-active)]"
                     : "text-[var(--nav-inactive)] hover:text-text-muted",

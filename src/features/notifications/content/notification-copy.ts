@@ -54,7 +54,7 @@ const NOTIFICATION_COPY = {
     },
   },
 } as const satisfies Record<
-  SupportedLocale,
+  "en" | "ru",
   Record<ReminderType, NotificationCopyEntry>
 >;
 
@@ -68,7 +68,8 @@ export function getNotificationCopy(
   locale: SupportedLocale,
   reminderType: ReminderType,
 ): NotificationCopyEntry {
-  return NOTIFICATION_COPY[locale][reminderType];
+  const resolvedLocale = locale === "de" ? "en" : locale;
+  return NOTIFICATION_COPY[resolvedLocale][reminderType];
 }
 
 export function listNotificationCopyBodies(): string[] {

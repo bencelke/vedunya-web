@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 
-import { Link } from "@/i18n/navigation";
+import { MysticPlusPaywallLink } from "@/features/premium/components/mystic-plus-paywall-link";
 import { Lock } from "lucide-react";
 
 type MysticPlusLockCardProps = {
@@ -14,6 +14,7 @@ type MysticPlusLockCardProps = {
 
 export function MysticPlusLockCard({ body, sectionNote }: MysticPlusLockCardProps) {
   const t = useTranslations("premium");
+  const tPaywall = useTranslations("premium.paywall");
 
   return (
     <section className="mystic-cosmic-card space-y-4 p-5">
@@ -30,17 +31,9 @@ export function MysticPlusLockCard({ body, sectionNote }: MysticPlusLockCardProp
         </div>
       </div>
       <div className="space-y-3">
-        <button
-          type="button"
-          disabled
-          className="inline-flex min-h-12 w-full cursor-not-allowed items-center justify-center rounded-[var(--radius-pill)] border border-border-subtle bg-surface-primary/60 px-5 text-sm font-medium text-text-subtle opacity-80"
-        >
-          {t("paymentComingLater")}
-        </button>
+        <MysticPlusPaywallLink label={tPaywall("unlockFullReading")} />
         <p className="text-center text-xs text-text-subtle">
-          <Link href="/profile" className="text-accent-gold underline-offset-2 hover:underline">
-            {t("profileLink")}
-          </Link>
+          <MysticPlusPaywallLink variant="text" label={tPaywall("openInPlus")} />
         </p>
       </div>
     </section>

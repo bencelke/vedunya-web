@@ -16,23 +16,23 @@ function readSource(relativePath: string): string {
 }
 
 describe("Phase 9.3 brand wordmark", () => {
-  it("uses Vedunya Maria brand wordmark in Today header", () => {
+  it("uses MYSTIC by Vedunya Maria brand wordmark in Today header", () => {
     const header = readSource(
       "src/features/daily-guidance/components/daily-guidance-header.tsx",
     );
-    expect(header).toContain("brandWordmark");
-    expect(header).not.toContain(">Mystic<");
-    expect(en.dailyGuidance.brandWordmark).toBe("Vedunya Maria");
-    expect(ru.dailyGuidance.brandWordmark).toBe("Vedunya Maria");
+    expect(header).toContain("MysticBrandHeader");
+    expect(header).toContain('tAuth("brandWordmark")');
+    expect(en.dailyGuidance.brandWordmark).toBe("MYSTIC by Vedunya Maria");
+    expect(ru.dailyGuidance.brandWordmark).toBe("MYSTIC by Vedunya Maria");
   });
 });
 
 describe("Phase 9.3 Russian Today content", () => {
-  it("loads Today content from route locale instead of profile language", () => {
+  it("loads Today spiritual content from route locale via resolveSpiritualContentLocale", () => {
     const loader = readSource(
       "src/features/daily-guidance/services/load-daily-guidance.ts",
     );
-    expect(loader).toContain("const contentLocale = locale");
+    expect(loader).toContain("resolveSpiritualContentLocale(locale)");
     expect(loader).not.toContain("profile.language");
   });
 
@@ -74,10 +74,10 @@ describe("Phase 9.3 rune visual polish", () => {
     expect(theme).toContain("#f3ede3");
   });
 
-  it("uses MysticRuneSigil on Today and Rune detail heroes", () => {
-    const today = readSource("src/features/today/components/today-rune-anchor.tsx");
+  it("uses MysticRuneSigil on Today rhythm strip and Rune detail heroes", () => {
+    const rhythm = readSource("src/features/today/components/today-rhythm-strip.tsx");
     const hero = readSource("src/features/runes/components/rune-hero.tsx");
-    expect(today).toContain("MysticRuneSigil");
+    expect(rhythm).toContain("MysticRuneSigil");
     expect(hero).toContain("MysticRuneSigil");
   });
 

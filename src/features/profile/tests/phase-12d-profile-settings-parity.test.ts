@@ -85,14 +85,14 @@ describe("Phase 12D — Request and Reminders integration", () => {
 });
 
 describe("Phase 12D — Mystic Plus placeholder", () => {
-  it("shows deferred Mystic Plus copy without checkout buttons", () => {
+  it("links Profile Mystic Plus section to paywall without checkout buttons", () => {
     const source = readSource("src/features/profile/components/profile-subscription-section.tsx");
-    expect(source).toContain("resolvePremiumDisplayStatus");
-    expect(source).toContain("webComingSoon");
+    expect(source).toContain("MysticPlusPaywallLink");
+    expect(source).toContain("webNote");
     expect(source).not.toContain("PayPal");
     expect(source).not.toContain("paypalConfigured");
-    expect(en.premium.webComingSoon).toContain("configured later");
-    expect(ru.premium.webComingSoon).toContain("подключено позже");
+    expect(en.profile.subscription.webNote).toContain("soon");
+    expect(ru.profile.subscription.webNote).toContain("скоро");
   });
 });
 

@@ -21,7 +21,7 @@ export function PersonalDayIndicator({
     );
   }
 
-  const { number, title, explanation } = numerology.data;
+  const { number, title, summary, focus } = numerology.data;
 
   return (
     <section className="mystic-cosmic-card px-5 py-4">
@@ -37,9 +37,16 @@ export function PersonalDayIndicator({
           <h3 className="text-base font-medium leading-snug text-text-primary">
             {title}
           </h3>
-          <p className="mt-2 text-sm leading-[1.72] text-text-muted">
-            {explanation}
-          </p>
+          {summary ? (
+            <p className="mt-2 text-sm leading-[1.72] text-text-muted">
+              {summary}
+            </p>
+          ) : null}
+          {focus ? (
+            <p className="mt-2 text-sm leading-[1.72] text-text-primary">
+              {focus}
+            </p>
+          ) : null}
         </div>
       </div>
     </section>

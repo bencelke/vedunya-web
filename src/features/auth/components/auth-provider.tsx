@@ -25,6 +25,7 @@ import {
 } from "@/features/auth/services/session-service";
 import { bootstrapUserProfile } from "@/features/profile/services/profile-bootstrap-service";
 import type { SupportedLocale } from "@/config/app-config";
+import { resolveProfileBootstrapLocale } from "@/i18n/resolve-profile-bootstrap-locale";
 import { getFirebaseAuth } from "@/lib/firebase/auth";
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -48,6 +49,12 @@ export function AuthProvider({
   const redirectHandledRef = useRef(false);
   const bootstrappedRedirectRef = useRef(false);
   const hadFirebaseUserRef = useRef(false);
+
+  const localeRef = useRef<SupportedLocale>(locale);
+
+  useEffect(() => {
+    localeRef.current = locale;
+  }, [locale]);
 
   const syncSession = useCallback(async (nextUser: User | null) => {
     if (!adminConfigured) {
@@ -107,7 +114,10 @@ export function AuthProvider({
             !bootstrappedRedirectRef.current
           ) {
             bootstrappedRedirectRef.current = true;
-            await bootstrapUserProfile(redirectResult.user, locale);
+            await bootstrapUserProfile(
+              redirectResult.user,
+              resolveProfileBootstrapLocale(localeRef.current),
+            );
           }
         } catch {
           // Redirect errors are surfaced by the auth page when needed.
@@ -134,7 +144,7 @@ export function AuthProvider({
       active = false;
       unsubscribe();
     };
-  }, [configured, locale, syncSession]);
+  }, [configured, syncSession]);
 
   const signOut = useCallback(async () => {
     await signOutFromFirebase();

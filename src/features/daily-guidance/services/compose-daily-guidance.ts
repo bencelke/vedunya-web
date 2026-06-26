@@ -39,9 +39,6 @@ function normalizeText(value: string): string {
 export function composeNumerologySection(
   numerology: PersonalDayResult | null,
   unavailableMessage: string,
-  primaryMessage: string,
-  primaryAction: string,
-  formatPersonalDayExplanation: (number: number, title: string) => string,
 ): DailyGuidanceNumerologySection {
   if (!numerology) {
     return { status: "unavailable", message: unavailableMessage };
@@ -51,11 +48,9 @@ export function composeNumerologySection(
     status: "ready",
     data: {
       number: numerology.calculation.personalDayNumber,
-      title: numerology.content.title,
-      explanation: formatPersonalDayExplanation(
-        numerology.calculation.personalDayNumber,
-        numerology.content.title,
-      ),
+      title: numerology.content.title.trim(),
+      summary: numerology.content.summary.trim(),
+      focus: numerology.content.doAdvice.trim(),
     },
   };
 }
@@ -170,9 +165,6 @@ export function composeAuthenticatedGuidance(
   const numerology = composeNumerologySection(
     input.numerology,
     input.labels.numerologyUnavailable,
-    primary.message,
-    primary.action,
-    input.labels.formatPersonalDayExplanation,
   );
 
   const moon = composeMoonSection(

@@ -10,30 +10,35 @@ export function getCookieValue(
   cookieName: string,
   cookieHeader: string,
 ): string | null {
-  const entry = cookieHeader
-    .split("; ")
-    .find((part) => part.startsWith(`${cookieName}=`));
-
-  if (!entry) {
+  if (!cookieHeader) {
     return null;
   }
 
-  return entry.slice(cookieName.length + 1);
+  for (const part of cookieHeader.split(";")) {
+    const trimmed = part.trim();
+    if (trimmed.startsWith(`${cookieName}=`)) {
+      return trimmed.slice(cookieName.length + 1);
+    }
+  }
+
+  return null;
 }
 
 export function shouldWriteTimezoneCookie(
   timeZone: string,
   existingCookieValue: string | null,
 ): boolean {
-  if (!timeZone) {
+  const normalizedTimeZone = timeZone.trim();
+  if (!normalizedTimeZone) {
     return false;
   }
 
-  if (!existingCookieValue) {
+  const normalizedExisting = existingCookieValue?.trim();
+  if (!normalizedExisting) {
     return true;
   }
 
-  return safeDecodeCookieValue(existingCookieValue) !== timeZone;
+  return safeDecodeCookieValue(normalizedExisting) !== normalizedTimeZone;
 }
 
 export function formatTimezoneCookieAssignment(

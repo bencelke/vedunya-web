@@ -1,4 +1,5 @@
 import type { SupportedLocale } from "@/config/app-config";
+import { resolveProfileBootstrapLocale } from "@/i18n/resolve-profile-bootstrap-locale";
 import { isPwaEnabled } from "@/config/pwa";
 import type { PushPlatform } from "@/features/notifications/types/push";
 import type { PushSubscribeRequest } from "@/features/notifications/schemas/push-schema";
@@ -49,7 +50,7 @@ export function serializePushSubscription(input: {
     },
     userAgent: navigator.userAgent.slice(0, 512),
     platform: input.platform ?? detectPushPlatform(),
-    locale: input.locale,
+    locale: resolveProfileBootstrapLocale(input.locale),
     timezone: input.timezone,
   };
 }

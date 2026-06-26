@@ -1,7 +1,7 @@
 import Script from "next/script";
 
 import { isPwaEnabled } from "@/config/pwa";
-import { DEV_SW_CLEANUP_KEY } from "@/features/pwa/utils/service-worker-lifecycle";
+import { DEV_SW_CLEANUP_KEY, DEV_SW_RELOAD_KEY } from "@/features/pwa/utils/service-worker-lifecycle";
 
 const DEV_SW_CLEANUP = `
 (function () {
@@ -25,7 +25,12 @@ const DEV_SW_CLEANUP = `
     ).then(function () {
       try {
         window.sessionStorage.setItem("${DEV_SW_CLEANUP_KEY}", "1");
+        if (window.sessionStorage.getItem("${DEV_SW_RELOAD_KEY}") === "1") {
+          return;
+        }
+        window.sessionStorage.setItem("${DEV_SW_RELOAD_KEY}", "1");
       } catch (e) {}
+      window.location.reload();
     });
   });
   if ("caches" in window) {

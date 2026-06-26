@@ -9,13 +9,17 @@ import {
 } from "@/features/auth/utils/auth-error-map";
 import { bootstrapUserProfile } from "@/features/profile/services/profile-bootstrap-service";
 import type { SupportedLocale } from "@/config/app-config";
+import { resolveProfileBootstrapLocale } from "@/i18n/resolve-profile-bootstrap-locale";
 
 export async function completeSocialSignIn(
   credential: UserCredential,
   locale: SupportedLocale,
   onSuccess: () => void,
 ): Promise<void> {
-  await bootstrapUserProfile(credential.user, locale);
+  await bootstrapUserProfile(
+    credential.user,
+    resolveProfileBootstrapLocale(locale),
+  );
   const token = await credential.user.getIdToken(true);
   await createServerSession(token);
   onSuccess();

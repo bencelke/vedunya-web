@@ -4,7 +4,7 @@ export const appConfig = {
   description:
     "Daily guidance for a calmer, clearer day — personalized spiritual support from Vedunya Maria.",
   defaultLocale: "en",
-  supportedLocales: ["en", "ru"] as const,
+  supportedLocales: ["en", "ru", "de"] as const,
   supportEmail: "support@vedunya.com",
   productionUrl: "https://app.vedunya.com",
 } as const;

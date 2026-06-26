@@ -30,7 +30,7 @@ describe("Mystic theme foundation", () => {
     expect(mysticFlutterRefs.appColors.mutedGold).toBe("#B89B5E");
     expect(mysticFlutterRefs.cosmicTokens.voidDeep).toBe("#0B0D14");
     expect(mysticFlutterRefs.cosmicTokens.goldGlow).toBe("#C4A86A");
-    expect(mysticFlutterRefs.layout.todayMaxWidth).toBe("420px");
+    expect(mysticFlutterRefs.layout.todayMaxWidth).toBe("450px");
     expect(mysticFlutterRefs.chrome.navBlurPx).toBe(20);
   });
 

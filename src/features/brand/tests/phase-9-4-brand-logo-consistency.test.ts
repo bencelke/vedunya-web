@@ -13,16 +13,15 @@ function readSource(relativePath: string): string {
   return readFileSync(resolve(WEB_ROOT, relativePath), "utf8");
 }
 
-describe("Phase 9.4 — primary page headers use Vedunya Maria", () => {
-  it("uses translated brand wordmark in Today header, not standalone Mystic", () => {
+describe("Phase 9.4 — primary page headers use Mystic brand", () => {
+  it("uses shared MysticBrandHeader with auth wordmark in Today header", () => {
     const header = readSource(
       "src/features/daily-guidance/components/daily-guidance-header.tsx",
     );
-    expect(header).toContain('t("brandWordmark")');
-    expect(header).not.toContain(">Mystic<");
-    expect(header).not.toContain(">MYSTIC<");
-    expect(en.dailyGuidance.brandWordmark).toBe("Vedunya Maria");
-    expect(ru.dailyGuidance.brandWordmark).toBe("Vedunya Maria");
+    expect(header).toContain("MysticBrandHeader");
+    expect(header).toContain('tAuth("brandWordmark")');
+    expect(en.dailyGuidance.brandWordmark).toBe("MYSTIC by Vedunya Maria");
+    expect(ru.dailyGuidance.brandWordmark).toBe("MYSTIC by Vedunya Maria");
   });
 
   it("uses translated brand wordmark in app header via BrandMark", () => {
