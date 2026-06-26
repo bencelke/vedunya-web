@@ -74,7 +74,7 @@ describe("Phase 20C — auth session idle safety", () => {
   it("does not resubscribe auth listener when locale changes", () => {
     const auth = readSource("src/features/auth/components/auth-provider.tsx");
 
-    expect(auth).toContain("localeRef");
+    expect(auth).toContain("ensureOAuthRedirectChecked");
     expect(auth).not.toMatch(/}, \[configured, locale, syncSession\]/);
     expect(auth).not.toContain("router.refresh");
   });

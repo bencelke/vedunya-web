@@ -39,9 +39,9 @@ describe("Phase 19C.1 — auth session churn guard", () => {
   it("does not resubscribe Firebase auth when locale changes", () => {
     const auth = readSource("src/features/auth/components/auth-provider.tsx");
 
-    expect(auth).toContain("localeRef");
-    expect(auth).toContain("resolveProfileBootstrapLocale(localeRef.current)");
+    expect(auth).toContain("ensureOAuthRedirectChecked");
     expect(auth).not.toMatch(/}, \[configured, locale, syncSession\]/);
+    expect(auth).toMatch(/}, \[configured, syncSession\]/);
   });
 
   it("dedupes server session sync", () => {

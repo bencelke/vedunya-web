@@ -15,7 +15,8 @@ export type AuthErrorKey =
   | "operationNotAllowed"
   | "configuration"
   | "passwordMismatch"
-  | "termsRequired";
+  | "termsRequired"
+  | "googleSignInFailed";
 
 export function mapFirebaseAuthError(error: unknown): AuthErrorKey {
   if (!error || typeof error !== "object") {

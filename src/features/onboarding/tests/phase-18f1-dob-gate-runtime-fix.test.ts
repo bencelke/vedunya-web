@@ -99,7 +99,8 @@ describe("Phase 18F1 — post-login routing", () => {
 
   it("avoids redirect race before login handoff completes", () => {
     const screen = readSource("src/features/auth/components/auth-screen.tsx");
-    expect(screen).toContain("hadUserOnMountRef");
+    expect(screen).toContain("pendingRedirectRef");
+    expect(screen).toContain("useOAuthRedirectHandler");
     expect(screen).not.toMatch(
       /if \(pendingRedirectRef\.current === "login"\)[\s\S]*void redirectAfterAuth\(\);[\s\S]*void redirectAfterAuth\(\);/,
     );

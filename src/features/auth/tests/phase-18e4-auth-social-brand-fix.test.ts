@@ -142,7 +142,9 @@ describe("Phase 18E.4 — friendly errors and DOB handoff", () => {
     expect(mapFirebaseAuthError({ code: "auth/operation-not-allowed" })).toBe(
       "operationNotAllowed",
     );
-    expect(en.auth.errors.popupClosed).toBe("Sign-in was cancelled.");
+    expect(en.auth.errors.popupClosed).toBe(
+      "Google login was closed before completion.",
+    );
   });
 
   it("does not expose raw Firebase errors in UI", () => {

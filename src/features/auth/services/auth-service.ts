@@ -17,18 +17,14 @@ import {
 } from "firebase/auth";
 
 import { getFirebaseAuth, ensureAuthPersistence } from "@/lib/firebase/auth";
-import { isLikelyIOSPlatform, isStandaloneDisplayMode } from "@/lib/pwa/install";
+import { logGoogleAuth } from "@/features/auth/utils/google-auth-debug";
+import { shouldUseRedirectForGoogleAuth } from "@/features/auth/utils/google-oauth-strategy";
 
 const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: "select_account" });
 
 function shouldUseRedirectFlow(): boolean {
-  if (typeof window === "undefined") {
-    return false;
-  }
-
-  const isMobile = window.matchMedia("(max-width: 768px)").matches;
-  return isMobile || isLikelyIOSPlatform() || isStandaloneDisplayMode();
+  return shouldUseRedirectForGoogleAuth();
 }
 
 export async function registerWithEmail(
@@ -58,6 +54,14 @@ export async function loginWithEmail(
 }
 
 export async function loginWithGoogle(): Promise<UserCredential | null> {
+  logGoogleAuth("click");
+  if (shouldUseRedirectFlow()) {
+    logGoogleAuth("method", { method: "redirect" });
+    logGoogleAuth("redirect-start");
+  } else {
+    logGoogleAuth("method", { method: "popup" });
+  }
+
   return signInWithOAuthProvider(googleProvider);
 }
 
@@ -133,6 +137,8 @@ export async function signOutFromFirebase(): Promise<void> {
 
   await auth.signOut();
 }
+
+export { shouldUseRedirectForGoogleAuth } from "@/features/auth/utils/google-oauth-strategy";
 
 export function getCurrentFirebaseUser(): User | null {
   return getFirebaseAuth()?.currentUser ?? null;

@@ -4,12 +4,14 @@ import { useCallback, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 
 import { AuthBrandHeader } from "@/features/auth/components/auth-brand-header";
+import { AuthErrorMessage } from "@/features/auth/components/auth-error-message";
 import { AuthLanguageBar } from "@/features/auth/components/auth-language-bar";
 import { AuthProviderButtons } from "@/features/auth/components/auth-provider-buttons";
 import { AuthShell } from "@/features/auth/components/auth-shell";
 import { LoginForm } from "@/features/auth/components/login-form";
 import { RegisterForm } from "@/features/auth/components/register-form";
 import { useAuth } from "@/features/auth/hooks/use-auth";
+import { useOAuthRedirectHandler } from "@/features/auth/hooks/use-oauth-redirect-handler";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { useSearchParams } from "next/navigation";
 import type { ProfileStatusResponse } from "@/features/profile/utils/resolve-profile-status";
@@ -49,7 +51,6 @@ export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
     searchParams.get("mode") === "register" ? "register" : initialMode;
   const redirectStartedRef = useRef(false);
   const pendingRedirectRef = useRef<"login" | "register" | null>(null);
-  const hadUserOnMountRef = useRef<boolean | null>(null);
 
   const setAuthMode = useCallback(
     (nextMode: AuthMode) => {
@@ -57,12 +58,6 @@ export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
     },
     [router],
   );
-
-  useEffect(() => {
-    if (!loading && hadUserOnMountRef.current === null) {
-      hadUserOnMountRef.current = Boolean(user);
-    }
-  }, [loading, user]);
 
   const redirectAfterAuth = useCallback(
     async (forceOnboarding = false) => {
@@ -87,6 +82,27 @@ export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
     [pathname, router],
   );
 
+  const handleAuthSuccess = useCallback(() => {
+    pendingRedirectRef.current = "login";
+    if (sessionReady) {
+      void redirectAfterAuth(false);
+    }
+  }, [redirectAfterAuth, sessionReady]);
+
+  const handleRegisterSuccess = useCallback(() => {
+    pendingRedirectRef.current = "register";
+    if (sessionReady) {
+      void redirectAfterAuth(true);
+    }
+  }, [redirectAfterAuth, sessionReady]);
+
+  const oauthRedirectError = useOAuthRedirectHandler({
+    locale,
+    mode,
+    enabled: configured && adminConfigured,
+    onSuccess: mode === "register" ? handleRegisterSuccess : handleAuthSuccess,
+  });
+
   useEffect(() => {
     if (!loading && user && sessionReady) {
       if (pendingRedirectRef.current === "register") {
@@ -101,25 +117,9 @@ export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
         return;
       }
 
-      if (hadUserOnMountRef.current) {
-        void redirectAfterAuth(false);
-      }
-    }
-  }, [loading, redirectAfterAuth, sessionReady, user]);
-
-  function handleAuthSuccess() {
-    pendingRedirectRef.current = "login";
-    if (sessionReady) {
       void redirectAfterAuth(false);
     }
-  }
-
-  function handleRegisterSuccess() {
-    pendingRedirectRef.current = "register";
-    if (sessionReady) {
-      void redirectAfterAuth(true);
-    }
-  }
+  }, [loading, redirectAfterAuth, sessionReady, user]);
 
   const topBar = <AuthLanguageBar tone="auth" />;
 
@@ -163,6 +163,8 @@ export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
           headline={isLogin ? t("loginTitle") : t("registerTitle")}
           subtitle={isLogin ? t("loginDescription") : t("registerDescription")}
         />
+
+        <AuthErrorMessage errorKey={oauthRedirectError} tone="auth" />
 
         <AuthProviderButtons
           locale={locale}

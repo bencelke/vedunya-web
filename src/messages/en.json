@@ -511,14 +511,15 @@
       "emailAlreadyInUse": "An account with this email already exists.",
       "weakPassword": "Choose a stronger password with at least 8 characters.",
       "tooManyRequests": "Too many attempts. Wait a moment and try again.",
-      "popupBlocked": "The sign-in window was blocked. Allow pop-ups and try again.",
-      "popupClosed": "Sign-in was cancelled.",
-      "network": "Network error. Check your connection and try again.",
-      "unauthorizedDomain": "This domain is not authorized for sign-in yet.",
-      "operationNotAllowed": "This sign-in method is not enabled yet.",
+      "popupBlocked": "Your browser blocked the Google login popup. Try again or use email login.",
+      "popupClosed": "Google login was closed before completion.",
+      "network": "Network error during Google login. Please try again.",
+      "unauthorizedDomain": "Google login is not authorized for this domain yet.",
+      "operationNotAllowed": "Google login is not enabled for this Firebase project.",
       "configuration": "This sign-in method is not configured yet.",
       "passwordMismatch": "Passwords do not match.",
-      "termsRequired": "Please accept the terms before creating an account."
+      "termsRequired": "Please accept the terms before creating an account.",
+      "googleSignInFailed": "Google login could not be completed."
     },
     "intro": {
       "back": "Back",

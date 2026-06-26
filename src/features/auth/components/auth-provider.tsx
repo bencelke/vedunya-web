@@ -11,21 +11,15 @@ import {
   type ReactNode,
 } from "react";
 import { onIdTokenChanged, type User } from "firebase/auth";
-import { useLocale } from "next-intl";
 
 import type { AuthContextValue } from "@/features/auth/types/auth-state";
-import {
-  resolveOAuthRedirectResult,
-  signOutFromFirebase,
-} from "@/features/auth/services/auth-service";
+import { signOutFromFirebase } from "@/features/auth/services/auth-service";
+import { ensureOAuthRedirectChecked } from "@/features/auth/services/oauth-redirect-gate";
 import {
   clearServerSession,
   resetSessionSyncState,
   syncServerSession,
 } from "@/features/auth/services/session-service";
-import { bootstrapUserProfile } from "@/features/profile/services/profile-bootstrap-service";
-import type { SupportedLocale } from "@/config/app-config";
-import { resolveProfileBootstrapLocale } from "@/i18n/resolve-profile-bootstrap-locale";
 import { getFirebaseAuth } from "@/lib/firebase/auth";
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -41,20 +35,11 @@ export function AuthProvider({
   configured,
   adminConfigured,
 }: AuthProviderProps) {
-  const locale = useLocale() as SupportedLocale;
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(configured);
   const [sessionReady, setSessionReady] = useState(false);
   const syncingRef = useRef(false);
-  const redirectHandledRef = useRef(false);
-  const bootstrappedRedirectRef = useRef(false);
   const hadFirebaseUserRef = useRef(false);
-
-  const localeRef = useRef<SupportedLocale>(locale);
-
-  useEffect(() => {
-    localeRef.current = locale;
-  }, [locale]);
 
   const syncSession = useCallback(async (nextUser: User | null) => {
     if (!adminConfigured) {
@@ -103,42 +88,32 @@ export function AuthProvider({
     }
 
     let active = true;
+    let unsubscribe = () => {};
 
-    const bootstrap = async () => {
-      if (!redirectHandledRef.current) {
-        redirectHandledRef.current = true;
-        try {
-          const redirectResult = await resolveOAuthRedirectResult();
-          if (
-            redirectResult?.user &&
-            !bootstrappedRedirectRef.current
-          ) {
-            bootstrappedRedirectRef.current = true;
-            await bootstrapUserProfile(
-              redirectResult.user,
-              resolveProfileBootstrapLocale(localeRef.current),
-            );
-          }
-        } catch {
-          // Redirect errors are surfaced by the auth page when needed.
-        }
+    void (async () => {
+      try {
+        await ensureOAuthRedirectChecked();
+      } catch {
+        // Redirect errors are surfaced on the login screen.
       }
-    };
 
-    void bootstrap();
-
-    const unsubscribe = onIdTokenChanged(auth, (nextUser) => {
       if (!active) {
         return;
       }
 
-      setUser(nextUser);
-      void syncSession(nextUser).finally(() => {
-        if (active) {
-          setLoading(false);
+      unsubscribe = onIdTokenChanged(auth, (nextUser) => {
+        if (!active) {
+          return;
         }
+
+        setUser(nextUser);
+        void syncSession(nextUser).finally(() => {
+          if (active) {
+            setLoading(false);
+          }
+        });
       });
-    });
+    })();
 
     return () => {
       active = false;

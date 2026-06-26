@@ -64,7 +64,7 @@ export function SocialAuthButton({
 
       await completeSocialSignIn(credential, locale, onSuccess);
     } catch (error) {
-      setErrorKey(mapSocialSignInError(error));
+      setErrorKey(mapSocialSignInError(error, providerId));
     } finally {
       setSubmitting(false);
     }

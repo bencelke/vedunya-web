@@ -111,10 +111,10 @@ describe("Phase 18E.3 — OAuth implementation", () => {
     expect(source).toContain("signInWithRedirect");
   });
 
-  it("handles redirect result in AuthProvider", () => {
+  it("awaits shared OAuth redirect gate before auth listener", () => {
     const source = readSource("src/features/auth/components/auth-provider.tsx");
-    expect(source).toContain("resolveOAuthRedirectResult");
-    expect(source).toContain("bootstrapUserProfile");
+    expect(source).toContain("ensureOAuthRedirectChecked");
+    expect(source).not.toContain("bootstrapUserProfile");
   });
 
   it("routes social success through existing post-auth profile-status logic", () => {
@@ -131,7 +131,9 @@ describe("Phase 18E.3 — friendly errors and localization", () => {
     expect(mapFirebaseAuthError({ code: "auth/popup-closed-by-user" })).toBe(
       "popupClosed",
     );
-    expect(en.auth.errors.popupClosed).toBe("Sign-in was cancelled.");
+    expect(en.auth.errors.popupClosed).toBe(
+      "Google login was closed before completion.",
+    );
   });
 
   it("maps provider-not-configured to friendly message", () => {
