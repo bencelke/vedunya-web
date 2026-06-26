@@ -113,7 +113,7 @@ function PwaRegistrarProduction() {
 }
 
 export function PwaRegistrar() {
-  if (!isPwaEnabled) {
+  if (process.env.NODE_ENV === "development" || !isPwaEnabled) {
     return null;
   }
 

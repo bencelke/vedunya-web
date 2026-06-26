@@ -54,14 +54,11 @@ describe("Phase 19C.1 — auth session churn guard", () => {
 });
 
 describe("Phase 19C.1 — PWA dev reload guard", () => {
-  it("marks dev cleanup complete before the one-time reload", () => {
+  it("marks dev cleanup complete without reloading the page", () => {
     const script = readSource("src/components/pwa/dev-service-worker-cleanup-script.tsx");
 
-    const cleanupSet = script.indexOf('setItem("${DEV_SW_CLEANUP_KEY}", "1")');
-    const reload = script.indexOf("window.location.reload");
-
-    expect(cleanupSet).toBeGreaterThan(-1);
-    expect(reload).toBeGreaterThan(cleanupSet);
+    expect(script).toContain('setItem("${DEV_SW_CLEANUP_KEY}", "1")');
+    expect(script).not.toContain("window.location.reload");
   });
 
   it("keeps PWA registrar inert in development", () => {

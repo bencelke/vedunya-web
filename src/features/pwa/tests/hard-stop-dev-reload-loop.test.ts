@@ -19,6 +19,7 @@ describe("Phase 9.2 hard stop dev reload loop", () => {
   it("keeps PWA registrar inert in development", () => {
     const registrar = readSource("src/components/pwa/pwa-registrar.tsx");
     const gate = registrar.match(/export function PwaRegistrar\([\s\S]*?\n\}/)?.[0] ?? "";
+    expect(gate).toContain('process.env.NODE_ENV === "development"');
     expect(gate).toContain("isPwaEnabled");
     expect(gate).toContain("return null");
     expect(gate).not.toContain("useEffect");
@@ -72,13 +73,13 @@ describe("Phase 9.2 hard stop dev reload loop", () => {
     expect(config).toContain("/sw-dev-noop.js");
   });
 
-  it("runs beforeInteractive dev service worker cleanup script", () => {
+  it("runs beforeInteractive dev service worker cleanup script without reload", () => {
     const script = readSource("src/components/pwa/dev-service-worker-cleanup-script.tsx");
     expect(script).toContain("beforeInteractive");
     expect(script).toContain("unregister");
     expect(script).toContain("DEV_SW_CLEANUP_KEY");
-    expect(script).toContain("DEV_SW_RELOAD_KEY");
     expect(script).toContain("sessionStorage.getItem");
+    expect(script).not.toContain("window.location.reload");
   });
 
   it("keeps /api routes excluded from service worker cache", () => {

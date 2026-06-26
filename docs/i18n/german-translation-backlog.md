@@ -73,6 +73,16 @@ German (`de`) is enabled as a UI locale with **English fallback copy** in `src/m
 | `profile.*` | Profile sections, edit labels, premium status, language preference |
 | `premium.*` | Mystic+ lock cards and upgrade copy |
 
+### Mystic Plus paywall pricing (`premium.paywall`)
+
+These structural keys currently use **English fallback placeholders** in `de.json` (awaiting manual German translation):
+
+- `plansHeading`, `monthlyTitle`, `monthlyInterval`, `monthlyDescription`
+- `yearlyTitle`, `yearlyInterval`, `yearlyDescription`, `yearlyBadge`
+- `paymentComingLater`, `paymentNotWiredNote`
+
+Runtime also merges `en.json` under non-English locales, so `/de/plus` stays free of `MISSING_MESSAGE` errors even if a key is omitted later.
+
 ---
 
 ## 8. Legal / support

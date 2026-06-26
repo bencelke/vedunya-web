@@ -87,17 +87,14 @@ describe("Phase 19A.1 — Today reload loop fix", () => {
     expect(gate).not.toContain("useEffect");
   });
 
-  it("reloads at most once after unregistering stale dev service workers", () => {
+  it("unregisters stale dev service workers without reloading the page", () => {
     const script = readSource("src/components/pwa/dev-service-worker-cleanup-script.tsx");
     const lifecycle = readSource("src/features/pwa/utils/service-worker-lifecycle.ts");
 
-    expect(script).toContain("DEV_SW_RELOAD_KEY");
-    expect(lifecycle).toContain('DEV_SW_RELOAD_KEY = "mystic:dev-sw-reload-done"');
     expect(script).toContain("DEV_SW_CLEANUP_KEY");
-    expect(script).toContain("window.location.reload");
-    const cleanupSet = script.indexOf('setItem("${DEV_SW_CLEANUP_KEY}", "1")');
-    const reload = script.indexOf("window.location.reload");
-    expect(cleanupSet).toBeLessThan(reload);
+    expect(lifecycle).toContain('DEV_SW_CLEANUP_KEY = "mystic:dev-sw-cleaned"');
+    expect(script).toContain("unregister");
+    expect(script).not.toContain("window.location.reload");
   });
 
   it("keeps profile gate redirects server-side without client replace loops", () => {
