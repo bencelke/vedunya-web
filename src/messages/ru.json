@@ -441,6 +441,55 @@
       "action": "Выйти",
       "submitting": "Выходим…"
     },
+    "screen": {
+      "pageTitle": "Профиль",
+      "back": "Назад",
+      "sections": {
+        "account": "Аккаунт / Профиль",
+        "mysticPlus": "Mystic Plus",
+        "preferences": "Настройки",
+        "appLegal": "Приложение и правовая информация"
+      },
+      "hero": {
+        "subtitle": "Спокойное пространство для ежедневной практики.",
+        "fallbackName": "Пользователь Mystic",
+        "unlockPlus": "Открыть Mystic Plus",
+        "plusActiveChip": "Mystic Plus активен"
+      },
+      "mysticPlus": {
+        "description": "Mystic Plus — это более глубокий слой: полные разборы, подробные подсказки и пространство, к которому можно возвращаться."
+      },
+      "rows": {
+        "editProfile": "Редактировать профиль",
+        "editProfileSubtitle": "Имя, дата рождения и язык",
+        "apple": "Apple",
+        "google": "Google",
+        "providerConnected": "Подключено",
+        "providerComingSoon": "Скоро",
+        "restorePurchases": "Восстановить покупки",
+        "restoreComingSoon": "Скоро в веб-версии",
+        "logout": "Выйти",
+        "unlockMysticPlus": "Открыть Mystic Plus",
+        "unlockMysticPlusSubtitle": "Более глубокие разборы рун и ежедневных подсказок.",
+        "subscription": "Подписка",
+        "subscriptionActive": "Mystic Plus активен",
+        "subscriptionInactive": "Mystic Plus не активен",
+        "universeRequest": "Запрос к Вселенной",
+        "universeRequestSubtitle": "Ваше желание и напоминания",
+        "notifications": "Уведомления",
+        "notificationsSubtitle": "Ежедневные подсказки и вечернее размышление",
+        "language": "Язык",
+        "languageSubtitle": "Язык приложения",
+        "about": "О Mystic by Vedunya Maria",
+        "aboutSubtitle": "Что такое Mystic by Vedunya Maria и как им пользоваться",
+        "privacy": "Политика конфиденциальности",
+        "privacySubtitle": "Как мы обрабатываем ваши данные",
+        "terms": "Условия использования",
+        "termsSubtitle": "Правила использования приложения",
+        "support": "Поддержка",
+        "supportSubtitle": "Получить помощь или сообщить о проблеме"
+      }
+    },
     "pwa": {
       "label": "Установка приложения"
     }

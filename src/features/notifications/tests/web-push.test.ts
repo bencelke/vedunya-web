@@ -27,13 +27,14 @@ describe("Web Push env documentation", () => {
 });
 
 describe("Web Push Profile UI", () => {
-  it("renders notification settings in Profile reminders section", () => {
+  it("renders notification settings behind Profile notifications row", () => {
     const profile = readSource("src/features/profile/components/profile-content.tsx");
-    expect(profile).toContain("ProfileRemindersSection");
-    const reminders = readSource(
-      "src/features/profile/components/profile-reminders-section.tsx",
+    expect(profile).toContain("NotificationSettingsCard");
+    expect(profile).toContain('tScreen("rows.notifications")');
+    const card = readSource(
+      "src/features/notifications/components/notification-settings-card.tsx",
     );
-    expect(reminders).toContain("NotificationSettingsCard");
+    expect(card).toContain("NotificationSettingsCard");
   });
 
   it("shows iPhone install requirement component", () => {

@@ -13,18 +13,15 @@ function readSource(relativePath: string): string {
 }
 
 describe("Phase 12D — Profile sections", () => {
-  it("renders account section in Profile content", () => {
+  it("renders Flutter-parity profile screen sections", () => {
     const source = readSource("src/features/profile/components/profile-content.tsx");
-    expect(source).toContain("ProfileAccountSection");
-    expect(source).toContain("ProfilePersonalDetailsSection");
-    expect(source).toContain("ProfileLanguageSection");
-    expect(source).toContain("ProfileUniverseRequestSection");
-    expect(source).toContain("ProfileRemindersSection");
-    expect(source).toContain("ProfileSubscriptionSection");
-    expect(source).toContain("ProfileCoursesSection");
-    expect(source).toContain("ProfileLegalSection");
-    expect(source).toContain("ProfileSupportSection");
-    expect(source).toContain("ProfileLogoutSection");
+    expect(source).toContain("ProfilePageHeader");
+    expect(source).toContain("ProfileHero");
+    expect(source).toContain("ProfileSectionLabel");
+    expect(source).toContain("ProfileCosmicPanel");
+    expect(source).toContain("ProfileActionRow");
+    expect(source).toContain("NotificationSettingsCard");
+    expect(source).toContain("ProfileEditPanel");
   });
 
   it("hides UID and raw debug fields from Profile UI", () => {
@@ -72,23 +69,22 @@ describe("Phase 12D — localization EN/RU", () => {
 });
 
 describe("Phase 12D — Request and Reminders integration", () => {
-  it("loads universe request summary for Profile", () => {
-    const loader = readSource("src/features/profile/server/load-profile-settings-summary.ts");
-    expect(loader).toContain("readUniverseRequest");
+  it("loads universe request summary for Profile notifications gate", () => {
+    const page = readSource("src/app/[locale]/profile/page.tsx");
+    expect(page).toContain("readUniverseRequest");
   });
 
-  it("wraps notification settings in Profile reminders section", () => {
-    const source = readSource("src/features/profile/components/profile-reminders-section.tsx");
+  it("wraps notification settings behind Profile notifications row", () => {
+    const source = readSource("src/features/profile/components/profile-content.tsx");
     expect(source).toContain("NotificationSettingsCard");
     expect(source).not.toContain("endpoint");
   });
 });
 
 describe("Phase 12D — Mystic Plus placeholder", () => {
-  it("links Profile Mystic Plus section to paywall without checkout buttons", () => {
-    const source = readSource("src/features/profile/components/profile-subscription-section.tsx");
-    expect(source).toContain("MysticPlusPaywallLink");
-    expect(source).toContain("webNote");
+  it("links Profile Mystic Plus rows to paywall without checkout buttons", () => {
+    const source = readSource("src/features/profile/components/profile-content.tsx");
+    expect(source).toContain('href="/plus"');
     expect(source).not.toContain("PayPal");
     expect(source).not.toContain("paypalConfigured");
     expect(en.profile.subscription.webNote).toContain("soon");
@@ -104,13 +100,12 @@ describe("Phase 12D — Legal and Support", () => {
     expect(ru.profile.support.email).toBe("vedunyamaria@gmail.com");
   });
 
-  it("links Profile legal section to trust pages", () => {
-    const source = readSource("src/features/profile/components/profile-legal-section.tsx");
-    expect(source).toContain("TRUST_ROUTES");
-    expect(source).toContain("TRUST_ROUTES.disclaimer");
+  it("links Profile App & Legal rows to trust pages", () => {
+    const source = readSource("src/features/profile/components/profile-content.tsx");
     expect(source).toContain("TRUST_ROUTES.privacy");
-    expect(source).toContain("TRUST_ROUTES.dataDeletion");
-    expect(source).not.toContain("comingSoon");
+    expect(source).toContain("TRUST_ROUTES.terms");
+    expect(source).toContain("TRUST_ROUTES.support");
+    expect(source).toContain("TRUST_ROUTES.about");
   });
 });
 
@@ -139,14 +134,5 @@ describe("Phase 12D — profile validation and merge", () => {
     const source = readSource("src/features/profile/components/profile-content.tsx");
     expect(source).toContain("disablePushOnLogout");
     expect(source).toContain('router.replace("/")');
-  });
-});
-
-describe("Phase 12D — Courses section", () => {
-  it("links to courses with progress summary loader", () => {
-    const section = readSource("src/features/profile/components/profile-courses-section.tsx");
-    expect(section).toContain('href="/courses"');
-    const loader = readSource("src/features/profile/server/load-profile-settings-summary.ts");
-    expect(loader).toContain("readCourseProgress");
   });
 });

@@ -441,6 +441,55 @@
       "action": "Sign out",
       "submitting": "Signing out…"
     },
+    "screen": {
+      "pageTitle": "Profile",
+      "back": "Back",
+      "sections": {
+        "account": "Account / Profile",
+        "mysticPlus": "Mystic Plus",
+        "preferences": "Preferences",
+        "appLegal": "App & Legal"
+      },
+      "hero": {
+        "subtitle": "A calm space for your daily ritual.",
+        "fallbackName": "Mystic User",
+        "unlockPlus": "Unlock Mystic Plus",
+        "plusActiveChip": "Mystic Plus is active"
+      },
+      "mysticPlus": {
+        "description": "Mystic Plus is the deeper layer: full readings, richer cues for work and relationships, and room to return."
+      },
+      "rows": {
+        "editProfile": "Edit Profile",
+        "editProfileSubtitle": "Name, birthday, and language",
+        "apple": "Apple",
+        "google": "Google",
+        "providerConnected": "Connected",
+        "providerComingSoon": "Coming soon",
+        "restorePurchases": "Restore Purchases",
+        "restoreComingSoon": "Coming soon on web",
+        "logout": "Log Out",
+        "unlockMysticPlus": "Unlock Mystic Plus",
+        "unlockMysticPlusSubtitle": "Deeper rune threads and richer daily cues.",
+        "subscription": "Subscription",
+        "subscriptionActive": "Mystic Plus is active",
+        "subscriptionInactive": "Mystic Plus is not active",
+        "universeRequest": "Request to the Universe",
+        "universeRequestSubtitle": "Your wish and reminders",
+        "notifications": "Notifications",
+        "notificationsSubtitle": "Daily guidance and evening reflection",
+        "language": "Language",
+        "languageSubtitle": "App language",
+        "about": "About Mystic by Vedunya Maria",
+        "aboutSubtitle": "What Mystic by Vedunya Maria is and how to use it",
+        "privacy": "Privacy Policy",
+        "privacySubtitle": "How we handle your data",
+        "terms": "Terms of Use",
+        "termsSubtitle": "Using the app respectfully",
+        "support": "Support",
+        "supportSubtitle": "Get help or report an issue"
+      }
+    },
     "pwa": {
       "label": "Install app"
     }

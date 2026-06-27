@@ -137,9 +137,10 @@ describe("Phase 12B — Today integration wiring", () => {
     expect(source).toContain('CURRENT_DOC_ID = "current"');
   });
 
-  it("adds universe request section on Profile", () => {
+  it("adds universe request row on Profile", () => {
     const source = readSource("src/features/profile/components/profile-content.tsx");
-    expect(source).toContain("ProfileUniverseRequestSection");
+    expect(source).toContain('tScreen("rows.universeRequest")');
+    expect(source).toContain('href="/today"');
   });
 });
 
