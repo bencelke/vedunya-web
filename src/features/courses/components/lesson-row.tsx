@@ -96,8 +96,9 @@ export function LessonRow({
   return (
     <Link
       href={href}
+      prefetch={false}
       className={cn(
-        "mystic-cosmic-card flex min-w-0 items-start gap-4 overflow-hidden p-4 transition-colors focus-visible:outline-none",
+        "touch-manipulation mystic-cosmic-card flex min-w-0 items-start gap-4 overflow-hidden p-4 transition-[background-color,opacity,transform] duration-100 active:scale-[0.99] active:duration-0 focus-visible:outline-none",
         state === "current" && "border-accent-gold/25 bg-accent-gold-muted/20",
       )}
     >

@@ -1,8 +1,9 @@
 import "server-only";
 
 import type { SupportedLocale } from "@/config/app-config";
-import { LIVING_THE_RUNES_SLUG } from "@/features/courses/constants/course-ids";
-import { getLivingTheRunesLessonSummaries } from "@/features/courses/content/living-the-runes-runtime";
+import {
+  getCourseLessonSummaries,
+} from "@/features/courses/services/course-content-registry";
 import {
   fetchSanityCourseCatalog,
   mergeCourseCatalog,
@@ -56,11 +57,8 @@ export async function loadCourseCatalog(
       if (sessionUser) {
         const progress = await readCourseProgress(sessionUser.uid, course.id);
         if (progress) {
-          const validIds = new Set(
-            course.slug === LIVING_THE_RUNES_SLUG
-              ? getLivingTheRunesLessonSummaries(locale).map((l) => l.id)
-              : [],
-          );
+          const lessons = getCourseLessonSummaries(course.slug, locale);
+          const validIds = new Set(lessons.map((l) => l.id));
           const completed = filterValidCompletedLessonIds(
             progress.completedLessonIds,
             validIds,
@@ -71,11 +69,8 @@ export async function loadCourseCatalog(
             course.lessonCount,
           );
           isCompleted = progress.isCompleted;
-          if (course.slug === LIVING_THE_RUNES_SLUG) {
-            resumeLessonId = resolveResumeLessonId({
-              lessons: getLivingTheRunesLessonSummaries(locale),
-              progress,
-            });
+          if (lessons.length > 0) {
+            resumeLessonId = resolveResumeLessonId({ lessons, progress });
           }
         }
       }

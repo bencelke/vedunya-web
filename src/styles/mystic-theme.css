@@ -979,4 +979,34 @@
     text-transform: uppercase;
     color: var(--mystic-gold);
   }
+
+  @media (max-width: 768px) {
+    .mystic-app-page::before,
+    .mystic-app-page::after {
+      position: absolute;
+      height: 100%;
+      min-height: 100dvh;
+    }
+
+    .mystic-chrome-nav-inner,
+    .mystic-chrome-header {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      background-color: color-mix(in srgb, var(--app-bg) 94%, transparent);
+    }
+
+    .mystic-cosmic-card {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      background-color: color-mix(in srgb, var(--app-glass) 96%, var(--app-bg));
+    }
+  }
+
+  .mystic-route-loading [class*="rounded"] {
+    background-color: color-mix(
+      in srgb,
+      var(--app-surface-elevated) 90%,
+      var(--mystic-gold) 10%
+    );
+  }
 }

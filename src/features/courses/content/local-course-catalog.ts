@@ -4,8 +4,12 @@ import {
   LIVING_THE_RUNES_LESSON_COUNT,
   LIVING_THE_RUNES_PRODUCT_ID,
   LIVING_THE_RUNES_SLUG,
+  RUNES_FIRST_STEPS_COURSE_ID,
+  RUNES_FIRST_STEPS_LESSON_COUNT,
+  RUNES_FIRST_STEPS_SLUG,
 } from "@/features/courses/constants/course-ids";
 import { getCourseCoverPath } from "@/features/courses/constants/course-assets";
+import { runesFirstStepsCourseMeta } from "@/features/courses/content/runes-first-steps.generated";
 import type { CourseSummary } from "@/features/courses/types/course";
 
 export function getLocalCourseCatalog(
@@ -14,6 +18,22 @@ export function getLocalCourseCatalog(
   const isRu = locale === "ru";
 
   return [
+    {
+      id: RUNES_FIRST_STEPS_COURSE_ID,
+      slug: RUNES_FIRST_STEPS_SLUG,
+      title: isRu
+        ? runesFirstStepsCourseMeta.titleRu
+        : runesFirstStepsCourseMeta.titleEn,
+      description: isRu
+        ? runesFirstStepsCourseMeta.descriptionRu
+        : runesFirstStepsCourseMeta.descriptionEn,
+      coverAssetPath: getCourseCoverPath(RUNES_FIRST_STEPS_SLUG),
+      lessonCount: RUNES_FIRST_STEPS_LESSON_COUNT,
+      estimatedDuration: "12 min",
+      language: locale,
+      accessType: "free",
+      status: "available",
+    },
     {
       id: LIVING_THE_RUNES_COURSE_ID,
       slug: LIVING_THE_RUNES_SLUG,

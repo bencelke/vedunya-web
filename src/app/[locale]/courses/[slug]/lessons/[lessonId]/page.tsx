@@ -3,17 +3,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { LessonReaderScreen } from "@/features/courses/components/lesson-reader-screen";
-import {
-  isKnownCourseSlug,
-  LIVING_THE_RUNES_COURSE_ID,
-} from "@/features/courses/constants/course-ids";
+import { isKnownCourseSlug } from "@/features/courses/constants/course-ids";
 import { mergeCourseProgressOpen } from "@/features/courses/repositories/course-progress-repository";
-import {
-  isPremiumUser,
-  resolveLivingTheRunesAccess,
-} from "@/features/courses/services/resolve-course-access";
 import { loadLesson } from "@/features/courses/services/load-lesson";
-import { getProfileSnapshot } from "@/features/profile/services/profile-repository";
 import { getCurrentUser } from "@/lib/auth/current-user";
 import type { SupportedLocale } from "@/config/app-config";
 
@@ -55,15 +47,11 @@ export default async function LessonPage({ params }: LessonPageProps) {
 
   const sessionUser = await getCurrentUser();
   if (sessionUser && data.access.canOpenLessons) {
-    const profile = await getProfileSnapshot(sessionUser.uid);
-    const access = resolveLivingTheRunesAccess(profile, isPremiumUser(profile));
-    if (access.canOpenLessons) {
-      await mergeCourseProgressOpen({
-        uid: sessionUser.uid,
-        courseId: LIVING_THE_RUNES_COURSE_ID,
-        lessonId,
-      });
-    }
+    await mergeCourseProgressOpen({
+      uid: sessionUser.uid,
+      courseId: data.course.id,
+      lessonId,
+    });
   }
 
   const lockedTitle = data.access.isPremiumLocked
@@ -80,7 +68,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
   return (
     <LessonReaderScreen
       courseSlug={slug}
-      courseId={LIVING_THE_RUNES_COURSE_ID}
+      courseId={data.course.id}
       courseTitle={data.course.title}
       lessonId={lessonId}
       lessonTitle={data.lesson.title}

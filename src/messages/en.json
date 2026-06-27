@@ -253,6 +253,9 @@
     "estimatedDuration": "{duration}",
     "comingSoon": "Coming soon",
     "completed": "Completed",
+    "accessFree": "Free",
+    "accessPaid": "Paid course",
+    "accessOwned": "Owned",
     "resume": "Resume",
     "startCourse": "Start course",
     "viewCourse": "View course",
@@ -435,7 +438,8 @@
       "openPage": "Open support page"
     },
     "logout": {
-      "action": "Sign out"
+      "action": "Sign out",
+      "submitting": "Signing out…"
     },
     "pwa": {
       "label": "Install app"

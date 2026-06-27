@@ -98,6 +98,7 @@ export default async function CourseDetailPage({
       lockedTitle={lockedTitle}
       lockedMessage={lockedMessage}
       coverAlt={t("coverA11y", { title: detail.summary.title })}
+      accessType={detail.summary.accessType}
       completedLabel={t("lessonCompleted")}
       currentLabel={t("lessonCurrent")}
       lockedLabel={t("lessonLocked")}

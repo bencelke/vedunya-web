@@ -30,6 +30,17 @@
     overflow-x: hidden;
   }
 
+  a,
+  button,
+  [role="button"] {
+    touch-action: manipulation;
+  }
+
+  button,
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
+
   :focus-visible {
     outline: 2px solid var(--focus-ring);
     outline-offset: 2px;
@@ -53,5 +64,9 @@
 
   .guidance-primary-surface {
     isolation: isolate;
+  }
+
+  .touch-manipulation {
+    touch-action: manipulation;
   }
 }

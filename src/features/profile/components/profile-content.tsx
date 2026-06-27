@@ -58,6 +58,7 @@ export function ProfileContent({
   const router = useRouter();
   const { user, signOut } = useAuth();
   const [message, setMessage] = useState<string | null>(null);
+  const [loggingOut, setLoggingOut] = useState(false);
 
   const providers =
     profile.authProviders.length > 0
@@ -126,10 +127,18 @@ export function ProfileContent({
   }
 
   async function handleLogout() {
-    await disablePushOnLogout();
-    await signOut();
-    router.replace("/");
-    router.refresh();
+    if (loggingOut) {
+      return;
+    }
+
+    setLoggingOut(true);
+    try {
+      await disablePushOnLogout();
+      await signOut();
+      router.replace("/");
+    } catch {
+      setLoggingOut(false);
+    }
   }
 
   return (
@@ -183,7 +192,10 @@ export function ProfileContent({
 
       <ProfileSupportSection />
 
-      <ProfileLogoutSection onLogout={() => void handleLogout()} />
+      <ProfileLogoutSection
+        onLogout={() => void handleLogout()}
+        loggingOut={loggingOut}
+      />
     </div>
   );
 }

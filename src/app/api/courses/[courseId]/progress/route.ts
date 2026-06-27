@@ -1,13 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import {
-  LIVING_THE_RUNES_COURSE_ID,
-  LIVING_THE_RUNES_LESSON_COUNT,
-} from "@/features/courses/constants/course-ids";
-import {
-  isLivingTheRunesLessonId,
-} from "@/features/courses/content/living-the-runes-runtime";
-import {
   mergeCourseProgressComplete,
   mergeCourseProgressOpen,
   toSafeCourseProgress,
@@ -16,22 +9,13 @@ import {
   progressCompleteRequestSchema,
   progressOpenRequestSchema,
 } from "@/features/courses/schemas/course-progress-schema";
-import {
-  isPremiumUser,
-  resolveLivingTheRunesAccess,
-} from "@/features/courses/services/resolve-course-access";
-import { loadOwnedCourseIds } from "@/features/payments/server/load-payment-access";
-import { getProfileSnapshot } from "@/features/profile/services/profile-repository";
+import { resolveCourseProgressGate } from "@/features/courses/server/resolve-course-progress-gate";
 import { verifySessionCookie } from "@/lib/auth/session";
 import { jsonError } from "@/lib/auth/request-guards";
 
 type RouteContext = {
   params: Promise<{ courseId: string }>;
 };
-
-function assertCourseId(courseId: string): boolean {
-  return courseId === LIVING_THE_RUNES_COURSE_ID;
-}
 
 async function getVerifiedUid(): Promise<string | null> {
   const session = await verifySessionCookie();
@@ -43,9 +27,6 @@ export async function POST(
   context: RouteContext,
 ): Promise<Response> {
   const { courseId } = await context.params;
-  if (!assertCourseId(courseId)) {
-    return jsonError("Course not found.", 404);
-  }
 
   const uid = await getVerifiedUid();
   if (!uid) {
@@ -64,18 +45,16 @@ export async function POST(
     return jsonError("Invalid lesson.", 400);
   }
 
-  if (!isLivingTheRunesLessonId(parsed.data.lessonId)) {
-    return jsonError("Invalid lesson.", 404);
-  }
+  const gate = await resolveCourseProgressGate({
+    uid,
+    courseId,
+    lessonId: parsed.data.lessonId,
+  });
 
-  const profile = await getProfileSnapshot(uid);
-  const ownedCourseIds = await loadOwnedCourseIds(uid);
-  const access = resolveLivingTheRunesAccess(
-    profile,
-    isPremiumUser(profile),
-    ownedCourseIds,
-  );
-  if (!access.canOpenLessons) {
+  if (!gate.ok) {
+    if (gate.reason === "course_not_found" || gate.reason === "invalid_lesson") {
+      return jsonError("Course not found.", 404);
+    }
     return jsonError("Course access required.", 403);
   }
 
@@ -96,9 +75,6 @@ export async function PUT(
   context: RouteContext,
 ): Promise<Response> {
   const { courseId } = await context.params;
-  if (!assertCourseId(courseId)) {
-    return jsonError("Course not found.", 404);
-  }
 
   const uid = await getVerifiedUid();
   if (!uid) {
@@ -117,18 +93,16 @@ export async function PUT(
     return jsonError("Invalid lesson.", 400);
   }
 
-  if (!isLivingTheRunesLessonId(parsed.data.lessonId)) {
-    return jsonError("Invalid lesson.", 404);
-  }
+  const gate = await resolveCourseProgressGate({
+    uid,
+    courseId,
+    lessonId: parsed.data.lessonId,
+  });
 
-  const profile = await getProfileSnapshot(uid);
-  const ownedCourseIds = await loadOwnedCourseIds(uid);
-  const access = resolveLivingTheRunesAccess(
-    profile,
-    isPremiumUser(profile),
-    ownedCourseIds,
-  );
-  if (!access.canOpenLessons) {
+  if (!gate.ok) {
+    if (gate.reason === "course_not_found" || gate.reason === "invalid_lesson") {
+      return jsonError("Course not found.", 404);
+    }
     return jsonError("Course access required.", 403);
   }
 
@@ -137,7 +111,7 @@ export async function PUT(
       uid,
       courseId,
       lessonId: parsed.data.lessonId,
-      totalLessonCount: LIVING_THE_RUNES_LESSON_COUNT,
+      totalLessonCount: gate.totalLessonCount,
     });
     return NextResponse.json({ progress: toSafeCourseProgress(progress) });
   } catch {

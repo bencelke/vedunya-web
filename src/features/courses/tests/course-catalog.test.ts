@@ -20,9 +20,10 @@ const livingSanityItem: SanityCatalogItem = {
 describe("course catalog merge", () => {
   it("falls back to local catalog when Sanity is empty", () => {
     const courses = mergeCourseCatalog("en", []);
-    expect(courses).toHaveLength(1);
-    expect(courses[0]?.slug).toBe(LIVING_THE_RUNES_SLUG);
-    expect(courses[0]?.lessonCount).toBe(28);
+    expect(courses).toHaveLength(2);
+    expect(courses[0]?.slug).toBe("runes-first-steps");
+    expect(courses[1]?.slug).toBe(LIVING_THE_RUNES_SLUG);
+    expect(courses[1]?.lessonCount).toBe(28);
   });
 
   it("deduplicates living-the-runes and keeps runtime lesson count 28", () => {
@@ -31,7 +32,8 @@ describe("course catalog merge", () => {
       { ...livingSanityItem, titleEn: "Duplicate" },
     ]);
     expect(courses.filter((c) => c.slug === LIVING_THE_RUNES_SLUG)).toHaveLength(1);
-    expect(courses[0]?.lessonCount).toBe(28);
+    const living = courses.find((course) => course.slug === LIVING_THE_RUNES_SLUG);
+    expect(living?.lessonCount).toBe(28);
   });
 
   it("uses malformed Sanity safely via merge with local fallback metadata", () => {
@@ -42,7 +44,8 @@ describe("course catalog merge", () => {
         lessonCount: 24,
       },
     ]);
-    expect(courses[0]?.title.length).toBeGreaterThan(0);
-    expect(courses[0]?.lessonCount).toBe(28);
+    const living = courses.find((course) => course.slug === LIVING_THE_RUNES_SLUG);
+    expect(living?.title.length).toBeGreaterThan(0);
+    expect(living?.lessonCount).toBe(28);
   });
 });

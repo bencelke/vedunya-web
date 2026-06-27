@@ -24,6 +24,7 @@ import {
   mapOnboardingZodIssue,
   type OnboardingErrorKey,
 } from "@/features/onboarding/utils/onboarding-error-map";
+import { invalidateProfileStatusCache } from "@/features/auth/services/profile-status-cache";
 import { useRouter } from "@/i18n/navigation";
 import { useAuth } from "@/features/auth/hooks/use-auth";
 import { completeUserProfile } from "@/features/profile/services/profile-bootstrap-service";
@@ -132,8 +133,8 @@ export function OnboardingFlow({ locale, initialProfile }: OnboardingFlowProps) 
         await completeUserProfile(user, input);
         clearOnboardingDraft();
         clearPreAuthOnboardingDraft();
+        invalidateProfileStatusCache();
         router.replace("/today", { locale: input.language });
-        router.refresh();
       } catch {
         setErrorKey("saveFailed");
       } finally {

@@ -4,9 +4,10 @@ export function CourseCatalogLoadingSkeleton() {
       aria-busy="true"
       aria-live="polite"
       role="status"
-      className="animate-pulse space-y-4 motion-reduce:animate-none"
+      className="animate-pulse space-y-5 motion-reduce:animate-none"
     >
-      <div className="h-40 rounded-[var(--radius-card)] border border-border-subtle bg-surface-elevated" />
+      <div className="h-44 rounded-[var(--radius-card)] border border-border-subtle bg-surface-elevated/80" />
+      <div className="h-44 rounded-[var(--radius-card)] border border-border-subtle bg-surface-elevated/70" />
     </div>
   );
 }

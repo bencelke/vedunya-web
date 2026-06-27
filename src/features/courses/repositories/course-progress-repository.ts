@@ -3,9 +3,8 @@ import "server-only";
 import { Timestamp } from "firebase-admin/firestore";
 
 import {
-  LIVING_THE_RUNES_COURSE_ID,
-  LIVING_THE_RUNES_LESSON_COUNT,
-} from "@/features/courses/constants/course-ids";
+  getLessonCountForCourseId,
+} from "@/features/courses/services/course-content-registry";
 import type { CourseProgress } from "@/features/courses/types/course-progress";
 import { getFirebaseAdminFirestore } from "@/lib/firebase-admin/firestore";
 
@@ -30,20 +29,18 @@ function normalizeProgress(
   courseId: string,
   data: Record<string, unknown>,
 ): CourseProgress {
+  const totalLessonCount = getLessonCountForCourseId(courseId);
   const completedLessonIds = readStringList(data.completedLessonIds);
   const progressPercent =
     typeof data.progressPercent === "number"
       ? Math.min(100, Math.max(0, data.progressPercent))
-      : LIVING_THE_RUNES_LESSON_COUNT > 0
-        ? Math.round(
-            (completedLessonIds.length / LIVING_THE_RUNES_LESSON_COUNT) * 100,
-          )
+      : totalLessonCount > 0
+        ? Math.round((completedLessonIds.length / totalLessonCount) * 100)
         : 0;
 
   const isCompleted =
     data.isCompleted === true ||
-    (LIVING_THE_RUNES_LESSON_COUNT > 0 &&
-      completedLessonIds.length >= LIVING_THE_RUNES_LESSON_COUNT);
+    (totalLessonCount > 0 && completedLessonIds.length >= totalLessonCount);
 
   return {
     courseId,
@@ -198,5 +195,3 @@ export async function mergeCourseProgressComplete(input: {
 export function toSafeCourseProgress(progress: CourseProgress) {
   return progress;
 }
-
-export { LIVING_THE_RUNES_COURSE_ID };

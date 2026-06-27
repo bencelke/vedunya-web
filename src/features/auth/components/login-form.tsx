@@ -45,6 +45,8 @@ export function LoginForm({ locale, onSuccess }: LoginFormProps) {
     }
 
     setSubmitting(true);
+    let succeeded = false;
+
     try {
       const credential = await loginWithEmail(
         parsed.data.email,
@@ -60,6 +62,7 @@ export function LoginForm({ locale, onSuccess }: LoginFormProps) {
         setErrorKey("generic");
         return;
       }
+      succeeded = true;
       onSuccess();
     } catch (error) {
       if (error instanceof Error && error.message === "configuration") {
@@ -68,7 +71,9 @@ export function LoginForm({ locale, onSuccess }: LoginFormProps) {
         setErrorKey(mapFirebaseAuthError(error));
       }
     } finally {
-      setSubmitting(false);
+      if (!succeeded) {
+        setSubmitting(false);
+      }
     }
   }
 

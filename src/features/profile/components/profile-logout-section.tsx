@@ -7,16 +7,25 @@ import { Link } from "@/i18n/navigation";
 
 type ProfileLogoutSectionProps = {
   onLogout: () => void;
+  loggingOut?: boolean;
 };
 
-export function ProfileLogoutSection({ onLogout }: ProfileLogoutSectionProps) {
+export function ProfileLogoutSection({
+  onLogout,
+  loggingOut = false,
+}: ProfileLogoutSectionProps) {
   const t = useTranslations("profile");
   const tLogout = useTranslations("profile.logout");
 
   return (
     <div className="flex flex-col gap-3 pt-2">
-      <Button variant="ghost" className="w-full" onClick={onLogout}>
-        {tLogout("action")}
+      <Button
+        variant="ghost"
+        className="w-full"
+        onClick={onLogout}
+        disabled={loggingOut}
+      >
+        {loggingOut ? tLogout("submitting") : tLogout("action")}
       </Button>
       <Link
         href="/today"

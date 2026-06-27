@@ -24,6 +24,7 @@ type CourseDetailScreenProps = {
   lockedTitle: string;
   lockedMessage: string;
   coverAlt: string;
+  accessType: "free" | "paid" | "premium";
   completedLabel: string;
   currentLabel: string;
   lockedLabel: string;
@@ -52,6 +53,7 @@ export function CourseDetailScreen({
   lockedTitle,
   lockedMessage,
   coverAlt,
+  accessType,
   completedLabel,
   currentLabel,
   lockedLabel,
@@ -82,6 +84,7 @@ export function CourseDetailScreen({
             lockedTitle={lockedTitle}
             lockedMessage={lockedMessage}
             coverAlt={coverAlt}
+            accessType={accessType}
             locale={locale}
             courseId={courseId}
             showPurchase={showPurchase}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 
 import { AuthBrandHeader } from "@/features/auth/components/auth-brand-header";
@@ -12,9 +12,9 @@ import { LoginForm } from "@/features/auth/components/login-form";
 import { RegisterForm } from "@/features/auth/components/register-form";
 import { useAuth } from "@/features/auth/hooks/use-auth";
 import { useOAuthRedirectHandler } from "@/features/auth/hooks/use-oauth-redirect-handler";
+import { fetchProfileStatusCached } from "@/features/auth/services/profile-status-cache";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { useSearchParams } from "next/navigation";
-import type { ProfileStatusResponse } from "@/features/profile/utils/resolve-profile-status";
 import type { SupportedLocale } from "@/config/app-config";
 
 type AuthMode = "login" | "register";
@@ -23,23 +23,6 @@ type AuthScreenProps = {
   locale: SupportedLocale;
   initialMode?: AuthMode;
 };
-
-async function fetchProfileStatus(): Promise<ProfileStatusResponse> {
-  const response = await fetch("/api/auth/profile-status", {
-    cache: "no-store",
-    credentials: "same-origin",
-  });
-
-  if (!response.ok) {
-    return {
-      authenticated: false,
-      profileComplete: false,
-      missing: ["displayName", "language", "dob"],
-    };
-  }
-
-  return (await response.json()) as ProfileStatusResponse;
-}
 
 export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
   const t = useTranslations("auth");
@@ -51,6 +34,7 @@ export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
     searchParams.get("mode") === "register" ? "register" : initialMode;
   const redirectStartedRef = useRef(false);
   const pendingRedirectRef = useRef<"login" | "register" | null>(null);
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   const setAuthMode = useCallback(
     (nextMode: AuthMode) => {
@@ -66,8 +50,9 @@ export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
       }
 
       redirectStartedRef.current = true;
+      setIsRedirecting(true);
 
-      const status = await fetchProfileStatus();
+      const status = await fetchProfileStatusCached();
       const destination = forceOnboarding
         ? "/onboarding"
         : status.profileComplete
@@ -76,7 +61,6 @@ export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
 
       if (pathname !== destination) {
         router.replace(destination);
-        router.refresh();
       }
     },
     [pathname, router],
@@ -123,7 +107,7 @@ export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
 
   const topBar = <AuthLanguageBar tone="auth" />;
 
-  if (loading) {
+  if (loading || isRedirecting) {
     return (
       <AuthShell topBar={topBar} layout="login">
         <div className="space-y-6 py-8 text-center">

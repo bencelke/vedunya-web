@@ -3,6 +3,10 @@ import {
   LIVING_THE_RUNES_COURSE_ID,
   LIVING_THE_RUNES_LESSON_COUNT,
   LIVING_THE_RUNES_SLUG,
+  LOCAL_COURSE_SLUG_ORDER,
+  RUNES_FIRST_STEPS_COURSE_ID,
+  RUNES_FIRST_STEPS_LESSON_COUNT,
+  RUNES_FIRST_STEPS_SLUG,
 } from "@/features/courses/constants/course-ids";
 import { getLocalCourseCatalog } from "@/features/courses/content/local-course-catalog";
 import type { SanityCatalogItem } from "@/features/courses/schemas/course-schema";
@@ -20,6 +24,18 @@ function mapSanityAccessType(value: string): CourseSummary["accessType"] {
   }
 }
 
+function resolveLessonCount(slug: string, fallback: number): number {
+  if (slug === LIVING_THE_RUNES_SLUG) return LIVING_THE_RUNES_LESSON_COUNT;
+  if (slug === RUNES_FIRST_STEPS_SLUG) return RUNES_FIRST_STEPS_LESSON_COUNT;
+  return fallback;
+}
+
+function resolveCourseId(slug: string, itemId: string, localFallback?: CourseSummary): string {
+  if (slug === LIVING_THE_RUNES_SLUG) return LIVING_THE_RUNES_COURSE_ID;
+  if (slug === RUNES_FIRST_STEPS_SLUG) return RUNES_FIRST_STEPS_COURSE_ID;
+  return itemId.trim() || localFallback?.id || slug;
+}
+
 function mapSanityItem(
   item: SanityCatalogItem,
   locale: SupportedLocale,
@@ -32,16 +48,13 @@ function mapSanityItem(
     (course) => course.slug === slug || course.id === item.id,
   );
 
-  const lessonCount =
-    slug === LIVING_THE_RUNES_SLUG
-      ? LIVING_THE_RUNES_LESSON_COUNT
-      : localFallback?.lessonCount ?? item.lessonCount ?? LIVING_THE_RUNES_LESSON_COUNT;
+  const lessonCount = resolveLessonCount(
+    slug,
+    localFallback?.lessonCount ?? item.lessonCount ?? 0,
+  );
 
   return {
-    id:
-      slug === LIVING_THE_RUNES_SLUG
-        ? LIVING_THE_RUNES_COURSE_ID
-        : item.id.trim() || localFallback?.id || slug,
+    id: resolveCourseId(slug, item.id, localFallback),
     slug,
     title: isRu ? item.titleRu || item.titleEn : item.titleEn || item.titleRu,
     description: isRu
@@ -55,6 +68,21 @@ function mapSanityItem(
       item.isComingSoon || item.published === false ? "coming-soon" : "available",
     productId: item.productId ?? localFallback?.productId,
   };
+}
+
+function sortCourses(courses: CourseSummary[]): CourseSummary[] {
+  return [...courses].sort((a, b) => {
+    const ai = LOCAL_COURSE_SLUG_ORDER.indexOf(
+      a.slug as (typeof LOCAL_COURSE_SLUG_ORDER)[number],
+    );
+    const bi = LOCAL_COURSE_SLUG_ORDER.indexOf(
+      b.slug as (typeof LOCAL_COURSE_SLUG_ORDER)[number],
+    );
+    const aRank = ai === -1 ? Number.MAX_SAFE_INTEGER : ai;
+    const bRank = bi === -1 ? Number.MAX_SAFE_INTEGER : bi;
+    if (aRank !== bRank) return aRank - bRank;
+    return a.slug.localeCompare(b.slug);
+  });
 }
 
 export function mergeCourseCatalog(
@@ -76,14 +104,9 @@ export function mergeCourseCatalog(
       ...existing,
       ...mapped,
       coverAssetPath: existing?.coverAssetPath ?? mapped.coverAssetPath,
-      lessonCount:
-        mapped.slug === LIVING_THE_RUNES_SLUG
-          ? LIVING_THE_RUNES_LESSON_COUNT
-          : mapped.lessonCount,
+      lessonCount: resolveLessonCount(mapped.slug, mapped.lessonCount),
     });
   }
 
-  return Array.from(bySlug.values()).sort((a, b) =>
-    a.slug.localeCompare(b.slug),
-  );
+  return sortCourses(Array.from(bySlug.values()));
 }

@@ -1,5 +1,6 @@
 import Image from "next/image";
 
+import { CourseAccessBadge } from "@/features/courses/components/course-access-badge";
 import { CourseAccessNotice } from "@/features/courses/components/course-access-notice";
 import { CourseShopifyPurchaseSection } from "@/features/shopify/components/CourseShopifyPurchaseSection";
 import type { CourseAccessState } from "@/features/courses/types/course";
@@ -22,6 +23,7 @@ type CourseDetailHeroProps = {
   lockedTitle: string;
   lockedMessage: string;
   coverAlt: string;
+  accessType: "free" | "paid" | "premium";
   locale?: SupportedLocale;
   courseId?: string;
   showPurchase?: boolean;
@@ -42,6 +44,7 @@ export function CourseDetailHero({
   lockedTitle,
   lockedMessage,
   coverAlt,
+  accessType,
   locale,
   courseId,
   showPurchase = false,
@@ -79,6 +82,13 @@ export function CourseDetailHero({
         )}
       >
         <div className="mystic-cosmic-card-elevated space-y-4 p-5 sm:p-6">
+          <div className="flex flex-wrap items-center gap-2">
+            <CourseAccessBadge
+              accessType={accessType}
+              isLocked={!access.canOpenLessons}
+              isPurchased={access.isPurchased}
+            />
+          </div>
           <h1 className="text-2xl font-medium leading-tight text-text-primary sm:text-[1.75rem]">
             {title}
           </h1>
@@ -95,7 +105,8 @@ export function CourseDetailHero({
             {access.canOpenLessons && ctaHref ? (
               <Link
                 href={ctaHref}
-                className="inline-flex min-h-12 w-full items-center justify-center rounded-[var(--radius-pill)] bg-accent-gold px-6 text-sm font-medium text-page-bg transition-opacity hover:opacity-95 sm:w-auto"
+                prefetch={false}
+                className="touch-manipulation inline-flex min-h-12 w-full items-center justify-center rounded-[var(--radius-pill)] bg-accent-gold px-6 text-sm font-medium text-page-bg transition-[filter,transform] duration-100 active:scale-[0.98] active:duration-0 hover:brightness-110 sm:w-auto"
               >
                 {ctaLabel}
               </Link>

@@ -52,11 +52,14 @@ describe("Courses UI parity", () => {
 });
 
 describe("Courses catalog fallback", () => {
-  it("shows Living the Runes from local fallback when Sanity is empty", () => {
+  it("shows local Mystic courses from fallback when Sanity is empty", () => {
     const courses = mergeCourseCatalog("en", []);
-    expect(courses).toHaveLength(1);
-    expect(courses[0]?.slug).toBe(LIVING_THE_RUNES_SLUG);
-    expect(courses[0]?.lessonCount).toBe(28);
+    expect(courses).toHaveLength(2);
+    expect(courses.map((course) => course.slug)).toEqual([
+      "runes-first-steps",
+      LIVING_THE_RUNES_SLUG,
+    ]);
+    expect(courses[1]?.lessonCount).toBe(28);
   });
 
   it("has course cover asset for Living the Runes", () => {

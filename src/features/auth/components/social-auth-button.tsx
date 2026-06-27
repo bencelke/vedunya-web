@@ -55,6 +55,7 @@ export function SocialAuthButton({
   async function handleClick() {
     setErrorKey(null);
     setSubmitting(true);
+    let succeeded = false;
 
     try {
       const credential = await providerSignIn[providerId]();
@@ -63,10 +64,13 @@ export function SocialAuthButton({
       }
 
       await completeSocialSignIn(credential, locale, onSuccess);
+      succeeded = true;
     } catch (error) {
       setErrorKey(mapSocialSignInError(error, providerId));
     } finally {
-      setSubmitting(false);
+      if (!succeeded) {
+        setSubmitting(false);
+      }
     }
   }
 

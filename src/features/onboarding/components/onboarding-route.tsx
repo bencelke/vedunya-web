@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 
+import { fetchProfileStatusCached } from "@/features/auth/services/profile-status-cache";
 import { useAuth } from "@/features/auth/hooks/use-auth";
 import { IntroOnboardingGate } from "@/features/onboarding/components/intro-onboarding-gate";
 import { OnboardingFlow } from "@/features/onboarding/components/onboarding-flow";
@@ -48,15 +49,12 @@ export function OnboardingRoute({
     let active = true;
 
     async function checkCompleteProfile() {
-      const response = await fetch("/api/auth/profile-status", {
-        cache: "no-store",
-      });
+      const payload = await fetchProfileStatusCached();
 
-      if (!response.ok || !active) {
+      if (!active) {
         return;
       }
 
-      const payload = (await response.json()) as { profileComplete?: boolean };
       if (payload.profileComplete !== true) {
         return;
       }
@@ -64,7 +62,6 @@ export function OnboardingRoute({
       completeRedirectRef.current = true;
       if (pathname !== "/today") {
         router.replace("/today");
-        router.refresh();
       }
     }
 

@@ -10,6 +10,9 @@ type LessonNavigationProps = {
   nextLabel: string;
 };
 
+const navLinkClass =
+  "touch-manipulation inline-flex min-h-12 min-w-0 items-center justify-center overflow-hidden rounded-full transition-[background-color,filter,transform] duration-100 active:scale-[0.98] active:duration-0";
+
 export function LessonNavigation({
   courseSlug,
   previousLessonId,
@@ -25,7 +28,8 @@ export function LessonNavigation({
     >
       <Link
         href={`/courses/${courseSlug}`}
-        className="inline-flex min-h-10 items-center text-sm font-medium text-text-muted underline-offset-4 hover:text-text-primary hover:underline"
+        prefetch={false}
+        className="touch-manipulation inline-flex min-h-10 items-center text-sm font-medium text-text-muted underline-offset-4 transition-colors active:opacity-80 hover:text-text-primary hover:underline"
       >
         {backLabel}
       </Link>
@@ -34,8 +38,10 @@ export function LessonNavigation({
         {previousLessonId ? (
           <Link
             href={`/courses/${courseSlug}/lessons/${previousLessonId}`}
+            prefetch={false}
             className={cn(
-              "inline-flex min-h-12 min-w-0 items-center justify-center overflow-hidden rounded-full border border-border-subtle bg-surface-primary px-5 text-sm font-medium text-text-primary transition-colors hover:bg-surface-elevated",
+              navLinkClass,
+              "border border-border-subtle bg-surface-primary px-5 text-sm font-medium text-text-primary hover:bg-surface-elevated",
             )}
           >
             <span className="truncate">{previousLabel}</span>
@@ -47,7 +53,11 @@ export function LessonNavigation({
         {nextLessonId ? (
           <Link
             href={`/courses/${courseSlug}/lessons/${nextLessonId}`}
-            className="inline-flex min-h-12 min-w-0 items-center justify-center overflow-hidden rounded-full bg-accent-gold px-5 text-sm font-medium text-page-bg transition-[filter] hover:brightness-110"
+            prefetch={false}
+            className={cn(
+              navLinkClass,
+              "bg-accent-gold px-5 text-sm font-medium text-page-bg hover:brightness-110",
+            )}
           >
             <span className="truncate">{nextLabel}</span>
           </Link>

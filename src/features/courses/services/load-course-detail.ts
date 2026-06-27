@@ -2,16 +2,15 @@ import "server-only";
 
 import type { SupportedLocale } from "@/config/app-config";
 import {
-  LIVING_THE_RUNES_SLUG,
   resolveCourseIdFromSlug,
 } from "@/features/courses/constants/course-ids";
 import { getLocalCourseSummaryBySlug } from "@/features/courses/content/local-course-catalog";
 import {
-  getLivingTheRunesLesson,
-  getLivingTheRunesLessonSummaries,
-  isLivingTheRunesLessonId,
-  LIVING_THE_RUNES_LESSON_COUNT,
-} from "@/features/courses/content/living-the-runes-runtime";
+  getCourseLesson,
+  getCourseLessonSummaries,
+  getLessonCountForCourseSlug,
+  isKnownCourseLessonId,
+} from "@/features/courses/services/course-content-registry";
 import { readCourseProgress } from "@/features/courses/repositories/course-progress-repository";
 import {
   isPremiumUser,
@@ -32,10 +31,8 @@ export async function loadCourseDetail(slug: string, locale: SupportedLocale) {
   const summary = getLocalCourseSummaryBySlug(slug, locale);
   if (!summary) return null;
 
-  const lessons =
-    slug === LIVING_THE_RUNES_SLUG
-      ? getLivingTheRunesLessonSummaries(locale)
-      : [];
+  const lessons = getCourseLessonSummaries(slug, locale);
+  const lessonCount = getLessonCountForCourseSlug(slug);
 
   const sessionUser = await getCurrentUser();
   const profile = sessionUser
@@ -66,10 +63,7 @@ export async function loadCourseDetail(slug: string, locale: SupportedLocale) {
   return {
     summary: {
       ...summary,
-      lessonCount:
-        slug === LIVING_THE_RUNES_SLUG
-          ? LIVING_THE_RUNES_LESSON_COUNT
-          : summary.lessonCount,
+      lessonCount: lessonCount || summary.lessonCount,
     },
     lessons,
     progress: progress
@@ -89,18 +83,14 @@ export async function loadLesson(input: {
   locale: SupportedLocale;
 }) {
   const courseId = resolveCourseIdFromSlug(input.slug);
-  if (!courseId || input.slug !== LIVING_THE_RUNES_SLUG) {
-    return null;
-  }
-
-  if (!isLivingTheRunesLessonId(input.lessonId)) {
+  if (!courseId || !isKnownCourseLessonId(input.slug, input.lessonId)) {
     return null;
   }
 
   const detail = await loadCourseDetail(input.slug, input.locale);
   if (!detail) return null;
 
-  const lesson = getLivingTheRunesLesson(input.lessonId, input.locale);
+  const lesson = getCourseLesson(input.slug, input.lessonId, input.locale);
   if (!lesson) return null;
 
   const lessonIds = detail.lessons.map((item) => item.id);

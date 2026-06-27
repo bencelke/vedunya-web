@@ -103,7 +103,7 @@ export function LessonReader({
   reflectionLabel,
 }: LessonReaderProps) {
   return (
-    <article className="min-w-0 space-y-5 overflow-hidden">
+    <article className="min-w-0 space-y-6 overflow-hidden">
       {blocks.map((block, index) =>
         renderBlock(block, index, { practiceLabel, reflectionLabel }),
       )}

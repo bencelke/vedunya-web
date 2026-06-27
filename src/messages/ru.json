@@ -253,6 +253,9 @@
     "estimatedDuration": "{duration}",
     "comingSoon": "Скоро",
     "completed": "Завершён",
+    "accessFree": "Бесплатно",
+    "accessPaid": "Платный курс",
+    "accessOwned": "Куплен",
     "resume": "Продолжить",
     "startCourse": "Начать курс",
     "viewCourse": "Открыть курс",
@@ -435,7 +438,8 @@
       "openPage": "Открыть страницу поддержки"
     },
     "logout": {
-      "action": "Выйти"
+      "action": "Выйти",
+      "submitting": "Выходим…"
     },
     "pwa": {
       "label": "Установка приложения"

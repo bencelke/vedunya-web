@@ -53,6 +53,8 @@ export function RegisterForm({ locale, onSuccess }: RegisterFormProps) {
     }
 
     setSubmitting(true);
+    let succeeded = false;
+
     try {
       const credential = await registerWithEmail(
         parsed.data.email,
@@ -68,6 +70,7 @@ export function RegisterForm({ locale, onSuccess }: RegisterFormProps) {
         setErrorKey("generic");
         return;
       }
+      succeeded = true;
       onSuccess();
     } catch (error) {
       if (error instanceof Error && error.message === "configuration") {
@@ -76,7 +79,9 @@ export function RegisterForm({ locale, onSuccess }: RegisterFormProps) {
         setErrorKey(mapFirebaseAuthError(error));
       }
     } finally {
-      setSubmitting(false);
+      if (!succeeded) {
+        setSubmitting(false);
+      }
     }
   }
 

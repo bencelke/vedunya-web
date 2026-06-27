@@ -23,6 +23,7 @@ export function MysticPlusPaywallLink({
     return (
       <Link
         href="/plus"
+        prefetch={false}
         className={cn(
           "text-sm font-medium text-accent-gold underline-offset-2 hover:underline",
           className,
@@ -34,7 +35,11 @@ export function MysticPlusPaywallLink({
   }
 
   return (
-    <Link href="/plus" className={cn("mystic-gold-pill-btn w-full text-center", className)}>
+    <Link
+      href="/plus"
+      prefetch={false}
+      className={cn("mystic-gold-pill-btn w-full text-center", className)}
+    >
       {text}
     </Link>
   );
