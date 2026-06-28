@@ -124,9 +124,9 @@ async function handleStatic(request) {
 const DEFAULT_NOTIFICATION = {
   title: "Mystic",
   body: "Your daily guidance is ready.",
-  url: "/en/today",
+  url: "/ru/today",
   tag: "mystic-reminder",
-  lang: "en",
+  lang: "ru",
 };
 
 function parsePushPayload(event) {
@@ -162,6 +162,7 @@ function parsePushPayload(event) {
         parsed.reminderType === "morning" ||
         parsed.reminderType === "midday" ||
         parsed.reminderType === "evening" ||
+        parsed.reminderType === "course" ||
         parsed.reminderType === "universeRequest" ||
         parsed.reminderType === "test"
           ? parsed.reminderType
@@ -210,6 +211,21 @@ self.addEventListener("notificationclick", (event) => {
     self.clients
       .matchAll({ type: "window", includeUncontrolled: true })
       .then((clients) => {
+        for (const client of clients) {
+          if (client.url === absoluteUrl && "focus" in client) {
+            return client.focus();
+          }
+        }
+
+        for (const client of clients) {
+          if (
+            new URL(client.url).origin === self.location.origin &&
+            "navigate" in client
+          ) {
+            return client.navigate(absoluteUrl).then(() => client.focus());
+          }
+        }
+
         for (const client of clients) {
           if ("focus" in client) {
             return client.focus();

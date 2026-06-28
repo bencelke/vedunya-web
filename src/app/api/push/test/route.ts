@@ -2,8 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { getNotificationCopy } from "@/features/notifications/content/notification-copy";
 import { pushTestRequestSchema } from "@/features/notifications/schemas/push-schema";
+import { isSchedulableReminderType } from "@/features/notifications/server/reminder-due";
+import {
+  buildReminderNotificationPayload,
+} from "@/features/notifications/server/send-web-push-notification";
 import { isWebPushConfigured } from "@/features/notifications/server/web-push-config";
 import { sendWebPushToEndpoint } from "@/features/notifications/server/send-web-push";
+import type { PushNotificationPayload } from "@/features/notifications/types/push";
 import { requireApiUser } from "@/lib/auth/require-api-user";
 import { jsonError } from "@/lib/auth/request-guards";
 
@@ -30,20 +35,30 @@ export async function POST(request: NextRequest): Promise<Response> {
   }
 
   const locale = parsed.data.locale === "ru" ? "ru" : "en";
-  const copy = getNotificationCopy(locale, "test");
+  const reminderType = parsed.data.type;
+  const localDate = new Date().toISOString().slice(0, 10);
+
+  const payload: PushNotificationPayload =
+    reminderType && isSchedulableReminderType(reminderType)
+      ? buildReminderNotificationPayload({
+          locale,
+          reminderType,
+          localDate,
+        })
+      : {
+          title: getNotificationCopy(locale, "test").title,
+          body: getNotificationCopy(locale, "test").body,
+          url: `/${locale}/today`,
+          tag: "mystic-test",
+          lang: locale,
+          reminderType: "test",
+        };
 
   try {
     const result = await sendWebPushToEndpoint({
       uid: auth.user.uid,
       endpoint: parsed.data.endpoint,
-      payload: {
-        title: copy.title,
-        body: copy.body,
-        url: `/${locale}/today`,
-        tag: "mystic-test",
-        lang: locale,
-        reminderType: "test",
-      },
+      payload,
     });
 
     if (result === "sent") {

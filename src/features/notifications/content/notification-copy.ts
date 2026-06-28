@@ -12,7 +12,7 @@ const NOTIFICATION_COPY = {
   en: {
     morning: {
       title: "Mystic",
-      body: "A quiet start for your day is ready.",
+      body: "Your daily guidance is ready.",
     },
     midday: {
       title: "Mystic",
@@ -20,11 +20,15 @@ const NOTIFICATION_COPY = {
     },
     evening: {
       title: "Mystic",
-      body: "Return to the day gently. Notice what mattered.",
+      body: "Time for a short evening reflection.",
+    },
+    course: {
+      title: "Mystic",
+      body: "Return to your lesson and continue the practice.",
     },
     universeRequest: {
       title: "Mystic",
-      body: "Return to your request for one quiet minute.",
+      body: "Remember your request to the Universe today.",
     },
     test: {
       title: "Mystic",
@@ -34,7 +38,7 @@ const NOTIFICATION_COPY = {
   ru: {
     morning: {
       title: "Mystic",
-      body: "Спокойное начало дня уже готово.",
+      body: "Ваша подсказка дня готова.",
     },
     midday: {
       title: "Mystic",
@@ -42,11 +46,15 @@ const NOTIFICATION_COPY = {
     },
     evening: {
       title: "Mystic",
-      body: "Вернитесь к дню спокойно. Заметьте, что было главным.",
+      body: "Время короткого вечернего размышления.",
+    },
+    course: {
+      title: "Mystic",
+      body: "Вернитесь к уроку и продолжите практику.",
     },
     universeRequest: {
       title: "Mystic",
-      body: "Вернитесь к своей просьбе на одну спокойную минуту.",
+      body: "Вспомните свой запрос к Вселенной на сегодня.",
     },
     test: {
       title: "Mystic",

@@ -18,10 +18,10 @@ describe("PWA manifest", () => {
     const data = manifest();
     expect(data.name).toBe("Mystic by Vedunya Maria");
     expect(data.short_name).toBe("Mystic");
-    expect(data.start_url).toBe("/en/today");
+    expect(data.start_url).toBe("/ru");
     expect(data.display).toBe("standalone");
-    expect(data.theme_color).toBe("#0B0D14");
-    expect(data.background_color).toBe("#0B0D14");
+    expect(data.theme_color).toBe("#080A10");
+    expect(data.background_color).toBe("#080A10");
   });
 
   it("references PNG manifest icons", () => {
@@ -59,21 +59,22 @@ describe("PWA service worker", () => {
 });
 
 describe("PWA install UX", () => {
-  it("renders install section behind Profile notifications row", () => {
+  it("renders notification panel behind Profile notifications row", () => {
     const profile = readSource("src/features/profile/components/profile-content.tsx");
-    expect(profile).toContain("PwaInstallSection");
-    expect(profile).toContain("NotificationSettingsCard");
+    expect(profile).toContain("NotificationSettingsPanel");
+    expect(profile).toContain("NotificationSettingsPanel");
   });
 
-  it("hides install prompt logic when standalone", () => {
-    const hook = readSource("src/features/pwa/hooks/use-pwa-install.ts");
+  it("detects standalone install state in usePwaInstallState", () => {
+    const hook = readSource("src/features/pwa/use-pwa-install-state.ts");
     expect(hook).toContain("isStandaloneDisplayMode");
-    expect(hook).toContain("showInstalledHint");
+    expect(hook).toContain("beforeinstallprompt");
+    expect(hook).toContain("getNotificationPermission");
   });
 
   it("includes iPhone install guide copy EN/RU", () => {
-    expect(en.pwa.iosGuide).toContain("Add to Home Screen");
-    expect(ru.pwa.iosGuide).toContain("На экран Домой");
+    expect(en.pwa.iosInstallFull).toContain("Add to Home Screen");
+    expect(ru.pwa.iosInstallFull).toContain("На экран Домой");
   });
 
   it("registers service worker only in production from client registrar", () => {

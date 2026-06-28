@@ -30,6 +30,7 @@ export const notificationPreferencesSchema = z.object({
   morning: reminderSlotSchema,
   midday: reminderSlotSchema,
   evening: reminderSlotSchema,
+  course: reminderSlotSchema,
   universeRequest: reminderSlotSchema,
   timezone: z.string().min(1).max(64),
   locale: z.enum(["en", "ru"]),
@@ -39,6 +40,7 @@ export type PushSubscribeRequest = z.infer<typeof pushSubscribeRequestSchema>;
 export type PushUnsubscribeRequest = z.infer<typeof pushUnsubscribeRequestSchema>;
 export const pushTestRequestSchema = pushUnsubscribeRequestSchema.extend({
   locale: z.enum(["en", "ru"]).optional(),
+  type: z.enum(["morning", "evening", "course", "universeRequest"]).optional(),
 });
 
 export type NotificationPreferencesInput = z.infer<

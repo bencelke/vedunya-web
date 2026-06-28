@@ -51,6 +51,9 @@ function buildClientStatus(
     preferences: serverStatus.preferences,
     requiresInstalledPwa: requiresInstalledPwaForPush(),
     pushSupported: isPushEnvironmentReady(),
+    schedulerConfigured: serverStatus.schedulerConfigured,
+    schedulerMode: serverStatus.schedulerMode,
+    schedulerCoverageAdequate: serverStatus.schedulerCoverageAdequate,
   };
 }
 

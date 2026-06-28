@@ -6,12 +6,14 @@ import { useTranslations } from "next-intl";
 import { Label } from "@/components/ui/label";
 import type { NotificationPreferencesRecord } from "@/features/notifications/types/push";
 
-type ReminderSlotKey = "morning" | "midday" | "evening" | "universeRequest";
+type ReminderSlotKey = "morning" | "midday" | "evening" | "course" | "universeRequest";
 
 type ReminderPreferenceFormProps = {
   preferences: NotificationPreferencesRecord;
   hasActiveUniverseRequest: boolean;
   disabled?: boolean;
+  hideMidday?: boolean;
+  showSchedulerDeliveryNote?: boolean;
   onSave: (preferences: NotificationPreferencesRecord) => Promise<void>;
 };
 
@@ -19,6 +21,8 @@ export function ReminderPreferenceForm({
   preferences,
   hasActiveUniverseRequest,
   disabled = false,
+  hideMidday = false,
+  showSchedulerDeliveryNote = false,
   onSave,
 }: ReminderPreferenceFormProps) {
   const t = useTranslations("notifications");
@@ -54,8 +58,11 @@ export function ReminderPreferenceForm({
     requiresActiveRequest?: boolean;
   }> = [
     { key: "morning", label: t("morningLabel"), copy: t("morningCopy") },
-    { key: "midday", label: t("middayLabel"), copy: t("middayCopy") },
+    ...(hideMidday
+      ? []
+      : [{ key: "midday" as const, label: t("middayLabel"), copy: t("middayCopy") }]),
     { key: "evening", label: t("eveningLabel"), copy: t("eveningCopy") },
+    { key: "course", label: t("courseLabel"), copy: t("courseCopy") },
     {
       key: "universeRequest",
       label: t("universeRequestLabel"),
@@ -72,6 +79,11 @@ export function ReminderPreferenceForm({
 
       <p className="text-xs leading-relaxed text-text-subtle">{t("schedulerNote")}</p>
       <p className="text-xs leading-relaxed text-text-subtle">{t("deliveryDependsNote")}</p>
+      {showSchedulerDeliveryNote ? (
+        <p className="text-xs leading-relaxed text-text-subtle">
+          {t("schedulerDeliveryNote")}
+        </p>
+      ) : null}
 
       {slots.map((slot) => {
         const slotDisabled =

@@ -62,7 +62,7 @@ describe("Phase 23A — profile sections and rows", () => {
     expect(content).toContain('tScreen("rows.universeRequest")');
     expect(content).toContain('href="/today"');
     expect(content).toContain('tScreen("rows.notifications")');
-    expect(content).toContain("NotificationSettingsCard");
+    expect(content).toContain("NotificationSettingsPanel");
     expect(content).toContain('tScreen("rows.language")');
   });
 

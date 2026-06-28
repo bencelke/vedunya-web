@@ -91,10 +91,11 @@ describe("Phase 14 — due-time calculation", () => {
   it("skips disabled global preferences", () => {
     const prefs = {
       enabled: false,
-      morning: { enabled: true, time: "08:30" },
+      morning: { enabled: true, time: "09:00" },
       midday: { enabled: true, time: "13:00" },
-      evening: { enabled: true, time: "20:30" },
-      universeRequest: { enabled: false, time: "09:00" },
+      evening: { enabled: true, time: "20:00" },
+      course: { enabled: false, time: "18:00" },
+      universeRequest: { enabled: false, time: "10:00" },
       timezone: "UTC",
       locale: "en" as const,
       updatedAt: new Date().toISOString(),
@@ -110,10 +111,31 @@ describe("Phase 14 — due-time calculation", () => {
   it("skips disabled reminder slots", () => {
     const prefs = {
       enabled: true,
-      morning: { enabled: false, time: "08:30" },
+      morning: { enabled: false, time: "09:00" },
       midday: { enabled: true, time: "13:00" },
-      evening: { enabled: true, time: "20:30" },
-      universeRequest: { enabled: false, time: "09:00" },
+      evening: { enabled: true, time: "20:00" },
+      course: { enabled: true, time: "18:00" },
+      universeRequest: { enabled: false, time: "10:00" },
+      timezone: "UTC",
+      locale: "en" as const,
+      updatedAt: new Date().toISOString(),
+    };
+
+    const due = getDueReminderTypes(
+      prefs,
+      new Date("2026-06-23T18:05:00.000Z"),
+    );
+    expect(due).toEqual(["course"]);
+  });
+
+  it("does not schedule midday even when enabled", () => {
+    const prefs = {
+      enabled: true,
+      morning: { enabled: false, time: "09:00" },
+      midday: { enabled: true, time: "13:00" },
+      evening: { enabled: false, time: "20:00" },
+      course: { enabled: false, time: "18:00" },
+      universeRequest: { enabled: false, time: "10:00" },
       timezone: "UTC",
       locale: "en" as const,
       updatedAt: new Date().toISOString(),
@@ -123,7 +145,8 @@ describe("Phase 14 — due-time calculation", () => {
       prefs,
       new Date("2026-06-23T13:05:00.000Z"),
     );
-    expect(due).toEqual(["midday"]);
+    expect(due).not.toContain("midday");
+    expect(due).toEqual([]);
   });
 });
 
@@ -150,29 +173,30 @@ describe("Phase 14 — duplicate delivery protection", () => {
 describe("Phase 14 — notification payloads", () => {
   it("includes EN and RU copy for all schedulable reminder types", () => {
     expect(getNotificationCopy("en", "morning").body).toBe(
-      "A quiet start for your day is ready.",
+      "Your daily guidance is ready.",
     );
     expect(getNotificationCopy("ru", "morning").body).toBe(
-      "Спокойное начало дня уже готово.",
+      "Ваша подсказка дня готова.",
     );
     expect(getNotificationCopy("en", "midday").body).toContain("Pause for a minute");
-    expect(getNotificationCopy("ru", "evening").body).toContain("Вернитесь к дню");
-    expect(getNotificationCopy("en", "universeRequest").body).toContain("request");
-    expect(getNotificationCopy("ru", "universeRequest").body).toContain("просьбе");
+    expect(getNotificationCopy("ru", "evening").body).toContain("вечернего");
+    expect(getNotificationCopy("en", "course").body).toContain("lesson");
+    expect(getNotificationCopy("en", "universeRequest").body).toContain("Universe");
+    expect(getNotificationCopy("ru", "universeRequest").body).toContain("Вселенной");
   });
 
-  it("targets Today routes without private request text", () => {
+  it("targets Today and Courses routes without private request text", () => {
     const payloadBuilder = readSource(
       "src/features/notifications/server/send-web-push-notification.ts",
     );
-    expect(payloadBuilder).toContain('reminderType === "universeRequest"');
-    expect(payloadBuilder).toContain("/today?focus=request");
+    expect(payloadBuilder).toContain('reminderType === "course"');
+    expect(payloadBuilder).toContain("/courses");
     expect(payloadBuilder).toContain("getNotificationCopy");
 
     const copy = getNotificationCopy("en", "universeRequest");
     expect(copy.body).not.toMatch(/love|money|family/i);
     expect(copy.body).toBe(
-      "Return to your request for one quiet minute.",
+      "Remember your request to the Universe today.",
     );
   });
 });
@@ -228,13 +252,13 @@ describe("Phase 14 — dispatcher and universe request rule", () => {
 });
 
 describe("Phase 14 — Profile copy", () => {
-  it("no longer says scheduler is not enabled on the server", () => {
-    expect(en.notifications.schedulerNote).toContain("scheduled from the server");
-    expect(ru.notifications.schedulerNote).toContain("отправляются сервером");
-    expect(en.notifications.schedulerNote).not.toContain(
-      "after scheduled notifications are enabled on the server",
-    );
-    expect(ru.notifications.schedulerNote).not.toContain("Автоматическая отправка");
+  it("uses honest scheduler copy without overpromising delivery", () => {
+    expect(en.notifications.schedulerNote).toContain("saved");
+    expect(ru.notifications.schedulerNote).toContain("сохраняются");
+    expect(en.notifications.schedulerNote).not.toContain("scheduled from the server");
+    expect(ru.notifications.schedulerNote).not.toContain("отправляются сервером");
+    expect(en.notifications.schedulerDeliveryNote).toContain("scheduler setup");
+    expect(ru.notifications.schedulerDeliveryNote).toContain("настройки сервера");
     expect(en.notifications.deliveryDependsNote).toContain("browser");
     expect(ru.notifications.deliveryDependsNote).toContain("браузера");
   });
@@ -244,6 +268,7 @@ describe("Phase 14 — Profile copy", () => {
       "src/features/notifications/components/reminder-preference-form.tsx",
     );
     expect(form).toContain("schedulerNote");
+    expect(form).toContain("schedulerDeliveryNote");
     expect(form).toContain("deliveryDependsNote");
   });
 });

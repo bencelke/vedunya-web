@@ -15,8 +15,12 @@ export function buildReminderNotificationUrl(
   locale: SupportedLocale,
   reminderType: SchedulableReminderType,
 ): string {
+  if (reminderType === "course") {
+    return `/${locale}/courses`;
+  }
+
   if (reminderType === "universeRequest") {
-    return `/${locale}/today?focus=request`;
+    return `/${locale}/today`;
   }
 
   return `/${locale}/today`;

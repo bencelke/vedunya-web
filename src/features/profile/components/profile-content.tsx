@@ -25,8 +25,7 @@ import {
   sendPasswordReset,
   userHasPasswordProvider,
 } from "@/features/auth/services/auth-service";
-import { NotificationSettingsCard } from "@/features/notifications/components/notification-settings-card";
-import { PwaInstallSection } from "@/features/pwa/components/pwa-install-section";
+import { NotificationSettingsPanel } from "@/features/notifications/components/notification-settings-panel";
 import { disablePushOnLogout } from "@/features/notifications/utils/push-subscription";
 import { ProfileActionRow } from "@/features/profile/components/profile-action-row";
 import { ProfileCosmicPanel } from "@/features/profile/components/profile-cosmic-panel";
@@ -310,9 +309,8 @@ export function ProfileContent({
             />
           </ProfileCosmicPanel>
           {notificationsOpen ? (
-            <div className="space-y-4 pt-4" id="profile-notifications">
-              <PwaInstallSection />
-              <NotificationSettingsCard
+            <div className="pt-4" id="profile-notifications">
+              <NotificationSettingsPanel
                 locale={locale}
                 initialStatus={pushStatus}
                 hasActiveUniverseRequest={hasActiveUniverseRequest}

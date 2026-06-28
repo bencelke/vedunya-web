@@ -7,10 +7,10 @@ export const SCHEDULE_WINDOW_MINUTES = 15;
 
 export const SCHEDULABLE_REMINDER_TYPES = [
   "morning",
-  "midday",
   "evening",
+  "course",
   "universeRequest",
-] as const satisfies readonly Exclude<ReminderType, "test">[];
+] as const satisfies readonly Exclude<ReminderType, "test" | "midday">[];
 
 export type SchedulableReminderType = (typeof SCHEDULABLE_REMINDER_TYPES)[number];
 
@@ -100,10 +100,16 @@ export function isSchedulableReminderType(
 ): value is SchedulableReminderType {
   return (
     value === "morning" ||
-    value === "midday" ||
     value === "evening" ||
+    value === "course" ||
     value === "universeRequest"
   );
+}
+
+export function resolveReminderLocale(
+  locale: NotificationPreferencesRecord["locale"],
+): "en" | "ru" {
+  return locale === "en" ? "en" : "ru";
 }
 
 export function getDueReminderTypes(
@@ -122,8 +128,8 @@ export function getDueReminderTypes(
     slot: NotificationPreferencesRecord[SchedulableReminderType];
   }> = [
     { key: "morning", slot: preferences.morning },
-    { key: "midday", slot: preferences.midday },
     { key: "evening", slot: preferences.evening },
+    { key: "course", slot: preferences.course },
     { key: "universeRequest", slot: preferences.universeRequest },
   ];
 

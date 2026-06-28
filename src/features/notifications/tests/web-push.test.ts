@@ -27,14 +27,15 @@ describe("Web Push env documentation", () => {
 });
 
 describe("Web Push Profile UI", () => {
-  it("renders notification settings behind Profile notifications row", () => {
+  it("renders notification panel behind Profile notifications row", () => {
     const profile = readSource("src/features/profile/components/profile-content.tsx");
-    expect(profile).toContain("NotificationSettingsCard");
+    expect(profile).toContain("NotificationSettingsPanel");
     expect(profile).toContain('tScreen("rows.notifications")');
-    const card = readSource(
-      "src/features/notifications/components/notification-settings-card.tsx",
+    const panel = readSource(
+      "src/features/notifications/components/notification-settings-panel.tsx",
     );
-    expect(card).toContain("NotificationSettingsCard");
+    expect(panel).toContain("InstallMysticCard");
+    expect(panel).toContain("enableReminders");
   });
 
   it("shows iPhone install requirement component", () => {
@@ -121,14 +122,14 @@ describe("Web Push service worker", () => {
 
 describe("Web Push localization", () => {
   it("includes EN/RU reminder copy", () => {
-    expect(en.notifications.morningCopy).toContain("quiet start");
+    expect(en.notifications.morningCopy).toContain("daily guidance");
     expect(en.notifications.middayCopy).toContain("clear step");
-    expect(en.notifications.eveningCopy).toContain("matter");
+    expect(en.notifications.eveningCopy).toContain("evening reflection");
     expect(en.notifications.testCopy).toContain("working on this device");
 
-    expect(ru.notifications.morningCopy).toContain("Спокойное начало");
+    expect(ru.notifications.morningCopy).toContain("подсказка");
     expect(ru.notifications.middayCopy).toContain("точный шаг");
-    expect(ru.notifications.eveningCopy).toContain("главным");
+    expect(ru.notifications.eveningCopy).toContain("вечернего");
     expect(ru.notifications.testCopy).toContain("работают на этом устройстве");
   });
 });
@@ -166,10 +167,11 @@ describe("Web Push schemas", () => {
   it("validates notification preferences", () => {
     const parsed = notificationPreferencesSchema.safeParse({
       enabled: true,
-      morning: { enabled: true, time: "08:30" },
+      morning: { enabled: true, time: "09:00" },
       midday: { enabled: true, time: "13:00" },
-      evening: { enabled: true, time: "20:30" },
-      universeRequest: { enabled: false, time: "09:00" },
+      evening: { enabled: true, time: "20:00" },
+      course: { enabled: false, time: "18:00" },
+      universeRequest: { enabled: false, time: "10:00" },
       timezone: "UTC",
       locale: "en",
     });

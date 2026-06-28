@@ -20,12 +20,14 @@ function readSource(relativePath: string): string {
 }
 
 describe("Phase 12C — notification preference defaults", () => {
-  it("includes morning, midday, evening, and universeRequest slots", () => {
+  it("includes morning, midday, evening, course, and universeRequest slots", () => {
     const repo = readSource("src/features/notifications/repositories/push-repository.ts");
-    expect(repo).toContain('morning: { enabled: true, time: "08:30" }');
+    expect(repo).toContain('morning: { enabled: true, time: "09:00" }');
     expect(repo).toContain('midday: { enabled: true, time: "13:00" }');
-    expect(repo).toContain('evening: { enabled: true, time: "20:30" }');
-    expect(repo).toContain('universeRequest: { enabled: false, time: "09:00" }');
+    expect(repo).toContain('evening: { enabled: true, time: "20:00" }');
+    expect(repo).toContain('course: { enabled: false, time: "18:00" }');
+    expect(repo).toContain('course: { enabled: false, time: "18:00" }');
+    expect(repo).toContain('universeRequest: { enabled: false, time: "10:00" }');
   });
 });
 
@@ -72,10 +74,11 @@ describe("Phase 12C — preference API auth and merge", () => {
   it("validates full preference payload including universeRequest", () => {
     const parsed = notificationPreferencesSchema.safeParse({
       enabled: true,
-      morning: { enabled: true, time: "08:30" },
+      morning: { enabled: true, time: "09:00" },
       midday: { enabled: true, time: "13:00" },
-      evening: { enabled: true, time: "20:30" },
-      universeRequest: { enabled: false, time: "09:00" },
+      evening: { enabled: true, time: "20:00" },
+      course: { enabled: false, time: "18:00" },
+      universeRequest: { enabled: false, time: "10:00" },
       timezone: "UTC",
       locale: "en",
     });
@@ -111,7 +114,7 @@ describe("Phase 12C — Profile reminders UI", () => {
     expect(ruNotifications).not.toContain("Daily reminders");
     expect(ruNotifications).not.toContain("Morning guidance");
     expect(ruNotifications).not.toContain("Enable reminders");
-    expect(ru.notifications.schedulerNote).toContain("отправляются сервером");
+    expect(ru.notifications.schedulerNote).toContain("сохраняются");
   });
 });
 
@@ -157,10 +160,10 @@ describe("Phase 12C — PWA and dev mode behavior", () => {
 
 describe("Phase 12C — notification copy library", () => {
   it("provides EN and RU templates for all reminder slots", () => {
-    expect(getNotificationCopy("en", "morning").body).toContain("quiet start");
-    expect(getNotificationCopy("ru", "morning").body).toContain("Спокойное начало");
+    expect(getNotificationCopy("en", "morning").body).toContain("daily guidance");
+    expect(getNotificationCopy("ru", "morning").body).toContain("подсказка");
     expect(getNotificationCopy("en", "universeRequest").body).toContain("request");
-    expect(getNotificationCopy("ru", "universeRequest").body).toContain("просьбе");
+    expect(getNotificationCopy("ru", "universeRequest").body).toContain("Вселенной");
   });
 
   it("does not contain fake guarantee phrases", () => {
@@ -181,7 +184,8 @@ describe("Phase 12C — honest scheduler status", () => {
       "src/features/notifications/components/reminder-preference-form.tsx",
     );
     expect(form).toContain("schedulerNote");
-    expect(en.notifications.schedulerNote).toContain("scheduled from the server");
-    expect(ru.notifications.schedulerNote).toContain("отправляются сервером");
+    expect(form).toContain("schedulerDeliveryNote");
+    expect(en.notifications.schedulerNote).toContain("saved");
+    expect(ru.notifications.schedulerNote).toContain("сохраняются");
   });
 });

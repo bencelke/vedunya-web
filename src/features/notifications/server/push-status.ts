@@ -6,9 +6,13 @@ import {
   readNotificationPreferences,
 } from "@/features/notifications/repositories/push-repository";
 import {
+  getNotificationSchedulerStatus,
+} from "@/features/notifications/server/scheduler-config";
+import {
   getWebPushPublicKey,
   isWebPushConfigured,
 } from "@/features/notifications/server/web-push-config";
+
 import type { PushStatusSummary } from "@/features/notifications/types/push";
 
 export async function getPushStatusSummary(
@@ -20,6 +24,8 @@ export async function getPushStatusSummary(
     readEnabledPushSubscriptions(uid),
   ]);
 
+  const scheduler = getNotificationSchedulerStatus();
+
   return {
     configured: isWebPushConfigured(),
     publicKey: getWebPushPublicKey(),
@@ -30,5 +36,8 @@ export async function getPushStatusSummary(
       subscriptions.find((item) => item.lastSuccessAt)?.lastSuccessAt ?? null,
     lastFailureAt:
       subscriptions.find((item) => item.lastFailureAt)?.lastFailureAt ?? null,
+    schedulerConfigured: scheduler.schedulerConfigured,
+    schedulerMode: scheduler.schedulerMode,
+    schedulerCoverageAdequate: scheduler.schedulerCoverageAdequate,
   };
 }

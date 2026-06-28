@@ -6,6 +6,7 @@ export type ReminderType =
   | "morning"
   | "midday"
   | "evening"
+  | "course"
   | "universeRequest"
   | "test";
 
@@ -40,6 +41,7 @@ export type NotificationPreferencesRecord = {
   morning: ReminderSlotPreference;
   midday: ReminderSlotPreference;
   evening: ReminderSlotPreference;
+  course: ReminderSlotPreference;
   universeRequest: ReminderSlotPreference;
   timezone: string;
   locale: SupportedLocale;
@@ -62,6 +64,9 @@ export type PushStatusResponse = {
   preferences: NotificationPreferencesRecord;
   requiresInstalledPwa: boolean;
   pushSupported: boolean;
+  schedulerConfigured: boolean;
+  schedulerMode: "unknown" | "daily" | "hourly" | "external";
+  schedulerCoverageAdequate: boolean;
 };
 
 export type PushStatusSummary = {
@@ -72,4 +77,7 @@ export type PushStatusSummary = {
   preferences: NotificationPreferencesRecord;
   lastSuccessAt: string | null;
   lastFailureAt: string | null;
+  schedulerConfigured: boolean;
+  schedulerMode: "unknown" | "daily" | "hourly" | "external";
+  schedulerCoverageAdequate: boolean;
 };

@@ -20,7 +20,7 @@ describe("Phase 12D — Profile sections", () => {
     expect(source).toContain("ProfileSectionLabel");
     expect(source).toContain("ProfileCosmicPanel");
     expect(source).toContain("ProfileActionRow");
-    expect(source).toContain("NotificationSettingsCard");
+    expect(source).toContain("NotificationSettingsPanel");
     expect(source).toContain("ProfileEditPanel");
   });
 
@@ -76,7 +76,7 @@ describe("Phase 12D — Request and Reminders integration", () => {
 
   it("wraps notification settings behind Profile notifications row", () => {
     const source = readSource("src/features/profile/components/profile-content.tsx");
-    expect(source).toContain("NotificationSettingsCard");
+    expect(source).toContain("NotificationSettingsPanel");
     expect(source).not.toContain("endpoint");
   });
 });

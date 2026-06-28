@@ -11,6 +11,7 @@ import {
   getDueReminderTypes,
   getLocalTimeContext,
   isSchedulableReminderType,
+  resolveReminderLocale,
   type SchedulableReminderType,
 } from "@/features/notifications/server/reminder-due";
 import { buildReminderNotificationPayload } from "@/features/notifications/server/send-web-push-notification";
@@ -52,6 +53,14 @@ async function shouldSendUniverseRequestReminder(uid: string): Promise<boolean> 
   return request !== null;
 }
 
+function logDispatch(message: string, data?: Record<string, number | string | boolean>): void {
+  if (data) {
+    console.info(`[push-dispatch] ${message}`, data);
+    return;
+  }
+  console.info(`[push-dispatch] ${message}`);
+}
+
 export async function dispatchScheduledReminders(
   input: DispatchScheduledRemindersInput = {},
 ): Promise<ScheduledReminderDispatchSummary> {
@@ -63,7 +72,10 @@ export async function dispatchScheduledReminders(
       ? input.typeFilter
       : null;
 
+  logDispatch("start", { type: typeFilter ?? "all", dryRun });
+
   if (!isWebPushConfigured()) {
+    logDispatch("complete", { ok: false, reason: "web_push_not_configured" });
     return {
       ...summary,
       ok: false,
@@ -72,6 +84,8 @@ export async function dispatchScheduledReminders(
   }
 
   const users = await listEnabledNotificationPreferences();
+  let usersMatched = 0;
+  let inactiveSubscriptions = 0;
 
   for (const { uid, preferences } of users) {
     summary.checkedUsers += 1;
@@ -87,14 +101,17 @@ export async function dispatchScheduledReminders(
       continue;
     }
 
+    usersMatched += 1;
+
     const subscriptions = await readEnabledPushSubscriptions(uid);
     if (subscriptions.length === 0) {
       summary.skipped += dueTypes.length;
+      inactiveSubscriptions += dueTypes.length;
       continue;
     }
 
     const { localDate, timezone } = getLocalTimeContext(preferences.timezone, now);
-    const locale = preferences.locale === "ru" ? "ru" : "en";
+    const locale = resolveReminderLocale(preferences.locale);
 
     for (const reminderType of dueTypes) {
       if (reminderType === "universeRequest") {
@@ -144,6 +161,17 @@ export async function dispatchScheduledReminders(
       }
     }
   }
+
+  logDispatch("usersMatched", { count: usersMatched });
+  logDispatch("sent", { count: summary.sent });
+  logDispatch("skipped", { count: summary.skipped });
+  logDispatch("inactive", { count: inactiveSubscriptions });
+  logDispatch("complete", {
+    ok: true,
+    failed: summary.failed,
+    expiredRemoved: summary.expiredRemoved,
+    dryRun,
+  });
 
   return summary;
 }
