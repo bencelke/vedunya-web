@@ -287,11 +287,45 @@
     "offlineTitle": "You are offline",
     "offlineBody": "Mystic needs a connection for live guidance. Your saved shell is available, but Today content may be unavailable until you reconnect.",
     "offlineRetry": "Try again",
-    "offlineBackToToday": "Back to Today"
+    "offlineBackToToday": "Back to Today",
+    "installPage": {
+      "metaTitle": "Install Mystic",
+      "wordmark": "MYSTIC",
+      "title": "Install Mystic on your phone",
+      "hero": "Mystic can live on your Home Screen like a regular app. It helps you return to your daily ritual faster and enable gentle reminders when you are ready.",
+      "whyInstallTitle": "Why install Mystic?",
+      "whyInstallBody": "Installing Mystic adds an icon to your phone, like an app. It helps you return to your daily practice faster. After installation, you can also enable optional reminders for daily guidance, courses, and your Request to the Universe.",
+      "howItWorksTitle": "How it works",
+      "step1": "Add Mystic to your Home Screen",
+      "step2": "Open Mystic from the new icon",
+      "step3": "Enable notifications in Profile",
+      "step4": "Receive gentle reminders for your practice",
+      "platformAndroidTitle": "For Android",
+      "platformAndroidBody": "Tap “Install Mystic” and confirm the installation.",
+      "platformIphoneTitle": "For iPhone",
+      "platformIphoneBody": "Open Mystic in Safari, tap Share, then Add to Home Screen. After that, open Mystic from the new icon.",
+      "notificationNote": "Notifications are optional. Mystic will only ask after you tap “Enable notifications.”",
+      "removeTitle": "How to remove Mystic",
+      "removeIphone": "iPhone: touch and hold the Mystic icon, tap Remove App, then Delete App.",
+      "removeAndroid": "Android: open Settings, go to Apps, choose Mystic, then tap Uninstall.",
+      "removeAccountNote": "Removing Mystic from your phone does not delete your account.",
+      "installedTitle": "Installed",
+      "installedState": "Mystic is already installed on this device.",
+      "unsupportedBrowserTitle": "Install on your phone",
+      "unsupportedBrowser": "Open this page in Safari on iPhone or Chrome on Android for the best install experience.",
+      "installAction": "Install Mystic",
+      "installing": "Installing…",
+      "installAccepted": "Mystic was added to your Home Screen.",
+      "installDismissed": "You can install Mystic anytime from your browser menu.",
+      "continueLogin": "Continue to Login",
+      "enterMystic": "Enter Mystic",
+      "profileLink": "Open Profile"
+    }
   },
   "notifications": {
     "sectionLabel": "Reminders",
     "panelTitle": "Notifications",
+    "installEducationLink": "How installation and removal work",
     "title": "Reminders",
     "description": "Gentle reminders for morning guidance, evening reflection, course practice, and your Universe request.",
     "loading": "Loading reminder settings…",
@@ -526,6 +560,11 @@
       "submitting": "Opening Facebook…"
     },
     "loading": "Checking your session…",
+    "installPromo": {
+      "title": "Want Mystic on your phone?",
+      "body": "Install Mystic for faster access and optional reminders.",
+      "link": "Install Mystic"
+    },
     "configuration": {
       "title": "Sign-in is not configured yet",
       "body": "Firebase is not set up for this environment. Add the required variables and redeploy, or contact support if you are testing the live app."
@@ -712,7 +751,8 @@
       "compact": {
         "title": "Almost ready",
         "body": "Confirm the last details for your daily practice.",
-        "finish": "Continue to Today"
+        "finish": "Continue to Today",
+        "installLink": "Install Mystic on this phone"
       },
       "errors": {
         "nameRequired": "Please add your name to continue.",

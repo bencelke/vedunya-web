@@ -25,7 +25,7 @@ import {
   type OnboardingErrorKey,
 } from "@/features/onboarding/utils/onboarding-error-map";
 import { invalidateProfileStatusCache } from "@/features/auth/services/profile-status-cache";
-import { useRouter } from "@/i18n/navigation";
+import { useRouter, Link } from "@/i18n/navigation";
 import { useAuth } from "@/features/auth/hooks/use-auth";
 import { completeUserProfile } from "@/features/profile/services/profile-bootstrap-service";
 import { Button } from "@/components/ui/button";
@@ -333,6 +333,14 @@ export function OnboardingFlow({ locale, initialProfile }: OnboardingFlowProps) 
         >
           {submitting ? t("saving") : t("compact.finish")}
         </Button>
+        <p className="text-center">
+          <Link
+            href="/install"
+            className="text-sm text-auth-text-muted underline-offset-4 hover:text-auth-text-primary hover:underline"
+          >
+            {t("compact.installLink")}
+          </Link>
+        </p>
       </div>
     </OnboardingShell>
   );

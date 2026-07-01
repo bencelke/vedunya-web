@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 
 import type { SupportedLocale } from "@/config/app-config";
 import { InstallMysticCard } from "@/features/pwa/components/install-mystic-card";
+import { Link } from "@/i18n/navigation";
 import { NotificationPermissionState } from "@/features/notifications/components/notification-permission-state";
 import { ReminderPreferenceForm } from "@/features/notifications/components/reminder-preference-form";
 import { TestNotificationButton } from "@/features/notifications/components/test-notification-button";
@@ -62,6 +63,15 @@ export function NotificationSettingsPanel({
       </div>
 
       <InstallMysticCard alwaysShow />
+
+      <p className="text-center">
+        <Link
+          href="/install"
+          className="text-sm text-text-muted underline-offset-4 hover:text-text-primary hover:underline"
+        >
+          {t("installEducationLink")}
+        </Link>
+      </p>
 
       <div className="mystic-profile-panel space-y-4 p-4">
         <NotificationPermissionState

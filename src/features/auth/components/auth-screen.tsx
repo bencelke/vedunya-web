@@ -8,6 +8,7 @@ import { AuthErrorMessage } from "@/features/auth/components/auth-error-message"
 import { AuthLanguageBar } from "@/features/auth/components/auth-language-bar";
 import { AuthProviderButtons } from "@/features/auth/components/auth-provider-buttons";
 import { AuthShell } from "@/features/auth/components/auth-shell";
+import { InstallPagePromo } from "@/features/pwa/components/install-page-promo";
 import { LoginForm } from "@/features/auth/components/login-form";
 import { RegisterForm } from "@/features/auth/components/register-form";
 import { useAuth } from "@/features/auth/hooks/use-auth";
@@ -170,6 +171,8 @@ export function AuthScreen({ locale, initialMode = "login" }: AuthScreenProps) {
         ) : (
           <RegisterForm locale={locale} onSuccess={handleRegisterSuccess} />
         )}
+
+        <InstallPagePromo />
 
         <div className="space-y-4 border-t border-auth-border/80 pt-6 text-center text-sm">
           <button
